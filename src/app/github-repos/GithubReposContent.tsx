@@ -6,7 +6,10 @@ import { useGithubRepos } from '@/hooks/useGithubRepos';
 import { Spinner } from '@/components/ui/spinner';
 import { FallbackImage } from '@/components/FallbackImage';
 import { Suspense } from 'react';
-import { FaCogs, FaBrain, FaCode, FaServer, FaDatabase, FaShieldAlt, FaGraduationCap, FaGithub } from 'react-icons/fa';
+import { FaCode, FaServer, FaDatabase, FaShieldAlt, FaGraduationCap, FaGithub } from 'react-icons/fa';
+import { GoCpu } from "react-icons/go";
+import { RiRobot2Line } from "react-icons/ri";
+import { MdOutlineDesignServices } from "react-icons/md";
 
 const ITEMS_PER_PAGE = 8;
 
@@ -17,19 +20,21 @@ const categories = [
     "AI",
     "Infrastructure",
     "Data",
+    "Design",
     "Security",
     "Learning"
 ];
 
 const getCategoryIcon = (category: string) => {
     switch (category.toLowerCase()) {
-        case 'automation': return <FaCogs className="w-8 h-8" />;
-        case 'ai': return <FaBrain className="w-8 h-8" />;
+        case 'automation': return <RiRobot2Line className="w-8 h-8" />;
+        case 'ai': return <GoCpu className="w-8 h-8" />;
         case 'development': return <FaCode className="w-8 h-8" />;
         case 'infrastructure': return <FaServer className="w-8 h-8" />;
         case 'data': return <FaDatabase className="w-8 h-8" />;
         case 'security': return <FaShieldAlt className="w-8 h-8" />;
         case 'learning': return <FaGraduationCap className="w-8 h-8" />;
+        case 'design': return <MdOutlineDesignServices className="w-8 h-8" />;
         default: return <FaGithub className="w-8 h-8" />;
     }
 };
@@ -148,9 +153,6 @@ function GithubReposContentInner() {
 
                                             <div className="flex items-center justify-between pt-4 border-t border-white/5">
                                                 <span className="text-xs text-fill-color/40 font-mono">@{repo.owner}</span>
-                                                <div className="flex items-center text-xs font-medium text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity transform translate-x-[-10px] group-hover:translate-x-0 duration-300">
-                                                    View Details <span className="ml-1">→</span>
-                                                </div>
                                             </div>
                                         </div>
                                     </Link>

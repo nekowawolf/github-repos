@@ -3,12 +3,30 @@ import Footer from "@/components/Footer";
 import { dashboardMetadata } from "@/constants/metadataTemplates";
 import { fetchGithubReposData, fetchGithubRepoDetails } from "@/services/githubRepoService";
 import Link from "next/link";
-import { FaExternalLinkAlt, FaStar, FaCodeBranch, FaRegClock, FaCode } from "react-icons/fa";
+import { FaExternalLinkAlt, FaCode, FaServer, FaDatabase, FaShieldAlt, FaGraduationCap, FaGithub, FaMarkdown } from "react-icons/fa";
 import { FaXTwitter, FaTelegram } from "react-icons/fa6";
 import { BsDiscord } from "react-icons/bs";
+import { GoCpu } from "react-icons/go";
+import { RiRobot2Line } from "react-icons/ri";
+import { MdOutlineDesignServices } from "react-icons/md";
 import BackButton from "@/components/BackButton";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
+
+const getCategoryIcon = (category: string, className: string = "w-8 h-8") => {
+    switch (category.toLowerCase()) {
+        case 'automation': return <RiRobot2Line className={className} />;
+        case 'ai': return <GoCpu className={className} />;
+        case 'development': return <FaCode className={className} />;
+        case 'infrastructure': return <FaServer className={className} />;
+        case 'data': return <FaDatabase className={className} />;
+        case 'security': return <FaShieldAlt className={className} />;
+        case 'learning': return <FaGraduationCap className={className} />;
+        case 'design': return <MdOutlineDesignServices className={className} />;
+        default: return <FaGithub className={className} />;
+    }
+};
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -51,64 +69,28 @@ export default async function GithubRepoDetails({ params }: Props) {
       <Header />
       <main className="flex-grow pt-36 pb-12 min-h-screen body-color text-fill-color px-4 sm:px-8 font-sans">
         <div className="max-w-5xl mx-auto">
-          <BackButton fallbackUrl="/github-repos" />
+          <BackButton fallbackUrl="/github-repos" label="Back to list" />
 
           {/* Header Section */}
           <div className="glass-card rounded-3xl p-7 mb-8 border border-white/10 relative overflow-hidden">
-            <div className="absolute top-0 right-0 p-4 opacity-[0.03] pointer-events-none">
-                <FaCode className="w-64 h-64" />
+            <div className="absolute bottom-0 right-0 transform translate-y-1/2 opacity-[0.03] pointer-events-none">
+                {getCategoryIcon(repo.category, "w-64 h-64")}
             </div>
 
             <div className="relative z-10 flex flex-col md:flex-row gap-6 items-start">
               <div className="flex-1 w-full">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
-                    <h1 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">
+                    <h1 className="text-3xl md:text-4xl font-bold text-blue-500">
                     {repo.name}
                     </h1>
-                    <span className="px-4 py-1.5 rounded-full bg-blue-500/10 text-blue-400 text-sm border border-blue-500/20 font-medium whitespace-nowrap self-start md:self-auto">
+                    <span className="px-3 py-1 rounded-full bg-blue-500/20 text-blue-400 text-sm border border-blue-500/20 whitespace-nowrap self-start md:self-auto">
                         {repo.category}
                     </span>
                 </div>
 
-                <p className="text-fill-color/80 leading-relaxed max-w-3xl text-lg mb-6">
+                <p className="text-fill-color/70 leading-relaxed max-w-3xl text-lg mb-6">
                   {repo.description}
                 </p>
-
-                {/* GitHub Live Stats */}
-                {repoData && (
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-                        <div className="bg-black/20 rounded-xl p-4 border border-white/5 flex items-center gap-3">
-                            <FaStar className="text-yellow-400 w-5 h-5" />
-                            <div>
-                                <div className="text-xs text-fill-color/50 uppercase font-bold tracking-wider mb-1">Stars</div>
-                                <div className="font-mono text-lg font-bold">{repoData.stargazers_count?.toLocaleString() || 0}</div>
-                            </div>
-                        </div>
-                        <div className="bg-black/20 rounded-xl p-4 border border-white/5 flex items-center gap-3">
-                            <FaCodeBranch className="text-blue-400 w-5 h-5" />
-                            <div>
-                                <div className="text-xs text-fill-color/50 uppercase font-bold tracking-wider mb-1">Forks</div>
-                                <div className="font-mono text-lg font-bold">{repoData.forks_count?.toLocaleString() || 0}</div>
-                            </div>
-                        </div>
-                        <div className="bg-black/20 rounded-xl p-4 border border-white/5 flex items-center gap-3">
-                            <FaCode className="text-green-400 w-5 h-5" />
-                            <div>
-                                <div className="text-xs text-fill-color/50 uppercase font-bold tracking-wider mb-1">Language</div>
-                                <div className="font-semibold">{repoData.language || 'Multiple'}</div>
-                            </div>
-                        </div>
-                        <div className="bg-black/20 rounded-xl p-4 border border-white/5 flex items-center gap-3">
-                            <FaRegClock className="text-purple-400 w-5 h-5" />
-                            <div>
-                                <div className="text-xs text-fill-color/50 uppercase font-bold tracking-wider mb-1">Updated</div>
-                                <div className="text-sm font-medium">
-                                    {new Date(repoData.updated_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )}
 
                 {/* Button */}
                 <div className="flex flex-wrap items-center gap-4">
@@ -148,13 +130,13 @@ export default async function GithubRepoDetails({ params }: Props) {
 
           {/* README Section */}
           {readme && (
-             <div className="glass-card rounded-3xl p-8 border border-white/10 overflow-hidden">
+             <div className="glass-card rounded-3xl p-8 border border-white/10 overflow-hidden mt-8">
                 <h2 className="text-2xl font-bold mb-6 flex items-center gap-3 pb-4 border-b border-white/10">
-                    <FaCode className="text-blue-400" />
+                    <FaMarkdown className="text-blue-400" />
                     README.md
                 </h2>
-                <div className="prose prose-invert prose-blue max-w-none">
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                <div className="prose prose-invert prose-blue max-w-none prose-img:rounded-xl prose-a:text-blue-400 hover:prose-a:text-blue-300">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
                         {readme}
                     </ReactMarkdown>
                 </div>

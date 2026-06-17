@@ -1,115 +1,54 @@
 'use client';
 
-import React from 'react';
-import { HiChevronLeft, HiChevronRight } from 'react-icons/hi';
-
 interface PaginationProps {
     currentPage: number;
-    totalItems: number;
     itemsPerPage: number;
+    totalItems: number;
     onPageChange: (page: number) => void;
 }
 
 export default function Pagination({
     currentPage,
-    totalItems,
     itemsPerPage,
+    totalItems,
     onPageChange,
 }: PaginationProps) {
     const totalPages = Math.ceil(totalItems / itemsPerPage);
+    const start = totalItems === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1;
+    const end = totalItems === 0 ? 0 : Math.min(currentPage * itemsPerPage, totalItems);
 
-    if (totalPages <= 1) return null;
-
-    const maxVisiblePages = 5;
-    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-    const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-
-    if (endPage - startPage + 1 < maxVisiblePages) {
-        startPage = Math.max(1, endPage - maxVisiblePages + 1);
-    }
-
-    const pageNumbers = [];
-    for (let i = startPage; i <= endPage; i++) {
-        pageNumbers.push(i);
-    }
+    if (totalItems === 0) return null;
 
     return (
-        <div className="flex items-center justify-center gap-2 mt-12 mb-8">
-            <button
-                onClick={() => onPageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-                className={`p-2 rounded-xl border border-color transition-all duration-200 ${
-                    currentPage === 1
-                        ? 'opacity-50 cursor-not-allowed bg-card-color/50 text-fill-color/30'
-                        : 'hover:bg-blue-500 hover:text-white hover:border-blue-500 bg-card-color text-fill-color/70'
-                }`}
-                aria-label="Previous page"
-            >
-                <HiChevronLeft className="w-5 h-5" />
-            </button>
+        <div className="flex flex-col items-center mt-12 mb-12 gap-4">
+            <span className="text-sm text-fill-color/70">
+                Showing <span className="font-semibold text-fill-color">{start}</span> to{' '}
+                <span className="font-semibold text-fill-color">{end}</span> of{' '}
+                <span className="font-semibold text-fill-color">{totalItems}</span> Entries
+            </span>
 
-            {startPage > 1 && (
-                <>
-                    <button
-                        onClick={() => onPageChange(1)}
-                        className={`w-10 h-10 rounded-xl font-medium border transition-all duration-200 ${
-                            currentPage === 1
-                                ? 'bg-blue-500 text-white border-blue-500 shadow-lg shadow-blue-500/20'
-                                : 'hover:bg-blue-500 hover:text-white hover:border-blue-500 bg-card-color border-color text-fill-color/70'
-                        }`}
-                    >
-                        1
-                    </button>
-                    {startPage > 2 && (
-                        <span className="text-fill-color/30 px-1">...</span>
-                    )}
-                </>
-            )}
-
-            {pageNumbers.map((number) => (
+            <div className="inline-flex mt-2 xs:mt-0 gap-2">
                 <button
-                    key={number}
-                    onClick={() => onPageChange(number)}
-                    className={`w-10 h-10 rounded-xl font-medium border transition-all duration-200 ${
-                        currentPage === number
-                            ? 'bg-blue-500 text-white border-blue-500 shadow-lg shadow-blue-500/20 scale-105'
-                            : 'hover:bg-blue-500 hover:text-white hover:border-blue-500 bg-card-color border-color text-fill-color/70'
-                    }`}
+                    className="flex items-center justify-center px-4 h-10 text-sm font-medium text-fill-color bg-card-color border border-color rounded-lg hover:bg-card-color/80 hover:text-blue-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                    onClick={() => onPageChange(Math.max(currentPage - 1, 1))}
+                    disabled={currentPage === 1}
                 >
-                    {number}
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 mr-2">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                    </svg>
+                    Prev
                 </button>
-            ))}
-
-            {endPage < totalPages && (
-                <>
-                    {endPage < totalPages - 1 && (
-                        <span className="text-fill-color/30 px-1">...</span>
-                    )}
-                    <button
-                        onClick={() => onPageChange(totalPages)}
-                        className={`w-10 h-10 rounded-xl font-medium border transition-all duration-200 ${
-                            currentPage === totalPages
-                                ? 'bg-blue-500 text-white border-blue-500 shadow-lg shadow-blue-500/20'
-                                : 'hover:bg-blue-500 hover:text-white hover:border-blue-500 bg-card-color border-color text-fill-color/70'
-                        }`}
-                    >
-                        {totalPages}
-                    </button>
-                </>
-            )}
-
-            <button
-                onClick={() => onPageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className={`p-2 rounded-xl border border-color transition-all duration-200 ${
-                    currentPage === totalPages
-                        ? 'opacity-50 cursor-not-allowed bg-card-color/50 text-fill-color/30'
-                        : 'hover:bg-blue-500 hover:text-white hover:border-blue-500 bg-card-color text-fill-color/70'
-                }`}
-                aria-label="Next page"
-            >
-                <HiChevronRight className="w-5 h-5" />
-            </button>
+                <button
+                    className="flex items-center justify-center px-4 h-10 text-sm font-medium text-fill-color bg-card-color border border-color rounded-lg hover:bg-card-color/80 hover:text-blue-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                    onClick={() => onPageChange(Math.min(currentPage + 1, totalPages))}
+                    disabled={currentPage === totalPages}
+                >
+                    Next
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 ml-2">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                    </svg>
+                </button>
+            </div>
         </div>
     );
 }
