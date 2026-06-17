@@ -1,0 +1,151 @@
+@import "tailwindcss";
+
+html {
+  scroll-behavior: smooth;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+:root {
+  --body-color: #111827;
+  --fill-color: #ffffff;
+  --card-color: #243049;
+  --border-color: #3d4f6f;
+  --card-color2: #1a1f35;
+  --border-divider: rgba(255, 255, 255, 0.1);
+  --stack-chip-bg: rgba(59, 130, 246, 0.1);
+  --stack-chip-text: #60a5fa;
+  --stack-chip-border: rgba(59, 130, 246, 0.2);
+  --fill-color-rgb: 255, 255, 255;
+}
+
+.darkmode {
+  --body-color: #f3f4f6;
+  --fill-color: #111827;
+  --card-color: #ffffff;
+  --border-color: #959090;
+  --card-color2: #f1f5f9;
+  --border-divider: rgba(0, 0, 0, 0.1);
+  --stack-chip-bg: rgba(37, 99, 235, 0.18);
+  --stack-chip-text: #1d4ed8;
+  --stack-chip-border: rgba(37, 99, 235, 0.45);
+  --fill-color-rgb: 17, 24, 39;
+}
+
+.body-color {
+  background-color: var(--body-color);
+}
+
+.card-color {
+  background-color: var(--card-color);
+}
+
+.card-color2 {
+  background-color: var(--card-color2);
+}
+
+.text-fill-color {
+  color: var(--fill-color);
+}
+
+.text-fill-color\/60 {
+  color: rgba(var(--fill-color-rgb), 0.6);
+}
+
+.text-fill-color\/70 {
+  color: rgba(var(--fill-color-rgb), 0.7);
+}
+
+.text-fill-color\/80 {
+  color: rgba(var(--fill-color-rgb), 0.8);
+}
+
+.border-color {
+  border-color: var(--border-color);
+}
+
+.border-color {
+  border: 1px solid var(--border-color);
+}
+
+.border-divider-b {
+  border-bottom: 1px solid var(--border-divider);
+}
+
+.navbar-color {
+  background-color: #1f2937;
+}
+
+.darkmode .navbar-color {
+  background-color: #fbfcfe;
+}
+
+.glass-card {
+  background-color: var(--card-color2);
+  border: 1px solid var(--border-color);
+  backdrop-filter: blur(8px);
+}
+
+.card-hover {
+  transition: none;
+}
+
+.card-hover:hover {
+  transition:
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
+
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+}
+
+.darkmode .card-hover:hover {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+  border-color: rgba(0, 0, 0, 0.15);
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.theme-icon-sun {
+  display: block;
+}
+.theme-icon-moon {
+  display: none;
+}
+
+.darkmode .theme-icon-sun {
+  display: none;
+}
+.darkmode .theme-icon-moon {
+  display: block;
+}
