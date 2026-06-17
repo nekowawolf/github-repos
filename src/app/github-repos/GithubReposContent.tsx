@@ -138,7 +138,7 @@ function GithubReposContentInner() {
                                                 <div className="w-14 h-14 rounded-xl flex items-center justify-center bg-blue-500/10 text-blue-400 border border-blue-500/20 group-hover:bg-blue-500 group-hover:text-white transition-colors duration-300">
                                                     {getCategoryIcon(repo.category)}
                                                 </div>
-                                                <span className="text-[10px] uppercase tracking-wider font-bold px-3 py-1 rounded-full bg-white/5 text-fill-color/60 border border-white/10 group-hover:border-blue-500/30 group-hover:text-blue-400 transition-colors">
+                                                <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">
                                                     {repo.category}
                                                 </span>
                                             </div>

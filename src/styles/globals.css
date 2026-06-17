@@ -149,3 +149,47 @@ body {
 .darkmode .theme-icon-moon {
   display: block;
 }
+
+::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--border-divider);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(var(--fill-color-rgb), 0.3);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(var(--fill-color-rgb), 0.5);
+}
+
+img[src*="#gh-dark-mode-only"] {
+  display: inline-block !important;
+}
+
+.darkmode img[src*="#gh-dark-mode-only"] {
+  display: none !important;
+}
+
+img[src*="#gh-light-mode-only"] {
+  display: none !important;
+}
+
+.darkmode img[src*="#gh-light-mode-only"] {
+  display: inline-block !important;
+}
+
+.prose p {
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
+}
+.prose hr {
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
