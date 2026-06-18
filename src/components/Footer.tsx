@@ -119,7 +119,7 @@ export default function Footer() {
 
                     {/* Copyright */}
                     <p className="order-2 md:order-1 mt-6 md:mt-0 text-center md:text-left">
-                        &copy; Nww GitHub Repos, 2026.
+                        &copy; Nww GitHub Repos, {new Date().getFullYear()}.
                     </p>
 
                     {/* Links */}
