@@ -34,25 +34,32 @@ export default function Footer() {
 
                     <div className="order-1 md:order-2 flex space-x-6 mt-4 md:mt-0">
                         <a
-                            href=""
-                            onClick={(e) => handleScroll(e, 'get-listed')}
-                            className="text-fill-color/60 hover:text-fill-color transition-colors"
+                            href="https://airdrop.nekowawolf.xyz"
+                            target="_blank"
+                            className="text-fill-color/60 hover:!text-blue-600 transition-colors duration-300"
                         >
-                            Soon
+                            Airdrops
                         </a>
                         <a
-                            href=""
-                            onClick={(e) => handleScroll(e, 'whyus')}
-                            className="text-fill-color/60 hover:text-fill-color transition-colors"
+                            href="https://cc.nekowawolf.xyz/"
+                            target="_blank"
+                            className="text-fill-color/60 hover:!text-blue-600 transition-colors duration-300"
                         >
-                            Soon
+                            Community
                         </a>
                         <a
-                            href=""
-                            onClick={(e) => handleScroll(e, 'explore')}
-                            className="text-fill-color/60 hover:text-fill-color transition-colors"
+                            href="https://web3.nekowawolf.xyz/"
+                            target="_blank"
+                            className="text-fill-color/60 hover:!text-blue-600 transition-colors duration-300"
                         >
-                            Soon
+                            Web3 Tools
+                        </a>
+                        <a
+                            href="https://ai.nekowawolf.xyz/"
+                            target="_blank"
+                            className="text-fill-color/60 hover:!text-blue-600 transition-colors duration-300"
+                        >
+                            AI Tools
                         </a>
                     </div>
                 </div>
