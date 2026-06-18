@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { FaExternalLinkAlt, FaCode, FaServer, FaDatabase, FaShieldAlt, FaGraduationCap, FaGithub } from "react-icons/fa";
+import { FaExternalLinkAlt, FaCode, FaServer, FaDatabase, FaShieldAlt, FaGraduationCap, FaGithub, FaStar, FaCodeBranch, FaRegClock, FaRegUserCircle } from "react-icons/fa";
 import { FaXTwitter, FaTelegram } from "react-icons/fa6";
 import { BsDiscord } from "react-icons/bs";
 import { GoCpu } from "react-icons/go";
@@ -98,6 +98,10 @@ export default function DetailClient() {
 
                     <div className="relative z-10 flex flex-col md:flex-row gap-6 items-start">
                         <div className="flex-1 w-full">
+                            <div className="flex items-center gap-1.5 text-fill-color/70 mb-4">
+                                <FaRegUserCircle className="w-4 h-4" />
+                                <span className="text-sm font-medium">{repo.owner}</span>
+                            </div>
                             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
                                 <h1 className="text-3xl md:text-4xl font-bold text-blue-500">
                                     {repo.name}
@@ -114,20 +118,32 @@ export default function DetailClient() {
                             {/* GitHub Live Stats */}
                             {repoData && (
                                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-                                    <div className="bg-black/20 rounded-xl p-4 border border-white/5 flex flex-col justify-center">
-                                        <div className="text-xs text-fill-color/50 uppercase font-bold tracking-wider mb-1">Stars</div>
+                                    <div className="bg-[rgba(var(--fill-color-rgb),0.05)] rounded-xl p-4 border border-[var(--border-divider)] flex flex-col justify-center">
+                                        <div className="flex items-center gap-2 text-xs text-fill-color/70 uppercase font-bold tracking-wider mb-1">
+                                            <FaStar className="w-3.5 h-3.5" />
+                                            Stars
+                                        </div>
                                         <div className="font-mono text-xl font-bold text-fill-color">{repoData.stargazers_count?.toLocaleString() || 0}</div>
                                     </div>
-                                    <div className="bg-black/20 rounded-xl p-4 border border-white/5 flex flex-col justify-center">
-                                        <div className="text-xs text-fill-color/50 uppercase font-bold tracking-wider mb-1">Forks</div>
+                                    <div className="bg-[rgba(var(--fill-color-rgb),0.05)] rounded-xl p-4 border border-[var(--border-divider)] flex flex-col justify-center">
+                                        <div className="flex items-center gap-2 text-xs text-fill-color/70 uppercase font-bold tracking-wider mb-1">
+                                            <FaCodeBranch className="w-3.5 h-3.5" />
+                                            Forks
+                                        </div>
                                         <div className="font-mono text-xl font-bold text-fill-color">{repoData.forks_count?.toLocaleString() || 0}</div>
                                     </div>
-                                    <div className="bg-black/20 rounded-xl p-4 border border-white/5 flex flex-col justify-center">
-                                        <div className="text-xs text-fill-color/50 uppercase font-bold tracking-wider mb-1">Language</div>
+                                    <div className="bg-[rgba(var(--fill-color-rgb),0.05)] rounded-xl p-4 border border-[var(--border-divider)] flex flex-col justify-center">
+                                        <div className="flex items-center gap-2 text-xs text-fill-color/70 uppercase font-bold tracking-wider mb-1">
+                                            <FaCode className="w-3.5 h-3.5" />
+                                            Language
+                                        </div>
                                         <div className="font-semibold text-xl text-fill-color">{repoData.language || 'Multiple'}</div>
                                     </div>
-                                    <div className="bg-black/20 rounded-xl p-4 border border-white/5 flex flex-col justify-center">
-                                        <div className="text-xs text-fill-color/50 uppercase font-bold tracking-wider mb-1">Updated</div>
+                                    <div className="bg-[rgba(var(--fill-color-rgb),0.05)] rounded-xl p-4 border border-[var(--border-divider)] flex flex-col justify-center">
+                                        <div className="flex items-center gap-2 text-xs text-fill-color/70 uppercase font-bold tracking-wider mb-1">
+                                            <FaRegClock className="w-3.5 h-3.5" />
+                                            Updated
+                                        </div>
                                         <div className="text-sm font-medium text-fill-color">
                                             {new Date(repoData.updated_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
                                         </div>
@@ -149,23 +165,25 @@ export default function DetailClient() {
                                     </a>
                                 )}
 
-                                <div className="flex items-center gap-3 ml-auto sm:ml-4 bg-black/20 px-4 py-2 rounded-xl border border-white/5">
-                                    {repo.twitter && (
-                                        <a href={repo.twitter} target="_blank" rel="noopener noreferrer" className="opacity-70 hover:opacity-100 hover:text-blue-400 transition-all text-fill-color">
-                                            <FaXTwitter className="w-5 h-5" />
-                                        </a>
-                                    )}
-                                    {repo.discord && (
-                                        <a href={repo.discord} target="_blank" rel="noopener noreferrer" className="opacity-70 hover:opacity-100 hover:text-indigo-400 transition-all text-fill-color">
-                                            <BsDiscord className="w-5 h-5" />
-                                        </a>
-                                    )}
-                                    {repo.telegram && (
-                                        <a href={repo.telegram} target="_blank" rel="noopener noreferrer" className="opacity-70 hover:opacity-100 hover:text-blue-500 transition-all text-fill-color">
-                                            <FaTelegram className="w-5 h-5" />
-                                        </a>
-                                    )}
-                                </div>
+                                {(repo.twitter || repo.discord || repo.telegram) && (
+                                    <div className="flex items-center gap-3 ml-auto sm:ml-4 bg-[rgba(var(--fill-color-rgb),0.05)] px-4 py-2 rounded-xl border border-[var(--border-divider)]">
+                                        {repo.twitter && (
+                                            <a href={repo.twitter} target="_blank" rel="noopener noreferrer" className="opacity-70 hover:opacity-100 hover:text-blue-400 transition-all text-fill-color">
+                                                <FaXTwitter className="w-5 h-5" />
+                                            </a>
+                                        )}
+                                        {repo.discord && (
+                                            <a href={repo.discord} target="_blank" rel="noopener noreferrer" className="opacity-70 hover:opacity-100 hover:text-indigo-400 transition-all text-fill-color">
+                                                <BsDiscord className="w-5 h-5" />
+                                            </a>
+                                        )}
+                                        {repo.telegram && (
+                                            <a href={repo.telegram} target="_blank" rel="noopener noreferrer" className="opacity-70 hover:opacity-100 hover:text-blue-500 transition-all text-fill-color">
+                                                <FaTelegram className="w-5 h-5" />
+                                            </a>
+                                        )}
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>

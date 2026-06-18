@@ -4,7 +4,7 @@ import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
-import { FaMarkdown, FaBalanceScale } from 'react-icons/fa';
+import { FaMarkdown, FaBalanceScale, FaRegCopy, FaCheck } from 'react-icons/fa';
 import { FiUsers } from 'react-icons/fi';
 import { GoCodeOfConduct } from 'react-icons/go';
 
@@ -24,6 +24,42 @@ type Props = {
     owner: string;
     repoName: string;
     defaultBranch: string;
+};
+
+const PreBlock = ({ node, children, ...props }: any) => {
+    const [copied, setCopied] = useState(false);
+
+    const extractText = (child: any): string => {
+        if (typeof child === 'string') return child;
+        if (Array.isArray(child)) return child.map(extractText).join('');
+        if (child && child.props && child.props.children) {
+            return extractText(child.props.children);
+        }
+        return '';
+    };
+
+    const handleCopy = () => {
+        const textToCopy = extractText(children);
+        navigator.clipboard.writeText(textToCopy);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
+
+    return (
+        <div className="relative group w-fit max-w-full my-6">
+            <button
+                onClick={handleCopy}
+                className="absolute top-2 right-2 p-1.5 rounded-md bg-[rgba(var(--fill-color-rgb),0.1)] transition-all hover:bg-[rgba(var(--fill-color-rgb),0.2)] text-fill-color/70 z-10"
+                aria-label="Copy code"
+                title="Copy"
+            >
+                {copied ? <FaCheck className="w-3.5 h-3.5 text-green-500" /> : <FaRegCopy className="w-3.5 h-3.5" />}
+            </button>
+            <pre {...props} className="text-fill-color !m-0 !pr-12 w-full overflow-x-auto bg-[rgba(var(--fill-color-rgb),0.03)] border border-[var(--border-divider)] rounded-xl py-4 px-5">
+                {children}
+            </pre>
+        </div>
+    );
 };
 
 export default function RepoContentTabs({ readme, license, contributing, codeOfConduct, licenseName, owner, repoName, defaultBranch }: Props) {
@@ -51,7 +87,7 @@ export default function RepoContentTabs({ readme, license, contributing, codeOfC
                         className={`px-4 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-2 ${
                             activeTab === tab.id
                                 ? 'bg-blue-600 text-white'
-                                : 'bg-black/20 text-fill-color/60 hover:text-fill-color hover:bg-black/40 border border-white/5'
+                                : 'bg-[rgba(var(--fill-color-rgb),0.05)] text-fill-color/60 hover:text-fill-color hover:bg-[rgba(var(--fill-color-rgb),0.1)] border border-[var(--border-divider)]'
                         }`}
                     >
                         {tab.icon}
@@ -62,11 +98,12 @@ export default function RepoContentTabs({ readme, license, contributing, codeOfC
 
             {/* Content */}
             {activeContent && (
-                <div className="prose prose-invert prose-blue max-w-none prose-img:rounded-xl prose-a:text-blue-400 hover:prose-a:text-blue-300 prose-headings:border-b prose-headings:border-white/10 prose-headings:pb-2 prose-h1:text-3xl prose-h1:font-bold prose-h2:text-2xl prose-h2:font-bold prose-h3:text-xl prose-h3:font-semibold prose-p:leading-relaxed prose-li:leading-relaxed prose-code:bg-white/10 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-pre:bg-black/40 prose-pre:border prose-pre:border-white/10 prose-pre:rounded-xl">
+                <div className="prose prose-invert prose-blue max-w-none prose-img:rounded-xl prose-a:text-blue-400 hover:prose-a:text-blue-300 prose-p:leading-relaxed prose-li:leading-relaxed text-sm sm:text-[15px]">
                     <ReactMarkdown
                         remarkPlugins={[remarkGfm]}
                         rehypePlugins={[rehypeRaw]}
                         components={{
+                            pre: PreBlock,
                             table: ({ node, ...props }: any) => (
                                 <div className="overflow-x-auto my-6">
                                     <table {...props} className="w-full" />

@@ -27,7 +27,7 @@ export default function BackButton({
     return (
         <button
             onClick={handleBack}
-            className={`flex items-center gap-2 mb-6 text-fill-color/60 hover:text-fill-color transition-colors w-fit px-4 py-2 rounded-lg hover:bg-card-color border border-transparent hover:border-color ${className}`}
+            className={`flex items-center gap-2 mb-6 text-fill-color/70 hover:text-fill-color transition-colors w-fit px-4 py-2 rounded-lg hover:bg-card-color border border-transparent hover:border-color ${className}`}
         >
             <FaArrowLeft className="w-4 h-4" />
             <span className="font-medium">{label}</span>

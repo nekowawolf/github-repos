@@ -193,3 +193,117 @@ img[src*="#gh-light-mode-only"] {
   margin-top: 2em;
   margin-bottom: 2em;
 }
+
+.prose a {
+  color: #53c0f3;
+  transition: opacity 0.2s ease;
+}
+.prose a:hover {
+  opacity: 0.8;
+}
+.prose strong {
+  color: inherit;
+}
+.prose pre {
+  border-radius: 0.5rem;
+  margin: 2em 0;
+  overflow-x: auto;
+}
+.prose pre code {
+  font-size: 13px;
+  color: var(--fill-color) !important;
+}
+.prose code:not([class*="language-"]):not(.not-prose) {
+  background: rgba(var(--fill-color-rgb), 0.1);
+  color: var(--fill-color) !important;
+  padding: 0.15em 0.3em;
+  border-radius: 4px;
+}
+.prose blockquote {
+  border-left: 0.25em solid #e2e8f0;
+  padding: 0.5em 1em;
+  color: rgba(var(--fill-color-rgb), 0.7);
+  margin: 1.5em 0;
+}
+.darkmode .prose blockquote {
+  border-left-color: #334155;
+}
+.prose table {
+  width: 100%;
+  overflow-x: auto;
+  margin: 2em 0;
+}
+.prose th,
+.prose td {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border-color);
+}
+.prose th {
+  background-color: rgba(var(--fill-color-rgb), 0.05);
+  text-align: left;
+}
+.prose img {
+  border-radius: 0.5rem;
+  margin: 1.5em 0;
+}
+.prose summary {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+.prose details > * {
+  margin: 0;
+  padding: 0;
+}
+.prose details > p:last-child {
+  margin-bottom: 0;
+}
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  margin-top: 24px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+.prose h1 {
+  font-size: 2em;
+  border-bottom: 1px solid var(--border-divider);
+  padding-bottom: 0.3em;
+}
+.prose h2 {
+  font-size: 1.5em;
+  border-bottom: 1px solid var(--border-divider);
+  padding-bottom: 0.3em;
+}
+.prose h3 {
+  font-size: 1.25em;
+}
+.prose h4 {
+  font-size: 1em;
+}
+.prose li {
+  margin-top: 0.5em;
+}
+.prose ul,
+.prose ol {
+  padding-left: 1.5em;
+}
+.prose ul li {
+  list-style-type: disc;
+}
+.prose ol li {
+  list-style-type: decimal;
+}
+.prose ul ul,
+.prose ol ul,
+.prose ul ol,
+.prose ol ol {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+.prose del {
+  opacity: 0.5;
+}
