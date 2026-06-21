@@ -26,17 +26,17 @@ type Props = {
     defaultBranch: string;
 };
 
+const extractText = (child: any): string => {
+    if (typeof child === 'string') return child;
+    if (Array.isArray(child)) return child.map(extractText).join('');
+    if (child && child.props && child.props.children) {
+        return extractText(child.props.children);
+    }
+    return '';
+};
+
 const PreBlock = ({ node, children, ...props }: any) => {
     const [copied, setCopied] = useState(false);
-
-    const extractText = (child: any): string => {
-        if (typeof child === 'string') return child;
-        if (Array.isArray(child)) return child.map(extractText).join('');
-        if (child && child.props && child.props.children) {
-            return extractText(child.props.children);
-        }
-        return '';
-    };
 
     const handleCopy = () => {
         const textToCopy = extractText(children);
@@ -60,6 +60,33 @@ const PreBlock = ({ node, children, ...props }: any) => {
             </pre>
         </div>
     );
+};
+
+const MarkdownLink = ({ href, children, ...props }: any) => {
+    const [videoError, setVideoError] = useState(false);
+    const hrefStr = href || '';
+
+    if (hrefStr.startsWith('#')) {
+        return <a href={hrefStr} {...props}>{children}</a>;
+    }
+
+    const isGithubAsset = hrefStr.includes('github.com/user-attachments/assets/');
+    const isVideoExt = hrefStr.match(/\.(mp4|webm|ogg|mov)$/i);
+    const linkText = extractText(children);
+    const isRawLink = linkText === hrefStr;
+
+    if (!videoError && (isVideoExt || (isGithubAsset && isRawLink))) {
+        return (
+            <video 
+                src={hrefStr} 
+                controls 
+                className="w-full max-h-[600px] rounded-xl my-6 border border-[var(--border-divider)] bg-[rgba(var(--fill-color-rgb),0.03)]"
+                onError={() => setVideoError(true)}
+            />
+        );
+    }
+
+    return <a href={hrefStr} {...props} target="_blank" rel="noopener noreferrer">{children}</a>;
 };
 
 export default function RepoContentTabs({ readme, license, contributing, codeOfConduct, licenseName, owner, repoName, defaultBranch }: Props) {
@@ -104,6 +131,9 @@ export default function RepoContentTabs({ readme, license, contributing, codeOfC
                         rehypePlugins={[rehypeRaw]}
                         components={{
                             pre: PreBlock,
+                            video: (props: any) => (
+                                <video {...props} className={`w-full max-h-[600px] rounded-xl my-6 border border-[var(--border-divider)] bg-[rgba(var(--fill-color-rgb),0.03)] ${props.className || ''}`} controls />
+                            ),
                             table: ({ node, ...props }: any) => (
                                 <div className="overflow-x-auto my-6">
                                     <table {...props} className="w-full" />
@@ -135,13 +165,7 @@ export default function RepoContentTabs({ readme, license, contributing, codeOfC
                                 }
                                 return <img {...props} src={src} />;
                             },
-                            a: ({ node, children, ...props }: any) => {
-                                const href = props.href || '';
-                                if (href.startsWith('#')) {
-                                    return <a {...props}>{children}</a>;
-                                }
-                                return <a {...props} target="_blank" rel="noopener noreferrer">{children}</a>;
-                            }
+                            a: MarkdownLink
                         }}
                     >
                         {activeContent}
