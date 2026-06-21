@@ -26,6 +26,11 @@ export const fetchGithubReposData = async (): Promise<GithubRepo[]> => {
             resultData = data;
         }
 
+        for (let i = resultData.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [resultData[i], resultData[j]] = [resultData[j], resultData[i]];
+        }
+
         return resultData;
     } catch (error) {
         console.error("Error fetching github repos data:", error);
