@@ -77,7 +77,7 @@ export default function DetailClient() {
             <main className="flex-grow pt-36 min-h-screen flex items-center justify-center text-fill-color">
                 <div className="text-center">
                     <h1 className="text-2xl font-bold mb-4">Repository Not Found</h1>
-                    <Link href="/github-repos" className="text-blue-500 hover:underline">
+                    <Link href="/directory" className="text-blue-500 hover:underline">
                         Back to GitHub Repos
                     </Link>
                 </div>
@@ -88,7 +88,7 @@ export default function DetailClient() {
     return (
         <main className="flex-grow pt-36 pb-12 min-h-screen body-color text-fill-color px-4 sm:px-8 font-sans">
             <div className="max-w-5xl mx-auto">
-                <BackButton fallbackUrl="/github-repos" label="Back to list" />
+                <BackButton fallbackUrl="/directory" label="Back to list" />
 
                 {/* Header Section */}
                 <div className="glass-card rounded-3xl p-7 mb-8 border border-white/10 relative overflow-hidden">

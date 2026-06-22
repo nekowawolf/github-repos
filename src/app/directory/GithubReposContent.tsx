@@ -127,7 +127,7 @@ function GithubReposContentInner() {
                             {displayedRepos.length > 0 ? (
                                 displayedRepos.map((repo) => (
                                     <Link
-                                        href={`/github-repos/${repo._id}`}
+                                        href={`/directory/${repo._id}`}
                                         key={repo._id}
                                         className="relative group rounded-2xl p-[1px] overflow-hidden block hover:scale-[1.02] transition-transform duration-300"
                                     >
