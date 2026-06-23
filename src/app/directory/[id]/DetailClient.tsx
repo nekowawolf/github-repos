@@ -98,10 +98,15 @@ export default function DetailClient() {
 
                     <div className="relative z-10 flex flex-col md:flex-row gap-6 items-start">
                         <div className="flex-1 w-full">
-                            <div className="flex items-center gap-1.5 text-fill-color/70 mb-4">
+                            <a 
+                                href={`https://github.com/${repo.owner}`}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="flex items-center gap-1.5 mb-4 opacity-70 hover:opacity-100 transition-opacity text-fill-color w-fit"
+                            >
                                 <FaRegUserCircle className="w-4 h-4" />
                                 <span className="text-sm font-medium">{repo.owner}</span>
-                            </div>
+                            </a>
                             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
                                 <h1 className="text-3xl md:text-4xl font-bold text-fill-color">
                                     {repo.name}

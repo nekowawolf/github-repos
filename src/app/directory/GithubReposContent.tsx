@@ -152,7 +152,15 @@ function GithubReposContentInner() {
                                             </p>
 
                                             <div className="flex items-center justify-between pt-4 border-t border-white/5">
-                                                <span className="text-xs text-fill-color/40 font-mono">@{repo.owner}</span>
+                                                <a 
+                                                    href={`https://github.com/${repo.owner}`} 
+                                                    target="_blank" 
+                                                    rel="noreferrer" 
+                                                    onClick={(e) => e.stopPropagation()}
+                                                    className="text-xs font-mono opacity-70 hover:opacity-100 transition-opacity text-fill-color"
+                                                >
+                                                    @{repo.owner}
+                                                </a>
                                             </div>
                                         </div>
                                     </Link>
