@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Hero() {
   return (
@@ -16,9 +17,12 @@ export default function Hero() {
       <h1 className="text-3xl sm:text-4xl md:text-5xl font-black mb-4 text-blue-400 drop-shadow-sm tracking-tight">
         This page is under construction
       </h1>
-      <p className="text-fill-color/70 max-w-lg mt-2 font-medium">
-       Buat aja dulu gpp hasilnya jelek nanti bisa di bagusin, yang penting production karena klo nunggu bagus gk akan pernah production
+      <p className="text-fill-color/80 max-w-lg mt-2 mb-8 font-medium leading-relaxed">
+        This landing page is currently under development. Please proceed directly to our directory to explore the content.
       </p>
+      <Link href="/directory" className="inline-flex items-center justify-center px-8 py-3.5 text-sm font-bold text-white transition-all duration-300 bg-blue-600 rounded-full hover:bg-blue-500 shadow-lg shadow-blue-500/25 hover:-translate-y-0.5">
+        Explore Directory
+      </Link>
     </div>
   );
 }
