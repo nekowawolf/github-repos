@@ -103,10 +103,10 @@ export default function DetailClient() {
                                 <span className="text-sm font-medium">{repo.owner}</span>
                             </div>
                             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
-                                <h1 className="text-3xl md:text-4xl font-bold text-blue-500">
+                                <h1 className="text-3xl md:text-4xl font-bold text-fill-color">
                                     {repo.name}
                                 </h1>
-                                <span className="px-3 py-1 rounded-full bg-blue-500/20 text-blue-400 text-sm border border-blue-500/20 whitespace-nowrap self-start md:self-auto">
+                                <span className="px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-sm border border-blue-500/20 whitespace-nowrap self-start md:self-auto">
                                     {repo.category}
                                 </span>
                             </div>
