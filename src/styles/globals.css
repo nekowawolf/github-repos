@@ -193,6 +193,11 @@ a[href*="#gh-light-mode-only"] {
   margin-top: 1.25em;
   margin-bottom: 1.25em;
 }
+
+.prose p:has(img) {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
 .prose hr {
   margin-top: 2em;
   margin-bottom: 2em;

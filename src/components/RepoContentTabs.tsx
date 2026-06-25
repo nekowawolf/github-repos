@@ -200,7 +200,7 @@ export default function RepoContentTabs({ mdFiles, licenseName, owner, repoName,
                                     style.height = !isNaN(Number(props.height)) ? `${props.height}px` : props.height;
                                 }
 
-                                return <img {...props} src={src} style={style} className={`inline-block m-0 ${props.className || ''}`} />;
+                                return <img {...props} src={src} style={style} className={`inline-block !my-1 !mx-0.5 ${props.className || ''}`} />;
                             },
                             a: MarkdownLink
                         }}

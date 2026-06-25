@@ -64,7 +64,7 @@ export function useGithubRepos(itemsPerPage: number) {
             const matchesCategory = activeCategory === "All" ||
                 repo.category.toLowerCase() === activeCategory.toLowerCase();
             const matchesSearch = repo.name.toLowerCase().includes(localSearchQuery.toLowerCase()) ||
-                repo.description.toLowerCase().includes(localSearchQuery.toLowerCase());
+                repo.owner.toLowerCase().includes(localSearchQuery.toLowerCase());
             return matchesCategory && matchesSearch;
         });
     }, [allRepos, activeCategory, localSearchQuery]);
