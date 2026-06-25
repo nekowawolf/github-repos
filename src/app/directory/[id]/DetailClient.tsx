@@ -9,6 +9,7 @@ import { BsDiscord } from "react-icons/bs";
 import { GoCpu } from "react-icons/go";
 import { RiRobot2Line } from "react-icons/ri";
 import { MdOutlineDesignServices } from "react-icons/md";
+import { IoIosArrowUp } from "react-icons/io";
 import BackButton from "@/components/BackButton";
 import RepoContentTabs from "@/components/RepoContentTabs";
 import { fetchGithubReposData, fetchGithubRepoDetails } from "@/services/githubRepoService";
@@ -38,6 +39,20 @@ export default function DetailClient() {
     const [contributing, setContributing] = useState<string | null>(null);
     const [codeOfConduct, setCodeOfConduct] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
+    const [showScrollTop, setShowScrollTop] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 1500) {
+                setShowScrollTop(true);
+            } else {
+                setShowScrollTop(false);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     useEffect(() => {
         if (!id) return;
@@ -210,6 +225,17 @@ export default function DetailClient() {
                     repoName={repo.repo_name}
                     defaultBranch={repoData?.default_branch || 'master'}
                 />
+            </div>
+
+            {/* Scroll to Top Button */}
+            <div className={`fixed bottom-6 right-6 z-50 transition-all duration-300 ${showScrollTop ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}`}>
+                <button
+                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                    className="p-3 rounded-full text-white bg-blue-600 hover:bg-blue-500 transition-all shadow-lg shadow-blue-500/20 flex items-center justify-center"
+                    aria-label="Scroll to top"
+                >
+                    <IoIosArrowUp className="w-6 h-6" />
+                </button>
             </div>
         </main>
     );
