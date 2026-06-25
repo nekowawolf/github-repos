@@ -169,19 +169,23 @@ body {
   background: rgba(var(--fill-color-rgb), 0.5);
 }
 
-img[src*="#gh-dark-mode-only"] {
+img[src*="#gh-dark-mode-only"],
+a[href*="#gh-dark-mode-only"] {
   display: inline-block !important;
 }
 
-.darkmode img[src*="#gh-dark-mode-only"] {
+.darkmode img[src*="#gh-dark-mode-only"],
+.darkmode a[href*="#gh-dark-mode-only"] {
   display: none !important;
 }
 
-img[src*="#gh-light-mode-only"] {
+img[src*="#gh-light-mode-only"],
+a[href*="#gh-light-mode-only"] {
   display: none !important;
 }
 
-.darkmode img[src*="#gh-light-mode-only"] {
+.darkmode img[src*="#gh-light-mode-only"],
+.darkmode a[href*="#gh-light-mode-only"] {
   display: inline-block !important;
 }
 
