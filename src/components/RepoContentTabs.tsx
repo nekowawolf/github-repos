@@ -160,6 +160,13 @@ export default function RepoContentTabs({ mdFiles, licenseName, owner, repoName,
                                     <table {...props} className="w-full" />
                                 </div>
                             ),
+                            p: (props: any) => {
+                                const style = { ...props.style };
+                                if (props.align) {
+                                    style.textAlign = props.align;
+                                }
+                                return <p {...props} style={style} />;
+                            },
                             img: (props: any) => {
                                 let src = props.src || '';
                                 if (src && !src.startsWith('http') && !src.startsWith('data:')) {
@@ -184,7 +191,16 @@ export default function RepoContentTabs({ mdFiles, licenseName, owner, repoName,
                                     if (query) src += query;
                                     if (hash) src += hash;
                                 }
-                                return <img {...props} src={src} />;
+
+                                const style = { ...props.style };
+                                if (props.width) {
+                                    style.width = !isNaN(Number(props.width)) ? `${props.width}px` : props.width;
+                                }
+                                if (props.height) {
+                                    style.height = !isNaN(Number(props.height)) ? `${props.height}px` : props.height;
+                                }
+
+                                return <img {...props} src={src} style={style} className={`inline-block m-0 ${props.className || ''}`} />;
                             },
                             a: MarkdownLink
                         }}
