@@ -34,10 +34,7 @@ export default function DetailClient() {
     const { id } = useParams();
     const [repo, setRepo] = useState<GithubRepo | null>(null);
     const [repoData, setRepoData] = useState<any>(null);
-    const [readme, setReadme] = useState<string | null>(null);
-    const [license, setLicense] = useState<string | null>(null);
-    const [contributing, setContributing] = useState<string | null>(null);
-    const [codeOfConduct, setCodeOfConduct] = useState<string | null>(null);
+    const [mdFiles, setMdFiles] = useState<{name: string, content: string}[]>([]);
     const [loading, setLoading] = useState(true);
     const [showScrollTop, setShowScrollTop] = useState(false);
 
@@ -65,10 +62,7 @@ export default function DetailClient() {
                     setRepo(foundRepo);
                     const details = await fetchGithubRepoDetails(foundRepo.owner, foundRepo.repo_name);
                     setRepoData(details.repoData);
-                    setReadme(details.readme);
-                    setLicense(details.license);
-                    setContributing(details.contributing);
-                    setCodeOfConduct(details.codeOfConduct);
+                    setMdFiles(details.mdFiles);
                 }
             } catch (error) {
                 console.error(error);
@@ -216,10 +210,7 @@ export default function DetailClient() {
 
                 {/* Content Tabs */}
                 <RepoContentTabs
-                    readme={readme}
-                    license={license}
-                    contributing={contributing}
-                    codeOfConduct={codeOfConduct}
+                    mdFiles={mdFiles}
                     licenseName={repoData?.license?.name}
                     owner={repo.owner}
                     repoName={repo.repo_name}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
@@ -16,10 +16,7 @@ type Tab = {
 };
 
 type Props = {
-    readme: string | null;
-    license: string | null;
-    contributing: string | null;
-    codeOfConduct: string | null;
+    mdFiles: { name: string, content: string }[];
     licenseName?: string;
     owner: string;
     repoName: string;
@@ -89,19 +86,43 @@ const MarkdownLink = ({ href, children, ...props }: any) => {
     return <a href={hrefStr} {...props} target="_blank" rel="noopener noreferrer">{children}</a>;
 };
 
-export default function RepoContentTabs({ readme, license, contributing, codeOfConduct, licenseName, owner, repoName, defaultBranch }: Props) {
-    const tabs: Tab[] = [
-        { id: 'readme', label: 'README', icon: <FaMarkdown className="w-4 h-4" />, content: readme },
-        ...(codeOfConduct ? [{ id: 'codeofconduct', label: 'Code of Conduct', icon: <FiUsers className="w-4 h-4" />, content: codeOfConduct }] : []),
-        ...(contributing ? [{ id: 'contributing', label: 'Contributing', icon: <GoCodeOfConduct className="w-4 h-4" />, content: contributing }] : []),
-        ...(license ? [{ id: 'license', label: licenseName || 'License', icon: <FaBalanceScale className="w-4 h-4" />, content: license }] : []),
-    ];
+export default function RepoContentTabs({ mdFiles, licenseName, owner, repoName, defaultBranch }: Props) {
+    const getTabConfig = (name: string, content: string): Tab => {
+        const lowerName = name.toLowerCase();
+        if (lowerName.startsWith('readme')) {
+            return { id: name, label: 'README', icon: <FaMarkdown className="w-4 h-4" />, content };
+        }
+        if (lowerName.startsWith('code_of_conduct')) {
+            return { id: name, label: 'Code of Conduct', icon: <FiUsers className="w-4 h-4" />, content };
+        }
+        if (lowerName.startsWith('contributing')) {
+            return { id: name, label: 'Contributing', icon: <GoCodeOfConduct className="w-4 h-4" />, content };
+        }
+        if (lowerName.startsWith('license')) {
+            return { id: name, label: licenseName || 'License', icon: <FaBalanceScale className="w-4 h-4" />, content };
+        }
+        // Generic markdown file
+        return { 
+            id: name, 
+            label: name.replace(/\.mdx?$/i, ''), 
+            icon: <FaMarkdown className="w-4 h-4" />, 
+            content 
+        };
+    };
 
-    const [activeTab, setActiveTab] = useState('readme');
+    const tabs: Tab[] = mdFiles.map(f => getTabConfig(f.name, f.content));
 
-    const activeContent = tabs.find(t => t.id === activeTab)?.content;
+    const [activeTab, setActiveTab] = useState(tabs[0]?.id || '');
 
-    if (!readme && !license && !contributing && !codeOfConduct) return null;
+    useEffect(() => {
+        if (!activeTab && tabs.length > 0) {
+            setActiveTab(tabs[0].id);
+        }
+    }, [tabs, activeTab]);
+
+    const activeContent = tabs.find(t => t.id === activeTab)?.content || tabs[0]?.content;
+
+    if (tabs.length === 0) return null;
 
     return (
         <div className="glass-card rounded-3xl p-8 border border-white/10 overflow-hidden mt-8">

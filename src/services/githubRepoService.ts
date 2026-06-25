@@ -40,44 +40,7 @@ export const fetchGithubReposData = async (): Promise<GithubRepo[]> => {
     }
 };
 
-const promiseAny = <T>(promises: Promise<T>[]): Promise<T> => {
-    return new Promise((resolve, reject) => {
-        let rejectedCount = 0;
-        if (promises.length === 0) {
-            reject(new Error("Empty promise list"));
-            return;
-        }
-        promises.forEach((p) => {
-            Promise.resolve(p)
-                .then(resolve)
-                .catch(() => {
-                    rejectedCount++;
-                    if (rejectedCount === promises.length) {
-                        reject(new Error("All promises rejected"));
-                    }
-                });
-        });
-    });
-};
 
-const fetchFirstSuccessful = async (urls: string[]): Promise<string | null> => {
-    try {
-        return await promiseAny(
-            urls.map(async (url) => {
-                const res = await fetch(url, { next: { revalidate: 3600 } });
-                if (res.ok) {
-                    const text = await res.text();
-                    if (text.trim()) {
-                        return text;
-                    }
-                }
-                throw new Error(`Not found or empty: ${url}`);
-            })
-        );
-    } catch {
-        return null;
-    }
-};
 
 export const fetchGithubRepoDetails = async (owner: string, repoName: string) => {
     try {
@@ -86,64 +49,89 @@ export const fetchGithubRepoDetails = async (owner: string, repoName: string) =>
             headers['Authorization'] = `Bearer ${process.env.GITHUB_TOKEN}`;
         }
 
-        const [repoRes, readmeRes] = await Promise.all([
+        const [repoRes, contentsRes, githubDirRes] = await Promise.all([
             fetch(`https://api.github.com/repos/${owner}/${repoName}`, { 
                 headers,
                 next: { revalidate: 3600 } 
             }),
-            fetch(`https://api.github.com/repos/${owner}/${repoName}/readme`, {
-                headers: { ...headers, 'Accept': 'application/vnd.github.v3.raw' },
+            fetch(`https://api.github.com/repos/${owner}/${repoName}/contents`, {
+                headers,
                 next: { revalidate: 3600 }
             }),
+            fetch(`https://api.github.com/repos/${owner}/${repoName}/contents/.github`, {
+                headers,
+                next: { revalidate: 3600 }
+            })
         ]);
 
         let repoData = null;
-        let readme = null;
+        let allFiles: any[] = [];
 
         if (repoRes.ok) {
             repoData = await repoRes.json();
         }
 
-        if (readmeRes.ok) {
-            readme = await readmeRes.text();
+        if (contentsRes.ok) {
+            const data = await contentsRes.json();
+            if (Array.isArray(data)) allFiles.push(...data);
         }
 
-        const branches = repoData?.default_branch ? [repoData.default_branch] : ['main', 'master'];
+        if (githubDirRes.ok) {
+            const data = await githubDirRes.json();
+            if (Array.isArray(data)) allFiles.push(...data);
+        }
 
-        const getUrls = (paths: string[]) => 
-            branches.flatMap(branch => 
-                paths.map(path => `https://raw.githubusercontent.com/${owner}/${repoName}/${branch}/${path}`)
-            );
+        // Filter files
+        const filesToFetch = allFiles.filter((f: any) => {
+            if (f.type !== 'file') return false;
+            const name = f.name.toLowerCase();
+            return name.endsWith('.md') || name.endsWith('.mdx') || name === 'license' || name === 'code_of_conduct';
+        });
 
-        const licensePaths = [
-            'LICENSE', 'LICENSE.md', 'License', 'license', 'LICENSE.txt',
-            '.github/LICENSE', '.github/LICENSE.md', '.github/LICENSE.txt',
-            '.github/License', '.github/license'
-        ];
+        // Fetch contents
+        const fetchedFiles = await Promise.all(
+            filesToFetch.map(async (file: any) => {
+                if (file.download_url) {
+                    const res = await fetch(file.download_url, { headers });
+                    if (res.ok) {
+                        return { name: file.name, content: await res.text() };
+                    }
+                }
+                return { name: file.name, content: null };
+            })
+        );
 
-        const contributingPaths = [
-            'CONTRIBUTING.md', 'contributing.md', 'Contributing.md',
-            'CONTRIBUTING', 'contributing', 'Contributing',
-            '.github/CONTRIBUTING.md', '.github/contributing.md', '.github/Contributing.md',
-            '.github/CONTRIBUTING', '.github/contributing', '.github/Contributing'
-        ];
+        const validFiles = fetchedFiles.filter(f => f.content);
 
-        const cocPaths = [
-            'CODE_OF_CONDUCT.md', 'code_of_conduct.md', 'Code_Of_Conduct.md', 'CodeOfConduct.md', 'Code_of_conduct.md',
-            'CODE_OF_CONDUCT', 'code_of_conduct', 'CodeOfConduct',
-            '.github/CODE_OF_CONDUCT.md', '.github/code_of_conduct.md', '.github/Code_Of_Conduct.md', '.github/CodeOfConduct.md', '.github/Code_of_conduct.md',
-            '.github/CODE_OF_CONDUCT', '.github/code_of_conduct', '.github/CodeOfConduct'
-        ];
+        const uniqueFilesMap = new Map<string, {name: string, content: string}>();
+        for (const f of validFiles) {
+            const lowerName = f.name.toLowerCase();
+            if (!uniqueFilesMap.has(lowerName)) {
+                uniqueFilesMap.set(lowerName, f as {name: string, content: string});
+            }
+        }
+        
+        let mdFiles = Array.from(uniqueFilesMap.values());
 
-        const [license, contributing, codeOfConduct] = await Promise.all([
-            fetchFirstSuccessful(getUrls(licensePaths)),
-            fetchFirstSuccessful(getUrls(contributingPaths)),
-            fetchFirstSuccessful(getUrls(cocPaths))
-        ]);
+        const getPriority = (name: string) => {
+            const lower = name.toLowerCase();
+            if (lower.startsWith('readme')) return 1;
+            if (lower.startsWith('code_of_conduct')) return 2;
+            if (lower.startsWith('contributing')) return 3;
+            if (lower.startsWith('license')) return 4;
+            return 5;
+        };
 
-        return { repoData, readme, license, contributing, codeOfConduct };
+        mdFiles.sort((a, b) => {
+            const pA = getPriority(a.name);
+            const pB = getPriority(b.name);
+            if (pA !== pB) return pA - pB;
+            return a.name.localeCompare(b.name);
+        });
+
+        return { repoData, mdFiles };
     } catch (error) {
         console.error("Error fetching data from Github API:", error);
-        return { repoData: null, readme: null, license: null, contributing: null, codeOfConduct: null };
+        return { repoData: null, mdFiles: [] };
     }
 };
