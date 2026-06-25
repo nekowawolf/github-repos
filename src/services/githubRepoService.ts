@@ -9,7 +9,7 @@ export const fetchGithubReposData = async (): Promise<GithubRepo[]> => {
         const fullUrl = `${API_BASE_URL}/githubrepo`;
         console.log('Fetching github repos data from:', fullUrl);
 
-        const response = await fetch(fullUrl);
+        const response = await fetch(fullUrl, { next: { revalidate: 3600 } });
         if (!response.ok) {
             throw new Error(`Network response was not ok: ${response.status} ${response.statusText} (URL: ${fullUrl})`);
         }
@@ -92,7 +92,10 @@ export const fetchGithubRepoDetails = async (owner: string, repoName: string) =>
         const fetchedFiles = await Promise.all(
             filesToFetch.map(async (file: any) => {
                 if (file.download_url) {
-                    const res = await fetch(file.download_url, { headers });
+                    const res = await fetch(file.download_url, { 
+                        headers,
+                        next: { revalidate: 3600 }
+                    });
                     if (res.ok) {
                         return { name: file.name, content: await res.text() };
                     }
