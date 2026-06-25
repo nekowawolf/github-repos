@@ -1,3 +1,5 @@
+'use server';
+
 import { GithubRepo } from "@/types/githubRepo";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -79,10 +81,18 @@ const fetchFirstSuccessful = async (urls: string[]): Promise<string | null> => {
 
 export const fetchGithubRepoDetails = async (owner: string, repoName: string) => {
     try {
+        const headers: Record<string, string> = {};
+        if (process.env.GITHUB_TOKEN) {
+            headers['Authorization'] = `Bearer ${process.env.GITHUB_TOKEN}`;
+        }
+
         const [repoRes, readmeRes] = await Promise.all([
-            fetch(`https://api.github.com/repos/${owner}/${repoName}`, { next: { revalidate: 3600 } }),
+            fetch(`https://api.github.com/repos/${owner}/${repoName}`, { 
+                headers,
+                next: { revalidate: 3600 } 
+            }),
             fetch(`https://api.github.com/repos/${owner}/${repoName}/readme`, {
-                headers: { 'Accept': 'application/vnd.github.v3.raw' },
+                headers: { ...headers, 'Accept': 'application/vnd.github.v3.raw' },
                 next: { revalidate: 3600 }
             }),
         ]);
