@@ -9,7 +9,7 @@ export const fetchGithubReposData = async (): Promise<GithubRepo[]> => {
         const fullUrl = `${API_BASE_URL}/githubrepo`;
         console.log('Fetching github repos data from:', fullUrl);
 
-        const response = await fetch(fullUrl, { next: { revalidate: 3600 } });
+        const response = await fetch(fullUrl);
         if (!response.ok) {
             throw new Error(`Network response was not ok: ${response.status} ${response.statusText} (URL: ${fullUrl})`);
         }
