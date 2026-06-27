@@ -42,11 +42,20 @@ export const fetchGithubReposData = async (): Promise<GithubRepo[]> => {
 
 
 
-export const fetchGithubRepoDetails = async (owner: string, repoName: string) => {
+let useBackupTokenUntil = 0;
+
+export const fetchGithubRepoDetails = async (owner: string, repoName: string, retryCount = 0): Promise<{repoData: any, mdFiles: any[]}> => {
     try {
+        const tokens = [process.env.GITHUB_TOKEN, process.env.GITHUB_TOKEN2].filter(Boolean);
+        let currentTokenIndex = 0;
+        
+        if (tokens.length > 1 && Date.now() < useBackupTokenUntil) {
+            currentTokenIndex = 1;
+        }
+
         const headers: Record<string, string> = {};
-        if (process.env.GITHUB_TOKEN) {
-            headers['Authorization'] = `Bearer ${process.env.GITHUB_TOKEN}`;
+        if (tokens.length > 0) {
+            headers['Authorization'] = `Bearer ${tokens[currentTokenIndex]}`;
         }
 
         const [repoRes, contentsRes, githubDirRes] = await Promise.all([
@@ -63,6 +72,19 @@ export const fetchGithubRepoDetails = async (owner: string, repoName: string) =>
                 next: { revalidate: 3600 }
             })
         ]);
+
+        const hasAuthError = [repoRes, contentsRes, githubDirRes].some(res => res.status === 403 || res.status === 401);
+
+        if (hasAuthError && tokens.length > 1 && retryCount === 0) {
+            if (currentTokenIndex === 0) {
+                useBackupTokenUntil = Date.now() + 5 * 60 * 60 * 1000;
+                console.warn(`Github API rate limit hit on Token 1. Switching to Token 2 for 5 hours. Retrying...`);
+            } else {
+                useBackupTokenUntil = 0;
+                console.warn(`Github API rate limit hit on Token 2. Reverting back to Token 1. Retrying...`);
+            }
+            return fetchGithubRepoDetails(owner, repoName, retryCount + 1);
+        }
 
         let repoData = null;
         let allFiles: any[] = [];
@@ -101,6 +123,9 @@ export const fetchGithubRepoDetails = async (owner: string, repoName: string) =>
                         headers,
                         next: { revalidate: 3600 }
                     });
+                    if (res.status === 403 || res.status === 401) {
+                        return { name: file.name, content: null, authError: true };
+                    }
                     if (res.ok) {
                         return { name: file.name, content: await res.text() };
                     }
@@ -108,6 +133,17 @@ export const fetchGithubRepoDetails = async (owner: string, repoName: string) =>
                 return { name: file.name, content: null };
             })
         );
+
+        if (fetchedFiles.some(f => f.authError) && tokens.length > 1 && retryCount === 0) {
+            if (currentTokenIndex === 0) {
+                useBackupTokenUntil = Date.now() + 5 * 60 * 60 * 1000;
+                console.warn(`Github API rate limit hit on file download using Token 1. Switching to Token 2 for 5 hours. Retrying...`);
+            } else {
+                useBackupTokenUntil = 0;
+                console.warn(`Github API rate limit hit on file download using Token 2. Reverting back to Token 1. Retrying...`);
+            }
+            return fetchGithubRepoDetails(owner, repoName, retryCount + 1);
+        }
 
         const validFiles = fetchedFiles.filter(f => f.content);
 
