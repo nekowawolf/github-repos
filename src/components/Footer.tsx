@@ -66,12 +66,9 @@ export default function Footer() {
             >
                 {/* Layer 1: Default text */}
                 <div className="flex justify-center items-center select-none pointer-events-none">
-                    <h3 className="text-[9vw] font-black text-fill-color opacity-10 mx-2 tracking-tighter">
-                        NWW
-                    </h3>
-                    <h3 className="text-[9vw] font-black text-fill-color opacity-10 mx-2 tracking-tighter">
-                        GITHUB REPOS
-                    </h3>
+                    <h3 className="text-[9vw] font-black text-fill-color opacity-10 tracking-tighter whitespace-nowrap">
+                            NWW GITHUB REPOS
+                        </h3>
                 </div>
 
                 {/* Layer 2: Bright text with spotlight mask */}
@@ -85,12 +82,9 @@ export default function Footer() {
                         WebkitMaskImage: brightMask,
                     }}
                 >
-                    <motion.h3 className="text-[9vw] font-black text-blue-600 mx-2 tracking-tighter">
-                        NWW
-                    </motion.h3>
-                    <motion.h3 className="text-[9vw] font-black text-blue-600 mx-2 tracking-tighter">
-                        GITHUB REPOS
-                    </motion.h3>
+                    <motion.h3 className="text-[9vw] font-black text-blue-600 tracking-tighter whitespace-nowrap">
+                            NWW GITHUB REPOS
+                        </motion.h3>
                 </motion.div>
 
                 {/* Layer 3: Glow layer */}
@@ -104,12 +98,9 @@ export default function Footer() {
                         WebkitMaskImage: glowMask,
                     }}
                 >
-                    <motion.h3 className="text-[9vw] font-black text-blue-500 mx-2 tracking-tighter blur-[12px]">
-                        NWW
-                    </motion.h3>
-                    <motion.h3 className="text-[9vw] font-black text-blue-500 mx-2 tracking-tighter blur-[12px]">
-                        GITHUB REPOS
-                    </motion.h3>
+                    <motion.h3 className="text-[9vw] font-black text-blue-500 tracking-tighter blur-[12px] whitespace-nowrap">
+                            NWW GITHUB REPOS
+                        </motion.h3>
                 </motion.div>
             </div>
 
@@ -136,7 +127,7 @@ export default function Footer() {
                             target="_blank"
                             className="text-fill-color/60 hover:!text-blue-600 transition-colors duration-300"
                         >
-                            Community
+                            Crypto Community
                         </a>
                         <a
                             href="https://web3.nekowawolf.xyz/"
