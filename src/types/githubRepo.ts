@@ -6,9 +6,9 @@ export interface GithubRepo {
     repo_url: string;
     owner: string;
     repo_name: string;
+    website?: string;
     twitter?: string;
     instagram?: string;
     discord?: string;
     telegram?: string;
-    website?: string;
 }

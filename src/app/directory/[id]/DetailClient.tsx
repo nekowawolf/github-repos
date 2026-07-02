@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { FaExternalLinkAlt, FaCode, FaServer, FaDatabase, FaShieldAlt, FaGraduationCap, FaGithub, FaStar, FaCodeBranch, FaRegClock, FaRegUserCircle } from "react-icons/fa";
+import { FaExternalLinkAlt, FaCode, FaServer, FaDatabase, FaShieldAlt, FaGraduationCap, FaGithub, FaStar, FaCodeBranch, FaRegClock, FaRegUserCircle, FaGlobe } from "react-icons/fa";
 import { FaXTwitter, FaTelegram, FaInstagram } from "react-icons/fa6";
 import { BsDiscord } from "react-icons/bs";
 import { GoCpu } from "react-icons/go";
@@ -179,25 +179,30 @@ export default function DetailClient() {
                                     </a>
                                 )}
 
-                                {(repo.twitter || repo.instagram || repo.discord || repo.telegram) && (
+                                {(repo.website || repo.twitter || repo.instagram || repo.discord || repo.telegram) && (
                                     <div className="flex items-center gap-3 ml-auto sm:ml-4 bg-[rgba(var(--fill-color-rgb),0.05)] px-4 py-2 rounded-xl border border-[var(--border-divider)]">
+                                        {repo.website && (
+                                            <a href={repo.website} target="_blank" rel="noopener noreferrer" className="opacity-70 hover:opacity-100 transition-all text-fill-color">
+                                                <FaGlobe className="w-5 h-5" />
+                                            </a>
+                                        )}
                                         {repo.twitter && (
-                                            <a href={repo.twitter} target="_blank" rel="noopener noreferrer" className="opacity-70 hover:opacity-100 hover:text-blue-400 transition-all text-fill-color">
+                                            <a href={repo.twitter} target="_blank" rel="noopener noreferrer" className="opacity-70 hover:opacity-100 transition-all text-fill-color">
                                                 <FaXTwitter className="w-5 h-5" />
                                             </a>
                                         )}
                                         {repo.instagram && (
-                                            <a href={repo.instagram} target="_blank" rel="noopener noreferrer" className="opacity-70 hover:opacity-100 hover:text-pink-500 transition-all text-fill-color">
+                                            <a href={repo.instagram} target="_blank" rel="noopener noreferrer" className="opacity-70 hover:opacity-100 transition-all text-fill-color">
                                                 <FaInstagram className="w-5 h-5" />
                                             </a>
                                         )}
                                         {repo.discord && (
-                                            <a href={repo.discord} target="_blank" rel="noopener noreferrer" className="opacity-70 hover:opacity-100 hover:text-indigo-400 transition-all text-fill-color">
+                                            <a href={repo.discord} target="_blank" rel="noopener noreferrer" className="opacity-70 hover:opacity-100 transition-all text-fill-color">
                                                 <BsDiscord className="w-5 h-5" />
                                             </a>
                                         )}
                                         {repo.telegram && (
-                                            <a href={repo.telegram} target="_blank" rel="noopener noreferrer" className="opacity-70 hover:opacity-100 hover:text-blue-500 transition-all text-fill-color">
+                                            <a href={repo.telegram} target="_blank" rel="noopener noreferrer" className="opacity-70 hover:opacity-100 transition-all text-fill-color">
                                                 <FaTelegram className="w-5 h-5" />
                                             </a>
                                         )}
