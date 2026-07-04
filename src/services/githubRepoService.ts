@@ -61,15 +61,15 @@ export const fetchGithubRepoDetails = async (owner: string, repoName: string, re
         const [repoRes, contentsRes, githubDirRes] = await Promise.all([
             fetch(`https://api.github.com/repos/${owner}/${repoName}`, { 
                 headers,
-                next: { revalidate: 3600 } 
+                next: { revalidate: 86400 } 
             }),
             fetch(`https://api.github.com/repos/${owner}/${repoName}/contents`, {
                 headers,
-                next: { revalidate: 3600 }
+                next: { revalidate: 86400 }
             }),
             fetch(`https://api.github.com/repos/${owner}/${repoName}/contents/.github`, {
                 headers,
-                next: { revalidate: 3600 }
+                next: { revalidate: 86400 }
             })
         ]);
 
@@ -121,7 +121,7 @@ export const fetchGithubRepoDetails = async (owner: string, repoName: string, re
                 if (file.download_url) {
                     const res = await fetch(file.download_url, { 
                         headers,
-                        next: { revalidate: 3600 }
+                        next: { revalidate: 86400 }
                     });
                     if (res.status === 403 || res.status === 401) {
                         return { name: file.name, content: null, authError: true };
