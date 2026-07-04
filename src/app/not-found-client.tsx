@@ -61,7 +61,7 @@ export default function NotFound() {
           />
         </div>
 
-        <a href="https://nekowawolf.xyz" className="inline-block mb-4">
+        <a href="https://nekowawolf.xyz" className="cursor-pointer inline-block mb-4">
           <img
             src="https://www.nekowawolf.xyz/img/nww.png"
             alt=""

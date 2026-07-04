@@ -29,7 +29,7 @@ export default function Pagination({
 
             <div className="inline-flex mt-2 xs:mt-0 gap-2">
                 <button
-                    className="flex items-center justify-center px-4 h-10 text-sm font-medium text-fill-color bg-card-color border border-color rounded-lg hover:bg-card-color/80 hover:text-blue-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                    className="flex items-center justify-center px-4 h-10 text-sm font-medium text-blue-400 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/40 hover:border-blue-500/60 rounded-xl transition-all duration-300 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-500/20 disabled:hover:border-blue-500/40 disabled:hover:translate-y-0 disabled:active:scale-100 active:scale-95 cursor-pointer"
                     onClick={() => onPageChange(Math.max(currentPage - 1, 1))}
                     disabled={currentPage === 1}
                 >
@@ -39,7 +39,7 @@ export default function Pagination({
                     Prev
                 </button>
                 <button
-                    className="flex items-center justify-center px-4 h-10 text-sm font-medium text-fill-color bg-card-color border border-color rounded-lg hover:bg-card-color/80 hover:text-blue-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                    className="flex items-center justify-center px-4 h-10 text-sm font-medium text-blue-400 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/40 hover:border-blue-500/60 rounded-xl transition-all duration-300 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-500/20 disabled:hover:border-blue-500/40 disabled:hover:translate-y-0 disabled:active:scale-100 active:scale-95 cursor-pointer"
                     onClick={() => onPageChange(Math.min(currentPage + 1, totalPages))}
                     disabled={currentPage === totalPages}
                 >

@@ -20,7 +20,7 @@ export default function Hero() {
       <p className="text-fill-color/80 max-w-lg mt-2 mb-8 font-medium leading-relaxed">
         This landing page is currently under development. Please proceed directly to our directory to explore the content.
       </p>
-      <Link href="/directory" className="inline-flex items-center justify-center px-8 py-3.5 text-sm font-bold text-white transition-all duration-300 bg-blue-600 rounded-full hover:bg-blue-500 shadow-lg shadow-blue-500/25 hover:-translate-y-0.5">
+      <Link href="/directory" className="cursor-pointer inline-flex items-center justify-center px-8 py-3.5 text-sm font-bold text-white transition-all duration-300 bg-blue-600 rounded-full hover:bg-blue-500 shadow-lg shadow-blue-500/25 hover:-translate-y-0.5">
         Explore Directory
       </Link>
     </div>

@@ -46,7 +46,7 @@ const PreBlock = ({ node, children, ...props }: any) => {
         <div className="relative group w-fit max-w-full my-6">
             <button
                 onClick={handleCopy}
-                className="absolute top-2 right-2 p-1.5 rounded-md bg-[rgba(var(--fill-color-rgb),0.1)] transition-all hover:bg-[rgba(var(--fill-color-rgb),0.2)] text-fill-color/70 z-10"
+                className="cursor-pointer absolute top-2 right-2 p-1.5 rounded-md bg-[rgba(var(--fill-color-rgb),0.1)] transition-all hover:bg-[rgba(var(--fill-color-rgb),0.2)] text-fill-color/70 z-10"
                 aria-label="Copy code"
                 title="Copy"
             >
@@ -132,7 +132,7 @@ export default function RepoContentTabs({ mdFiles, licenseName, owner, repoName,
                     <button
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
-                        className={`px-4 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-2 ${
+                        className={`px-4 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-2 cursor-pointer ${
                             activeTab === tab.id
                                 ? 'bg-blue-600 text-white'
                                 : 'bg-[rgba(var(--fill-color-rgb),0.05)] text-fill-color/60 hover:text-fill-color hover:bg-[rgba(var(--fill-color-rgb),0.1)] border border-[var(--border-divider)]'

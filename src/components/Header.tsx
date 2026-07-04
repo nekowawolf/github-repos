@@ -69,7 +69,7 @@ export default function Header() {
         >
           <div className="h-full px-6 sm:px-8 flex items-center justify-between">
             {/* LEFT */}
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/" className="cursor-pointer flex items-center gap-2">
             <img
               src="https://nekowawolf.github.io/cdn-images/images/2026/1768368937_logo.jpg"
               alt="Logo"

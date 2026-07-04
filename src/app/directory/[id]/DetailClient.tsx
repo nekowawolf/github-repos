@@ -86,7 +86,7 @@ export default function DetailClient() {
             <main className="flex-grow pt-36 min-h-screen flex items-center justify-center text-fill-color">
                 <div className="text-center">
                     <h1 className="text-2xl font-bold mb-4">Repository Not Found</h1>
-                    <Link href="/directory" className="text-blue-500 hover:underline">
+                    <Link href="/directory" className="cursor-pointer text-blue-500 hover:underline">
                         Back to GitHub Repos
                     </Link>
                 </div>
@@ -111,7 +111,7 @@ export default function DetailClient() {
                                 href={`https://github.com/${repo.owner}`}
                                 target="_blank"
                                 rel="noreferrer"
-                                className="flex items-center gap-1.5 mb-4 opacity-70 hover:opacity-100 transition-opacity text-fill-color w-fit"
+                                className="cursor-pointer flex items-center gap-1.5 mb-4 opacity-70 hover:opacity-100 transition-opacity text-fill-color w-fit"
                             >
                                 <FaRegUserCircle className="w-4 h-4" />
                                 <span className="text-sm font-medium">{repo.owner}</span>
@@ -182,27 +182,27 @@ export default function DetailClient() {
                                 {(repo.website || repo.twitter || repo.instagram || repo.discord || repo.telegram) && (
                                     <div className="flex items-center gap-3 ml-auto sm:ml-4 bg-[rgba(var(--fill-color-rgb),0.05)] px-4 py-2 rounded-xl border border-[var(--border-divider)]">
                                         {repo.website && (
-                                            <a href={repo.website} target="_blank" rel="noopener noreferrer" className="opacity-70 hover:opacity-100 transition-all text-fill-color">
+                                            <a href={repo.website} target="_blank" rel="noopener noreferrer" className="cursor-pointer opacity-70 hover:opacity-100 transition-all text-fill-color">
                                                 <FaGlobe className="w-5 h-5" />
                                             </a>
                                         )}
                                         {repo.twitter && (
-                                            <a href={repo.twitter} target="_blank" rel="noopener noreferrer" className="opacity-70 hover:opacity-100 transition-all text-fill-color">
+                                            <a href={repo.twitter} target="_blank" rel="noopener noreferrer" className="cursor-pointer opacity-70 hover:opacity-100 transition-all text-fill-color">
                                                 <FaXTwitter className="w-5 h-5" />
                                             </a>
                                         )}
                                         {repo.instagram && (
-                                            <a href={repo.instagram} target="_blank" rel="noopener noreferrer" className="opacity-70 hover:opacity-100 transition-all text-fill-color">
+                                            <a href={repo.instagram} target="_blank" rel="noopener noreferrer" className="cursor-pointer opacity-70 hover:opacity-100 transition-all text-fill-color">
                                                 <FaInstagram className="w-5 h-5" />
                                             </a>
                                         )}
                                         {repo.discord && (
-                                            <a href={repo.discord} target="_blank" rel="noopener noreferrer" className="opacity-70 hover:opacity-100 transition-all text-fill-color">
+                                            <a href={repo.discord} target="_blank" rel="noopener noreferrer" className="cursor-pointer opacity-70 hover:opacity-100 transition-all text-fill-color">
                                                 <BsDiscord className="w-5 h-5" />
                                             </a>
                                         )}
                                         {repo.telegram && (
-                                            <a href={repo.telegram} target="_blank" rel="noopener noreferrer" className="opacity-70 hover:opacity-100 transition-all text-fill-color">
+                                            <a href={repo.telegram} target="_blank" rel="noopener noreferrer" className="cursor-pointer opacity-70 hover:opacity-100 transition-all text-fill-color">
                                                 <FaTelegram className="w-5 h-5" />
                                             </a>
                                         )}
@@ -227,7 +227,7 @@ export default function DetailClient() {
             <div className={`fixed bottom-6 right-6 z-50 transition-all duration-300 ${showScrollTop ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}`}>
                 <button
                     onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                    className="p-3 rounded-full text-white bg-blue-600 hover:bg-blue-500 transition-all shadow-lg shadow-blue-500/20 flex items-center justify-center"
+                    className="p-3 rounded-full text-white bg-blue-600 hover:bg-blue-500 transition-all shadow-lg shadow-blue-500/20 flex items-center justify-center cursor-pointer"
                     aria-label="Scroll to top"
                 >
                     <IoIosArrowUp className="w-6 h-6" />

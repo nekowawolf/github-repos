@@ -100,9 +100,9 @@ function GithubReposContentInner() {
                         <button
                             key={category}
                             onClick={() => handleCategoryChange(category)}
-                            className={`px-4 py-2 rounded-full text-sm font-medium leading-none transition-colors duration-200 ${activeCategory === category
+                            className={`px-4 py-2 rounded-full text-sm font-medium leading-none transition-colors duration-200 cursor-pointer ${activeCategory === category
                                 ? 'bg-blue-600 text-white'
-                                : 'card-color text-fill-color/70 hover:text-fill-color border border-color'
+                                : 'card-color text-fill-color/70 border border-color hover:!text-[var(--fill-color)] hover:!border-blue-600'
                                 }`}
                         >
                             {category}
@@ -129,7 +129,7 @@ function GithubReposContentInner() {
                                     <Link
                                         href={`/directory/${repo._id}`}
                                         key={repo._id}
-                                        className="relative group rounded-2xl p-[1px] overflow-hidden block hover:scale-[1.02] transition-transform duration-300"
+                                        className="relative group rounded-2xl p-[1px] overflow-hidden block hover:scale-[1.02] transition-transform duration-300 cursor-pointer"
                                     >
                                         <div className="absolute inset-0 bg-gradient-to-br from-blue-500/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                                         <div className="relative glass-card rounded-2xl p-6 flex flex-col h-full bg-card-color/80 backdrop-blur-xl border border-white/5">
