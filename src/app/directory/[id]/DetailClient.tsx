@@ -179,38 +179,38 @@ export default function DetailClient() {
                                         href={repo.repo_url}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-medium text-white bg-blue-600 hover:bg-blue-500 transition-all shadow-lg shadow-blue-500/20"
+                                        className="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3.5 py-2 sm:px-4 sm:py-2 rounded-xl font-medium text-[15px] sm:text-[15px] text-white bg-blue-600 hover:bg-blue-500 transition-all shadow-lg shadow-blue-500/20"
                                     >
                                         View Repository
-                                        <FaExternalLinkAlt className="w-3.5 h-3.5" />
+                                        <FaExternalLinkAlt className="w-[15px] h-[15px] sm:w-3.5 sm:h-3.5" />
                                     </a>
                                 )}
 
                                 {(repo.website || repo.twitter || repo.instagram || repo.discord || repo.telegram) && (
-                                    <div className="flex items-center gap-3 ml-auto sm:ml-4 bg-[rgba(var(--fill-color-rgb),0.05)] px-4 py-2 rounded-xl border border-[var(--border-divider)]">
+                                    <div className="flex items-center gap-2.5 sm:gap-2.5 ml-auto sm:ml-4 bg-[rgba(var(--fill-color-rgb),0.05)] px-3.5 py-1.5 sm:px-3.5 sm:py-1.5 rounded-xl border border-[var(--border-divider)]">
                                         {repo.website && (
                                             <a href={repo.website} target="_blank" rel="noopener noreferrer" className="cursor-pointer opacity-70 hover:opacity-100 transition-all text-fill-color">
-                                                <FaGlobe className="w-5 h-5" />
+                                                <FaGlobe className="w-[19px] h-[19px] sm:w-[18px] sm:h-[18px]" />
                                             </a>
                                         )}
                                         {repo.twitter && (
                                             <a href={repo.twitter} target="_blank" rel="noopener noreferrer" className="cursor-pointer opacity-70 hover:opacity-100 transition-all text-fill-color">
-                                                <FaXTwitter className="w-5 h-5" />
+                                                <FaXTwitter className="w-[19px] h-[19px] sm:w-[18px] sm:h-[18px]" />
                                             </a>
                                         )}
                                         {repo.instagram && (
                                             <a href={repo.instagram} target="_blank" rel="noopener noreferrer" className="cursor-pointer opacity-70 hover:opacity-100 transition-all text-fill-color">
-                                                <FaInstagram className="w-5 h-5" />
+                                                <FaInstagram className="w-[19px] h-[19px] sm:w-[18px] sm:h-[18px]" />
                                             </a>
                                         )}
                                         {repo.discord && (
                                             <a href={repo.discord} target="_blank" rel="noopener noreferrer" className="cursor-pointer opacity-70 hover:opacity-100 transition-all text-fill-color">
-                                                <BsDiscord className="w-5 h-5" />
+                                                <BsDiscord className="w-[19px] h-[19px] sm:w-[18px] sm:h-[18px]" />
                                             </a>
                                         )}
                                         {repo.telegram && (
                                             <a href={repo.telegram} target="_blank" rel="noopener noreferrer" className="cursor-pointer opacity-70 hover:opacity-100 transition-all text-fill-color">
-                                                <FaTelegram className="w-5 h-5" />
+                                                <FaTelegram className="w-[19px] h-[19px] sm:w-[18px] sm:h-[18px]" />
                                             </a>
                                         )}
                                     </div>
