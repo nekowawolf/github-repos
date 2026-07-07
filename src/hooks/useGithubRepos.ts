@@ -3,6 +3,8 @@ import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { GithubRepo } from '@/types/githubRepo';
 import { fetchGithubReposData } from '@/services/githubRepoService';
 
+let isInitialLoad = true;
+
 export function useGithubRepos(itemsPerPage: number) {
     const searchParams = useSearchParams();
     const router = useRouter();
@@ -13,15 +15,54 @@ export function useGithubRepos(itemsPerPage: number) {
     const [error, setError] = useState<string | null>(null);
 
     const [localSearchQuery, setLocalSearchQuery] = useState(searchParams.get('q') || '');
-    const activeCategory = searchParams.get('category') || 'All';
-    const currentPage = Number(searchParams.get('page')) || 1;
+    const [localCategory, setLocalCategory] = useState(searchParams.get('category') || 'All');
+    const [localPage, setLocalPage] = useState(Number(searchParams.get('page')) || 1);
 
     useEffect(() => {
         const loadRepos = async () => {
             setLoading(true);
             try {
+                let forceShuffle = false;
+                if (isInitialLoad) {
+                    isInitialLoad = false;
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const page = Number(urlParams.get('page')) || 1;
+                    if (page === 1) {
+                        forceShuffle = true;
+                    }
+                }
                 const data = await fetchGithubReposData();
-                setAllRepos(data);
+                let finalData = [...data];
+
+                if (typeof sessionStorage !== 'undefined') {
+                    const cachedOrderStr = sessionStorage.getItem('githubReposOrder');
+                    const getRepoKey = (r: any) => r._id || r.id || r.name;
+                    
+                    if (cachedOrderStr && !forceShuffle) {
+                        try {
+                            const cachedOrder: string[] = JSON.parse(cachedOrderStr);
+                            const orderMap = new Map<string, number>(cachedOrder.map((id, index) => [id, index]));
+                            finalData.sort((a, b) => {
+                                const aKey = getRepoKey(a);
+                                const bKey = getRepoKey(b);
+                                const aIdx = orderMap.has(aKey) ? orderMap.get(aKey)! : 99999;
+                                const bIdx = orderMap.has(bKey) ? orderMap.get(bKey)! : 99999;
+                                return aIdx - bIdx;
+                            });
+                        } catch (e) {
+                            console.error('Failed to parse cached order', e);
+                        }
+                    } else {
+                        for (let i = finalData.length - 1; i > 0; i--) {
+                            const j = Math.floor(Math.random() * (i + 1));
+                            [finalData[i], finalData[j]] = [finalData[j], finalData[i]];
+                        }
+                        const order = finalData.map(t => getRepoKey(t));
+                        sessionStorage.setItem('githubReposOrder', JSON.stringify(order));
+                    }
+                }
+
+                setAllRepos(finalData);
                 setError(null);
             } catch (err) {
                 setError(err instanceof Error ? err.message : "Failed to load github repos");
@@ -38,54 +79,73 @@ export function useGithubRepos(itemsPerPage: number) {
         const handler = setTimeout(() => {
             const currentQ = searchParams.get('q') || '';
             if (localSearchQuery !== currentQ) {
-                const params = new URLSearchParams(searchParams.toString());
+                const params = new URLSearchParams(window.location.search);
                 if (localSearchQuery) params.set('q', localSearchQuery);
                 else params.delete('q');
                 params.set('page', '1');
-                router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+                
+                const queryString = params.toString();
+                const newUrl = queryString ? `${pathname}?${queryString}` : pathname;
+                window.history.pushState(null, '', newUrl);
             }
         }, 300);
         return () => clearTimeout(handler);
-    }, [localSearchQuery, pathname, router, searchParams]);
+    }, [localSearchQuery, pathname, searchParams]);
 
     const updateURL = (newCategory: string, newQuery: string, newPage: number) => {
-        const params = new URLSearchParams(searchParams.toString());
+        const params = new URLSearchParams();
         if (newCategory !== 'All') params.set('category', newCategory);
-        else params.delete('category');
-        
+        if (newQuery) params.set('q', newQuery);
         if (newPage > 1) params.set('page', newPage.toString());
-        else params.delete('page');
         
-        router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+        const queryString = params.toString();
+        const newUrl = queryString ? `${pathname}?${queryString}` : pathname;
+        window.history.pushState(null, '', newUrl);
+    };
+
+    const handleCategoryChange = (category: string) => {
+        setLocalCategory(category);
+        setLocalPage(1);
+        updateURL(category, localSearchQuery, 1);
+    };
+
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setLocalSearchQuery(e.target.value);
+        setLocalPage(1);
+    };
+
+    const handlePageChange = (page: number) => {
+        setLocalPage(page);
+        updateURL(localCategory, localSearchQuery, page);
     };
 
     const filteredRepos = useMemo(() => {
         return allRepos.filter(repo => {
-            const matchesCategory = activeCategory === "All" ||
-                repo.category.toLowerCase() === activeCategory.toLowerCase();
+            const matchesCategory = localCategory === "All" ||
+                repo.category.toLowerCase() === localCategory.toLowerCase();
             const matchesSearch = repo.name.toLowerCase().includes(localSearchQuery.toLowerCase()) ||
                 repo.owner.toLowerCase().includes(localSearchQuery.toLowerCase());
             return matchesCategory && matchesSearch;
         });
-    }, [allRepos, activeCategory, localSearchQuery]);
+    }, [allRepos, localCategory, localSearchQuery]);
 
-    const totalPages = Math.ceil(filteredRepos.length / itemsPerPage);
-    const startIndex = (currentPage - 1) * itemsPerPage;
+    useEffect(() => {
+        const currentQ = searchParams.get('q') || '';
+        const currentCat = searchParams.get('category') || 'All';
+        const currentPg = Number(searchParams.get('page')) || 1;
+        
+        setLocalSearchQuery(currentQ);
+        setLocalCategory(currentCat);
+        setLocalPage(currentPg);
+    }, [searchParams.get('q'), searchParams.get('category'), searchParams.get('page')]);
+
+    const totalItems = filteredRepos.length;
+    const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
+    const validCurrentPage = Math.min(Math.max(1, localPage), totalPages);
+
+    const startIndex = (validCurrentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     const displayedRepos = filteredRepos.slice(startIndex, endIndex);
-
-    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setLocalSearchQuery(e.target.value);
-    };
-
-    const handleCategoryChange = (category: string) => {
-        updateURL(category, localSearchQuery, 1);
-    };
-
-    const handlePageChange = (page: number) => {
-        updateURL(activeCategory, localSearchQuery, page);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
 
     return {
         displayedRepos,
@@ -93,11 +153,11 @@ export function useGithubRepos(itemsPerPage: number) {
         error,
         localSearchQuery,
         handleSearchChange,
-        activeCategory,
+        activeCategory: localCategory,
         handleCategoryChange,
-        currentPage,
+        currentPage: validCurrentPage,
         handlePageChange,
         totalPages,
-        totalItems: filteredRepos.length
+        totalItems
     };
 }
