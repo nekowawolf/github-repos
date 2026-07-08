@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { dashboardMetadata } from "@/constants/metadataTemplates";
+import { githubRepoMetadata } from "@/constants/metadataTemplates";
 import { fetchGithubReposData } from "@/services/githubRepoService";
 import DetailClient from "./DetailClient";
 
@@ -12,8 +12,8 @@ export async function generateMetadata({ params }: Props) {
   const resolvedParams = await params;
   const reposData = await fetchGithubReposData();
   const repo = reposData.find((t) => t._id.toString() === resolvedParams.id);
-  if (!repo) return dashboardMetadata("Not Found", "Repository not found");
-  return dashboardMetadata(repo.name, repo.description);
+  if (!repo) return githubRepoMetadata("Not Found", "Repository not found");
+  return githubRepoMetadata(repo.name, repo.description);
 }
 
 export default function GithubRepoDetails() {

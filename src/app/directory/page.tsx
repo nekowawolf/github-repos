@@ -1,9 +1,9 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import GithubReposContent from "./GithubReposContent";
-import { dashboardMetadata } from "@/constants/metadataTemplates";
+import { githubRepoMetadata } from "@/constants/metadataTemplates";
 
-export const metadata = dashboardMetadata("GitHub Repos", "Explore top GitHub repositories");
+export const metadata = githubRepoMetadata("GitHub Repos", "Explore top GitHub repositories");
 
 export default function GithubReposPage() {
   return (

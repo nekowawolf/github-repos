@@ -1,9 +1,9 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
-import { dashboardMetadata } from "@/constants/metadataTemplates";
+import { githubRepoMetadata } from "@/constants/metadataTemplates";
 
-export const metadata = dashboardMetadata("Home", "Welcome to Nww");
+export const metadata = githubRepoMetadata("Home", "Welcome to Nww");
 
 export default function Home() {
   return (

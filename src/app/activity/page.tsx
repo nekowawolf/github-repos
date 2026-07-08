@@ -1,9 +1,9 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { dashboardMetadata } from "@/constants/metadataTemplates";
+import { githubRepoMetadata } from "@/constants/metadataTemplates";
 import DetailClient from "./DetailClient";
 
-export const metadata = dashboardMetadata("Activity", "Web activity.");
+export const metadata = githubRepoMetadata("Activity", "Web activity.");
 
 export default function ActivityPage() {
   return (
