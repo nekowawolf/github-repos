@@ -89,16 +89,16 @@ export default function Header() {
                 GitHub Repos
               </Link>
               <Link
-                href="https://airdrop.nekowawolf.xyz" target="_blank"
+                href="/news"
                 className="text-fill-color/70 font-semibold hover:!text-blue-600 transition-colors duration-300"
               >
-                Airdrops
+                News
               </Link>
               <Link
-                href="https://ai.nekowawolf.xyz/" target="_blank"
+                href="/activity"
                 className="text-fill-color/70 font-semibold hover:!text-blue-600 transition-colors duration-300"
               >
-                AI Tools
+                Activity
               </Link>
             </nav>
 
@@ -158,18 +158,18 @@ export default function Header() {
               GitHub Repos
             </Link>
             <Link
-              href="https://airdrop.nekowawolf.xyz" target="_blank"
+              href="/news"
               onClick={() => setIsMenuOpen(false)}
               className="block font-semibold text-fill-color/70 hover:!text-blue-600 transition-colors duration-300"
             >
-              Airdrops
+              News
             </Link>
             <Link
-              href="https://ai.nekowawolf.xyz/" target="_blank"
+              href="/activity"
               onClick={() => setIsMenuOpen(false)}
               className="block font-semibold text-fill-color/70 hover:!text-blue-600 transition-colors duration-300"
             >
-              AI Tools
+              Activity
             </Link>
 
             <div className="flex gap-3 pt-2">
