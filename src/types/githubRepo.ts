@@ -10,5 +10,4 @@ export interface GithubRepo {
     twitter?: string;
     instagram?: string;
     discord?: string;
-    telegram?: string;
 }

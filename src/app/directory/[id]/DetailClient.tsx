@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { FaExternalLinkAlt, FaCode, FaServer, FaDatabase, FaShieldAlt, FaGraduationCap, FaGithub, FaStar, FaCodeBranch, FaRegClock, FaRegUserCircle, FaGlobe } from "react-icons/fa";
-import { FaXTwitter, FaTelegram, FaInstagram } from "react-icons/fa6";
+import { FaXTwitter, FaInstagram } from "react-icons/fa6";
 import { BsDiscord } from "react-icons/bs";
 import { GoCpu } from "react-icons/go";
 import { RiRobot2Line } from "react-icons/ri";
@@ -186,7 +186,7 @@ export default function DetailClient() {
                                     </a>
                                 )}
 
-                                {(repo.website || repo.twitter || repo.instagram || repo.discord || repo.telegram) && (
+                                {(repo.website || repo.twitter || repo.instagram || repo.discord) && (
                                     <div className="flex items-center gap-2.5 sm:gap-2.5 ml-auto sm:ml-4 bg-[rgba(var(--fill-color-rgb),0.05)] px-3.5 py-1.5 sm:px-3.5 sm:py-1.5 rounded-xl border border-[var(--border-divider)]">
                                         {repo.website && (
                                             <a href={repo.website} target="_blank" rel="noopener noreferrer" className="cursor-pointer opacity-70 hover:opacity-100 transition-all text-fill-color">
@@ -206,11 +206,6 @@ export default function DetailClient() {
                                         {repo.discord && (
                                             <a href={repo.discord} target="_blank" rel="noopener noreferrer" className="cursor-pointer opacity-70 hover:opacity-100 transition-all text-fill-color">
                                                 <BsDiscord className="w-[19px] h-[19px] sm:w-[18px] sm:h-[18px]" />
-                                            </a>
-                                        )}
-                                        {repo.telegram && (
-                                            <a href={repo.telegram} target="_blank" rel="noopener noreferrer" className="cursor-pointer opacity-70 hover:opacity-100 transition-all text-fill-color">
-                                                <FaTelegram className="w-[19px] h-[19px] sm:w-[18px] sm:h-[18px]" />
                                             </a>
                                         )}
                                     </div>
