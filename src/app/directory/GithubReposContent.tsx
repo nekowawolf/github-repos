@@ -95,19 +95,24 @@ function GithubReposContentInner() {
                 </div>
 
                 {/* Categories */}
-                <div className="flex flex-wrap justify-center items-center gap-2 mb-10">
-                    {categories.map((category) => (
-                        <button
-                            key={category}
-                            onClick={() => handleCategoryChange(category)}
-                            className={`px-4 py-2 rounded-full text-sm font-medium leading-none transition-colors duration-200 cursor-pointer ${activeCategory === category
-                                ? 'bg-blue-600 text-white'
-                                : 'card-color text-fill-color/70 border border-color hover:!text-[var(--fill-color)] hover:!border-blue-600'
+                <div className="relative w-full md:max-w-3xl mb-10 mx-auto">
+                    <div className="flex overflow-x-auto md:flex-wrap gap-2 md:justify-center items-center [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                        {categories.map((category) => (
+                            <button
+                                key={category}
+                                onClick={() => handleCategoryChange(category)}
+                                className={`shrink-0 px-4 py-2 rounded-full text-sm font-medium leading-none transition-colors duration-200 cursor-pointer ${
+                                    activeCategory === category
+                                        ? 'bg-blue-600 text-white'
+                                        : 'card-color text-fill-color/70 border border-color hover:!text-[var(--fill-color)] hover:!border-blue-600'
                                 }`}
-                        >
-                            {category}
-                        </button>
-                    ))}
+                            >
+                                {category}
+                            </button>
+                        ))}
+                    </div>
+                    {/* Mobile fade indicator */}
+                    <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-blue-600/20 to-transparent pointer-events-none md:hidden" />
                 </div>
 
                 {loading ? (
