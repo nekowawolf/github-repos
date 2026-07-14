@@ -147,12 +147,18 @@ export function useGithubRepos(itemsPerPage: number) {
     const endIndex = startIndex + itemsPerPage;
     const displayedRepos = filteredRepos.slice(startIndex, endIndex);
 
+    const handleClearSearch = () => {
+        setLocalSearchQuery('');
+        setLocalPage(1);
+    };
+
     return {
         displayedRepos,
         loading,
         error,
         localSearchQuery,
         handleSearchChange,
+        handleClearSearch,
         activeCategory: localCategory,
         handleCategoryChange,
         currentPage: validCurrentPage,
