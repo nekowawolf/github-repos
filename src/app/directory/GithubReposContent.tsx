@@ -1,5 +1,6 @@
 'use client';
 
+import NwwOneeAIChat from "@/components/NwwOneeAIChat";
 import Link from 'next/link';
 import Pagination from '@/components/Pagination';
 import { useGithubRepos } from '@/hooks/useGithubRepos';
@@ -245,6 +246,7 @@ function GithubReposContentInner() {
                     </div>
                 )}
             </div>
+            <NwwOneeAIChat />
         </div>
     );
 }

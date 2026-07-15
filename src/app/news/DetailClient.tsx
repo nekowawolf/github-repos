@@ -1,6 +1,7 @@
 'use client';
 
 import Link from "next/link";
+import NwwOneeAIChat from "@/components/NwwOneeAIChat";
 
 export default function DetailClient() {
   return (
@@ -14,6 +15,7 @@ export default function DetailClient() {
           Back to Directory
         </Link>
       </div>
+      <NwwOneeAIChat />
     </main>
   );
 }

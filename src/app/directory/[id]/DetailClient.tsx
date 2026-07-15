@@ -15,6 +15,7 @@ import RepoContentTabs from "@/components/RepoContentTabs";
 import { fetchGithubReposData, fetchGithubRepoDetails } from "@/services/githubRepoService";
 import { GithubRepo } from "@/types/githubRepo";
 import { Spinner } from "@/components/ui/spinner";
+import NwwOneeAIChat from "@/components/NwwOneeAIChat";
 
 const getCategoryIcon = (category: string, className: string = "w-8 h-8") => {
     switch (category.toLowerCase()) {
@@ -226,7 +227,7 @@ export default function DetailClient() {
             </div>
 
             {/* Scroll to Top Button */}
-            <div className={`fixed bottom-6 right-6 z-50 transition-all duration-300 ${showScrollTop ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}`}>
+            <div className={`fixed bottom-24 right-7 z-50 transition-all duration-300 ${showScrollTop ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}`}>
                 <button
                     onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                     className="p-3 rounded-full text-white bg-blue-600 hover:bg-blue-500 transition-all shadow-lg shadow-blue-500/20 flex items-center justify-center cursor-pointer"
@@ -235,6 +236,7 @@ export default function DetailClient() {
                     <IoIosArrowUp className="w-6 h-6" />
                 </button>
             </div>
+            <NwwOneeAIChat />
         </main>
     );
 }
