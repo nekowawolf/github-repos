@@ -92,7 +92,7 @@ export default function NwwOneeAIChat() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.3, y: 40 }}
             transition={{ duration: 0.15, ease: 'easeOut' }}
-            className="w-[380px] max-w-[calc(100vw-32px)] glass-card rounded-2xl overflow-hidden shadow-2xl flex flex-col origin-bottom-right"
+            className="w-[380px] max-w-[calc(100vw-32px)] bg-[var(--card-color2)] border-color rounded-2xl overflow-hidden shadow-2xl flex flex-col origin-bottom-right"
           >
           {/* Header */}
           <div className="bg-blue-600/20 border-divider-b relative flex rounded-t-2xl rounded-b-3xl min-h-[140px] overflow-hidden">
@@ -128,40 +128,13 @@ export default function NwwOneeAIChat() {
                 <p className="text-xs text-fill-color/70 mb-4">Select an option below based on how NwwOnee AI can help you.</p>
                 
                 <div className="flex flex-col gap-2.5">
-                  <button onClick={() => handleSend("Find the best repositories")} className="relative text-left px-4 py-3 rounded-xl bg-gradient-to-r from-blue-600/10 to-blue-500/10 hover:from-blue-600/20 hover:to-blue-500/20 transition-all text-sm text-fill-color/90 hover:text-fill-color shadow-sm cursor-pointer group">
-                    <div 
-                      className="absolute inset-0 rounded-xl border border-transparent bg-gradient-to-r from-blue-600 to-blue-500 pointer-events-none" 
-                      style={{ 
-                        WebkitMask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)', 
-                        WebkitMaskComposite: 'xor', 
-                        mask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)', 
-                        maskComposite: 'exclude' 
-                      }}
-                    ></div>
+                  <button onClick={() => handleSend("Find the best repositories")} className="relative text-left px-4 py-3 rounded-xl border border-blue-600 bg-gradient-to-r from-blue-600/10 to-blue-500/10 hover:from-blue-600/20 hover:to-blue-500/20 transition-all text-sm text-fill-color/90 hover:text-fill-color shadow-sm cursor-pointer group">
                     <span className="relative z-10">Find the best repositories</span>
                   </button>
-                  <button onClick={() => handleSend("Explain repository details")} className="relative text-left px-4 py-3 rounded-xl bg-gradient-to-r from-blue-600/10 to-blue-500/10 hover:from-blue-600/20 hover:to-blue-500/20 transition-all text-sm text-fill-color/90 hover:text-fill-color shadow-sm cursor-pointer group">
-                    <div 
-                      className="absolute inset-0 rounded-xl border border-transparent bg-gradient-to-r from-blue-600 to-blue-500 pointer-events-none" 
-                      style={{ 
-                        WebkitMask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)', 
-                        WebkitMaskComposite: 'xor', 
-                        mask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)', 
-                        maskComposite: 'exclude' 
-                      }}
-                    ></div>
+                  <button onClick={() => handleSend("Explain repository details")} className="relative text-left px-4 py-3 rounded-xl border border-blue-600 bg-gradient-to-r from-blue-600/10 to-blue-500/10 hover:from-blue-600/20 hover:to-blue-500/20 transition-all text-sm text-fill-color/90 hover:text-fill-color shadow-sm cursor-pointer group">
                     <span className="relative z-10">Explain repository details</span>
                   </button>
-                  <button onClick={() => handleSend("Help me summarize data")} className="relative text-left px-4 py-3 rounded-xl bg-gradient-to-r from-blue-600/10 to-blue-500/10 hover:from-blue-600/20 hover:to-blue-500/20 transition-all text-sm text-fill-color/90 hover:text-fill-color shadow-sm cursor-pointer group">
-                    <div 
-                      className="absolute inset-0 rounded-xl border border-transparent bg-gradient-to-r from-blue-600 to-blue-500 pointer-events-none" 
-                      style={{ 
-                        WebkitMask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)', 
-                        WebkitMaskComposite: 'xor', 
-                        mask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)', 
-                        maskComposite: 'exclude' 
-                      }}
-                    ></div>
+                  <button onClick={() => handleSend("Help me summarize data")} className="relative text-left px-4 py-3 rounded-xl border border-blue-600 bg-gradient-to-r from-blue-600/10 to-blue-500/10 hover:from-blue-600/20 hover:to-blue-500/20 transition-all text-sm text-fill-color/90 hover:text-fill-color shadow-sm cursor-pointer group">
                     <span className="relative z-10">Help me summarize data</span>
                   </button>
                 </div>
@@ -197,7 +170,7 @@ export default function NwwOneeAIChat() {
 
           {/* Footer (Input) */}
           <div className="p-4 bg-transparent pb-5">
-            <div className="relative flex items-center justify-between border-color glass-card rounded-full px-2 py-2 shadow-sm">
+            <div className="relative flex items-center justify-between border-color bg-[var(--card-color2)] rounded-full px-2 py-2 shadow-sm">
               <input
                 type="text"
                 value={inputValue}
