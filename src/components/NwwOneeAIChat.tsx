@@ -280,7 +280,7 @@ export default function NwwOneeAIChat() {
                   <span className="text-sm font-medium">Back to chat</span>
                 </button>
                 <MdHistory className="w-16 h-16 text-fill-color/30 mb-1" />
-                <h4 className="text-sm font-semibold text-fill-color mb-2">No history</h4>
+                <h4 className="text-sm font-semibold text-fill-color mb-2">No chat history</h4>
                 <p className="text-xs text-fill-color/70 font-medium">Currently in development</p>
               </div>
             )}
