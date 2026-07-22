@@ -12,7 +12,8 @@ type Tab = {
     id: string;
     label: string;
     icon: React.ReactNode;
-    contents: { lang: string; content: string; filename: string }[];
+    content: string;
+    filename: string;
 };
 
 type Props = {
@@ -87,43 +88,42 @@ const MarkdownLink = ({ href, children, ...props }: any) => {
 };
 
 export default function RepoContentTabs({ mdFiles, licenseName, owner, repoName, defaultBranch }: Props) {
-    const getLang = (filename: string) => {
-        const match = filename.match(/\.(en|id|es|fr|zh|pt|de|ja|ko|ru)\.mdx?$/i) || filename.match(/-(en|id|es|fr|zh|pt|de|ja|ko|ru)\.mdx?$/i);
-        return match ? match[1].toUpperCase() : 'EN';
-    };
-
     const groupedTabs = new Map<string, Tab>();
 
     mdFiles.forEach(f => {
         const lowerName = f.name.toLowerCase();
+        
+        if (lowerName.match(/[-_.](en|id|es|fr|zh|pt|de|ja|ko|ru)\.mdx?$/i)) {
+            return;
+        }
+
         let baseId = '';
         let label = '';
         let icon = null;
 
-        if (lowerName.startsWith('readme')) {
+        if (lowerName === 'readme.md' || lowerName === 'readme.mdx') {
             baseId = 'readme'; label = 'README'; icon = <FaMarkdown className="w-4 h-4" />;
-        } else if (lowerName.startsWith('code_of_conduct')) {
+        } else if (lowerName === 'code_of_conduct.md' || lowerName === 'code_of_conduct.mdx') {
             baseId = 'code_of_conduct'; label = 'Code of Conduct'; icon = <FiUsers className="w-4 h-4" />;
-        } else if (lowerName.startsWith('contributing')) {
+        } else if (lowerName === 'contributing.md' || lowerName === 'contributing.mdx') {
             baseId = 'contributing'; label = 'Contributing'; icon = <GoCodeOfConduct className="w-4 h-4" />;
         } else if (lowerName.startsWith('license')) {
             baseId = 'license'; label = licenseName || 'License'; icon = <FaBalanceScale className="w-4 h-4" />;
         } else {
+            if (lowerName.startsWith('readme') || lowerName.startsWith('contributing') || lowerName.startsWith('code_of_conduct')) {
+                return;
+            }
             baseId = lowerName; label = f.name.replace(/\.mdx?$/i, ''); icon = <FaMarkdown className="w-4 h-4" />;
         }
-
-        const lang = getLang(f.name);
         
         if (!groupedTabs.has(baseId)) {
-            groupedTabs.set(baseId, { id: baseId, label, icon, contents: [] });
+            groupedTabs.set(baseId, { id: baseId, label, icon, content: f.content, filename: f.name });
         }
-        groupedTabs.get(baseId)!.contents.push({ lang, content: f.content, filename: f.name });
     });
 
     const tabs: Tab[] = Array.from(groupedTabs.values());
 
     const [activeTab, setActiveTab] = useState(tabs[0]?.id || '');
-    const [selectedLang, setSelectedLang] = useState('EN');
 
     useEffect(() => {
         if (!activeTab && tabs.length > 0) {
@@ -132,18 +132,40 @@ export default function RepoContentTabs({ mdFiles, licenseName, owner, repoName,
     }, [tabs, activeTab]);
 
     const activeTabObj = tabs.find(t => t.id === activeTab) || tabs[0];
-    
-    const activeContentObj = activeTabObj?.contents.find(c => c.lang === selectedLang) 
-        || activeTabObj?.contents.find(c => c.lang === 'EN') 
-        || activeTabObj?.contents[0];
-
-    const activeContent = activeContentObj?.content;
-    const availableLangs = activeTabObj?.contents.map(c => c.lang) || [];
+    const activeContent = activeTabObj?.content;
 
     const scrollRef = useRef<HTMLDivElement>(null);
+    const fadeRef = useRef<HTMLDivElement>(null);
     const [isDragging, setIsDragging] = useState(false);
     const [startX, setStartX] = useState(0);
     const [scrollLeft, setScrollLeft] = useState(0);
+
+    useEffect(() => {
+        const checkOverflow = () => {
+            if (scrollRef.current && fadeRef.current) {
+                const { scrollWidth, clientWidth, scrollLeft } = scrollRef.current;
+                const hasMore = Math.ceil(scrollLeft + clientWidth) < scrollWidth - 1;
+                fadeRef.current.style.opacity = hasMore ? '1' : '0';
+                fadeRef.current.style.visibility = hasMore ? 'visible' : 'hidden';
+            }
+        };
+
+        const timeoutId = setTimeout(checkOverflow, 50);
+        
+        window.addEventListener('resize', checkOverflow);
+        const scrollElement = scrollRef.current;
+        if (scrollElement) {
+            scrollElement.addEventListener('scroll', checkOverflow);
+        }
+        
+        return () => {
+            clearTimeout(timeoutId);
+            window.removeEventListener('resize', checkOverflow);
+            if (scrollElement) {
+                scrollElement.removeEventListener('scroll', checkOverflow);
+            }
+        };
+    }, [tabs.length]);
 
     const onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
         if (!scrollRef.current) return;
@@ -199,26 +221,12 @@ export default function RepoContentTabs({ mdFiles, licenseName, owner, repoName,
                         ))}
                     </div>
                     {/* Fade indicator */}
-                    <div className="absolute right-0 top-0 h-[38px] w-12 bg-gradient-to-l from-blue-600/20 to-transparent pointer-events-none" />
+                    <div 
+                        ref={fadeRef}
+                        className="absolute right-0 top-0 h-[38px] w-12 bg-gradient-to-l from-blue-600/20 to-transparent pointer-events-none transition-opacity duration-200" 
+                        style={{ opacity: 0, visibility: 'hidden' }}
+                    />
                 </div>
-                
-                {availableLangs.length > 1 && (
-                    <div className="flex items-center gap-2 bg-[rgba(var(--fill-color-rgb),0.03)] p-1 rounded-xl border border-[var(--border-divider)] w-fit">
-                        {availableLangs.map((lang) => (
-                            <button
-                                key={lang}
-                                onClick={() => setSelectedLang(lang)}
-                                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                                    (activeContentObj?.lang === lang)
-                                        ? 'bg-blue-600 text-white shadow-sm'
-                                        : 'text-fill-color/60 hover:text-fill-color hover:bg-[rgba(var(--fill-color-rgb),0.1)]'
-                                }`}
-                            >
-                                {lang}
-                            </button>
-                        ))}
-                    </div>
-                )}
             </div>
 
             {/* Content */}
