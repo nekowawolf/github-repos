@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
@@ -12,7 +12,7 @@ type Tab = {
     id: string;
     label: string;
     icon: React.ReactNode;
-    content: string | null;
+    contents: { lang: string; content: string; filename: string }[];
 };
 
 type Props = {
@@ -87,32 +87,43 @@ const MarkdownLink = ({ href, children, ...props }: any) => {
 };
 
 export default function RepoContentTabs({ mdFiles, licenseName, owner, repoName, defaultBranch }: Props) {
-    const getTabConfig = (name: string, content: string): Tab => {
-        const lowerName = name.toLowerCase();
-        if (lowerName.startsWith('readme')) {
-            return { id: name, label: 'README', icon: <FaMarkdown className="w-4 h-4" />, content };
-        }
-        if (lowerName.startsWith('code_of_conduct')) {
-            return { id: name, label: 'Code of Conduct', icon: <FiUsers className="w-4 h-4" />, content };
-        }
-        if (lowerName.startsWith('contributing')) {
-            return { id: name, label: 'Contributing', icon: <GoCodeOfConduct className="w-4 h-4" />, content };
-        }
-        if (lowerName.startsWith('license')) {
-            return { id: name, label: licenseName || 'License', icon: <FaBalanceScale className="w-4 h-4" />, content };
-        }
-        // Generic markdown file
-        return { 
-            id: name, 
-            label: name.replace(/\.mdx?$/i, ''), 
-            icon: <FaMarkdown className="w-4 h-4" />, 
-            content 
-        };
+    const getLang = (filename: string) => {
+        const match = filename.match(/\.(en|id|es|fr|zh|pt|de|ja|ko|ru)\.mdx?$/i) || filename.match(/-(en|id|es|fr|zh|pt|de|ja|ko|ru)\.mdx?$/i);
+        return match ? match[1].toUpperCase() : 'EN';
     };
 
-    const tabs: Tab[] = mdFiles.map(f => getTabConfig(f.name, f.content));
+    const groupedTabs = new Map<string, Tab>();
+
+    mdFiles.forEach(f => {
+        const lowerName = f.name.toLowerCase();
+        let baseId = '';
+        let label = '';
+        let icon = null;
+
+        if (lowerName.startsWith('readme')) {
+            baseId = 'readme'; label = 'README'; icon = <FaMarkdown className="w-4 h-4" />;
+        } else if (lowerName.startsWith('code_of_conduct')) {
+            baseId = 'code_of_conduct'; label = 'Code of Conduct'; icon = <FiUsers className="w-4 h-4" />;
+        } else if (lowerName.startsWith('contributing')) {
+            baseId = 'contributing'; label = 'Contributing'; icon = <GoCodeOfConduct className="w-4 h-4" />;
+        } else if (lowerName.startsWith('license')) {
+            baseId = 'license'; label = licenseName || 'License'; icon = <FaBalanceScale className="w-4 h-4" />;
+        } else {
+            baseId = lowerName; label = f.name.replace(/\.mdx?$/i, ''); icon = <FaMarkdown className="w-4 h-4" />;
+        }
+
+        const lang = getLang(f.name);
+        
+        if (!groupedTabs.has(baseId)) {
+            groupedTabs.set(baseId, { id: baseId, label, icon, contents: [] });
+        }
+        groupedTabs.get(baseId)!.contents.push({ lang, content: f.content, filename: f.name });
+    });
+
+    const tabs: Tab[] = Array.from(groupedTabs.values());
 
     const [activeTab, setActiveTab] = useState(tabs[0]?.id || '');
+    const [selectedLang, setSelectedLang] = useState('EN');
 
     useEffect(() => {
         if (!activeTab && tabs.length > 0) {
@@ -120,28 +131,94 @@ export default function RepoContentTabs({ mdFiles, licenseName, owner, repoName,
         }
     }, [tabs, activeTab]);
 
-    const activeContent = tabs.find(t => t.id === activeTab)?.content || tabs[0]?.content;
+    const activeTabObj = tabs.find(t => t.id === activeTab) || tabs[0];
+    
+    const activeContentObj = activeTabObj?.contents.find(c => c.lang === selectedLang) 
+        || activeTabObj?.contents.find(c => c.lang === 'EN') 
+        || activeTabObj?.contents[0];
+
+    const activeContent = activeContentObj?.content;
+    const availableLangs = activeTabObj?.contents.map(c => c.lang) || [];
+
+    const scrollRef = useRef<HTMLDivElement>(null);
+    const [isDragging, setIsDragging] = useState(false);
+    const [startX, setStartX] = useState(0);
+    const [scrollLeft, setScrollLeft] = useState(0);
+
+    const onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!scrollRef.current) return;
+        setIsDragging(true);
+        setStartX(e.pageX - scrollRef.current.offsetLeft);
+        setScrollLeft(scrollRef.current.scrollLeft);
+    };
+
+    const onMouseLeave = () => {
+        setIsDragging(false);
+    };
+
+    const onMouseUp = () => {
+        setIsDragging(false);
+    };
+
+    const onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!isDragging || !scrollRef.current) return;
+        e.preventDefault();
+        const x = e.pageX - scrollRef.current.offsetLeft;
+        const walk = (x - startX) * 2;
+        scrollRef.current.scrollLeft = scrollLeft - walk;
+    };
 
     if (tabs.length === 0) return null;
 
     return (
         <div className="glass-card rounded-3xl p-8 border border-white/10 overflow-hidden mt-8">
-            {/* Tabs */}
-            <div className="flex flex-wrap items-center gap-2 mb-6 pb-4 border-b border-white/10">
-                {tabs.map((tab) => (
-                    <button
-                        key={tab.id}
-                        onClick={() => setActiveTab(tab.id)}
-                        className={`px-4 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-2 cursor-pointer ${
-                            activeTab === tab.id
-                                ? 'bg-blue-600 text-white'
-                                : 'bg-[rgba(var(--fill-color-rgb),0.05)] text-fill-color/60 hover:text-fill-color hover:bg-[rgba(var(--fill-color-rgb),0.1)] border border-[var(--border-divider)]'
-                        }`}
+            {/* Tabs & Language Filter */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-white/10">
+                <div className="relative flex-1 min-w-0 overflow-hidden">
+                    <div 
+                        ref={scrollRef}
+                        onMouseDown={onMouseDown}
+                        onMouseLeave={onMouseLeave}
+                        onMouseUp={onMouseUp}
+                        onMouseMove={onMouseMove}
+                        className={`flex items-center gap-2 overflow-x-auto pb-3 w-full max-md:[&::-webkit-scrollbar]:hidden max-md:[-ms-overflow-style:none] max-md:[scrollbar-width:none] [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-blue-500/30 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-blue-500/60 ${isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
                     >
-                        {tab.icon}
-                        {tab.label}
-                    </button>
-                ))}
+                        {tabs.map((tab) => (
+                            <button
+                                key={tab.id}
+                                onClick={() => setActiveTab(tab.id)}
+                                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-2 cursor-pointer whitespace-nowrap flex-shrink-0 ${
+                                    activeTab === tab.id
+                                        ? 'bg-blue-600 text-white border border-transparent'
+                                        : 'bg-[rgba(var(--fill-color-rgb),0.05)] text-fill-color/60 hover:text-fill-color hover:bg-[rgba(var(--fill-color-rgb),0.1)] border border-[var(--border-divider)]'
+                                }`}
+                            >
+                                {tab.icon}
+                                {tab.label}
+                            </button>
+                        ))}
+                    </div>
+                    {/* Fade indicator */}
+                    <div className="absolute right-0 top-0 h-[38px] w-12 bg-gradient-to-l from-blue-600/20 to-transparent pointer-events-none" />
+                </div>
+                
+                {availableLangs.length > 1 && (
+                    <div className="flex items-center gap-2 bg-[rgba(var(--fill-color-rgb),0.03)] p-1 rounded-xl border border-[var(--border-divider)] w-fit">
+                        {availableLangs.map((lang) => (
+                            <button
+                                key={lang}
+                                onClick={() => setSelectedLang(lang)}
+                                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                                    (activeContentObj?.lang === lang)
+                                        ? 'bg-blue-600 text-white shadow-sm'
+                                        : 'text-fill-color/60 hover:text-fill-color hover:bg-[rgba(var(--fill-color-rgb),0.1)]'
+                                }`}
+                            >
+                                {lang}
+                            </button>
+                        ))}
+                    </div>
+                )}
             </div>
 
             {/* Content */}

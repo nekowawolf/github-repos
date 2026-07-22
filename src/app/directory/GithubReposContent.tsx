@@ -10,7 +10,7 @@ import { Suspense, useRef, useState } from 'react';
 import { FaCode, FaServer, FaDatabase, FaShieldAlt, FaGraduationCap, FaGithub } from 'react-icons/fa';
 import { GoCpu } from "react-icons/go";
 import { RiRobot2Line } from "react-icons/ri";
-import { MdOutlineDesignServices } from "react-icons/md";
+import { MdOutlineDesignServices, MdVideoLibrary } from "react-icons/md";
 import { CgClose } from "react-icons/cg";
 
 const ITEMS_PER_PAGE = 8;
@@ -23,6 +23,7 @@ const categories = [
     "Infrastructure",
     "Data",
     "Design",
+    "Video",
     "Security",
     "Learning"
 ];
@@ -37,6 +38,7 @@ const getCategoryIcon = (category: string) => {
         case 'security': return <FaShieldAlt className="w-8 h-8" />;
         case 'learning': return <FaGraduationCap className="w-8 h-8" />;
         case 'design': return <MdOutlineDesignServices className="w-8 h-8" />;
+        case 'video': return <MdVideoLibrary className="w-8 h-8" />;
         default: return <FaGithub className="w-8 h-8" />;
     }
 };
@@ -151,7 +153,7 @@ function GithubReposContentInner() {
                                 onClick={() => handleCategoryChange(category)}
                                 className={`shrink-0 px-4 py-2 rounded-full text-sm font-medium leading-none transition-colors duration-200 cursor-pointer ${
                                     activeCategory === category
-                                        ? 'bg-blue-600 text-white'
+                                        ? 'bg-blue-600 text-white border border-transparent'
                                         : 'card-color text-fill-color/70 border border-color hover:!text-[var(--fill-color)] hover:!border-blue-600'
                                 }`}
                             >
@@ -160,7 +162,7 @@ function GithubReposContentInner() {
                         ))}
                     </div>
                     {/* Fade indicator */}
-                    <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-blue-600/20 to-transparent pointer-events-none" />
+                    <div className="absolute right-0 top-0 h-8 w-12 bg-gradient-to-l from-blue-600/20 to-transparent pointer-events-none" />
                 </div>
 
                 {loading ? (
