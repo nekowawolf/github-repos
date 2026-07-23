@@ -103,10 +103,6 @@ export const fetchGithubRepoDetails = async (owner: string, repoName: string, re
             if (f.type !== 'file') return false;
             const name = f.name.toLowerCase();
 
-            if (name.startsWith('readme') && name !== 'readme.md' && name !== 'readme.mdx') {
-                return false;
-            }
-
             return name.endsWith('.md') || name.endsWith('.mdx') || name === 'license' || name === 'code_of_conduct';
         });
 

@@ -7,6 +7,7 @@ import rehypeRaw from 'rehype-raw';
 import { FaMarkdown, FaBalanceScale, FaRegCopy, FaCheck } from 'react-icons/fa';
 import { FiUsers } from 'react-icons/fi';
 import { GoCodeOfConduct } from 'react-icons/go';
+import LanguageFilter, { extractLangCode, ReadmeLangEntry } from './LanguageFilter';
 
 type Tab = {
     id: string;
@@ -89,28 +90,44 @@ const MarkdownLink = ({ href, children, ...props }: any) => {
 
 export default function RepoContentTabs({ mdFiles, licenseName, owner, repoName, defaultBranch }: Props) {
     const groupedTabs = new Map<string, Tab>();
+    const readmeLangs: ReadmeLangEntry[] = [];
 
     mdFiles.forEach(f => {
         const lowerName = f.name.toLowerCase();
-        
-        if (lowerName.match(/[-_.](en|id|es|fr|zh|pt|de|ja|ko|ru)\.mdx?$/i)) {
+
+        // --- Handle README files ---
+        if (lowerName.startsWith('readme')) {
+            const isMainReadme = lowerName === 'readme.md' || lowerName === 'readme.mdx';
+            const langCode = isMainReadme ? null : extractLangCode(f.name);
+
+            if (isMainReadme) {
+                if (!groupedTabs.has('readme')) {
+                    groupedTabs.set('readme', { 
+                        id: 'readme', label: 'README', 
+                        icon: <FaMarkdown className="w-4 h-4" />, 
+                        content: f.content, filename: f.name 
+                    });
+                }
+                readmeLangs.push({ lang: 'Default', content: f.content, filename: f.name });
+            } else if (langCode) {
+                readmeLangs.push({ lang: langCode, content: f.content, filename: f.name });
+            }
             return;
         }
 
+        // --- Handle other files ---
         let baseId = '';
         let label = '';
         let icon = null;
 
-        if (lowerName === 'readme.md' || lowerName === 'readme.mdx') {
-            baseId = 'readme'; label = 'README'; icon = <FaMarkdown className="w-4 h-4" />;
-        } else if (lowerName === 'code_of_conduct.md' || lowerName === 'code_of_conduct.mdx') {
+        if (lowerName === 'code_of_conduct.md' || lowerName === 'code_of_conduct.mdx') {
             baseId = 'code_of_conduct'; label = 'Code of Conduct'; icon = <FiUsers className="w-4 h-4" />;
         } else if (lowerName === 'contributing.md' || lowerName === 'contributing.mdx') {
             baseId = 'contributing'; label = 'Contributing'; icon = <GoCodeOfConduct className="w-4 h-4" />;
         } else if (lowerName.startsWith('license')) {
             baseId = 'license'; label = licenseName || 'License'; icon = <FaBalanceScale className="w-4 h-4" />;
         } else {
-            if (lowerName.startsWith('readme') || lowerName.startsWith('contributing') || lowerName.startsWith('code_of_conduct')) {
+            if (lowerName.startsWith('contributing') || lowerName.startsWith('code_of_conduct')) {
                 return;
             }
             baseId = lowerName; label = f.name.replace(/\.mdx?$/i, ''); icon = <FaMarkdown className="w-4 h-4" />;
@@ -123,7 +140,17 @@ export default function RepoContentTabs({ mdFiles, licenseName, owner, repoName,
 
     const tabs: Tab[] = Array.from(groupedTabs.values());
 
+    const sortedLangs = readmeLangs
+        .map(r => r.lang)
+        .filter((v, i, a) => a.indexOf(v) === i)
+        .sort((a, b) => {
+            if (a === 'Default') return -1;
+            if (b === 'Default') return 1;
+            return a.localeCompare(b);
+        });
+
     const [activeTab, setActiveTab] = useState(tabs[0]?.id || '');
+    const [selectedLang, setSelectedLang] = useState('Default');
 
     useEffect(() => {
         if (!activeTab && tabs.length > 0) {
@@ -132,7 +159,19 @@ export default function RepoContentTabs({ mdFiles, licenseName, owner, repoName,
     }, [tabs, activeTab]);
 
     const activeTabObj = tabs.find(t => t.id === activeTab) || tabs[0];
-    const activeContent = activeTabObj?.content;
+
+    let activeContent = activeTabObj?.content;
+    if (activeTabObj?.id === 'readme' && readmeLangs.length > 0) {
+        const langEntry = readmeLangs.find(r => r.lang === selectedLang);
+        if (langEntry) {
+            activeContent = langEntry.content;
+        } else {
+            const defaultEntry = readmeLangs.find(r => r.lang === 'Default');
+            if (defaultEntry) activeContent = defaultEntry.content;
+        }
+    }
+
+    const showLangFilter = activeTabObj?.id === 'readme' && sortedLangs.length > 1;
 
     const scrollRef = useRef<HTMLDivElement>(null);
     const fadeRef = useRef<HTMLDivElement>(null);
@@ -195,7 +234,7 @@ export default function RepoContentTabs({ mdFiles, licenseName, owner, repoName,
     return (
         <div className="glass-card rounded-3xl p-8 border border-white/10 overflow-hidden mt-8">
             {/* Tabs & Language Filter */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-white/10">
+            <div className="flex flex-row items-start justify-between gap-3 mb-6 pb-4 border-b border-white/10">
                 <div className="relative flex-1 min-w-0 overflow-hidden">
                     <div 
                         ref={scrollRef}
@@ -227,6 +266,15 @@ export default function RepoContentTabs({ mdFiles, licenseName, owner, repoName,
                         style={{ opacity: 0, visibility: 'hidden' }}
                     />
                 </div>
+
+                {/* Language Filter */}
+                {showLangFilter && (
+                    <LanguageFilter
+                        availableLangs={sortedLangs}
+                        selectedLang={selectedLang}
+                        setSelectedLang={setSelectedLang}
+                    />
+                )}
             </div>
 
             {/* Content */}
