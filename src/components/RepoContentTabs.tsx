@@ -61,12 +61,42 @@ const PreBlock = ({ node, children, ...props }: any) => {
     );
 };
 
-const MarkdownLink = ({ href, children, ...props }: any) => {
+const MarkdownLink = ({ href, children, onLangSwitch, readmeLangs, ...props }: any) => {
     const [videoError, setVideoError] = useState(false);
     const hrefStr = href || '';
 
     if (hrefStr.startsWith('#')) {
         return <a href={hrefStr} {...props}>{children}</a>;
+    }
+
+    if (readmeLangs) {
+        const filename = hrefStr.split('/').pop() || '';
+        const lowerFilename = filename.toLowerCase();
+        if (lowerFilename.startsWith('readme') && (lowerFilename.endsWith('.md') || lowerFilename.endsWith('.mdx'))) {
+            const isMainReadme = lowerFilename === 'readme.md' || lowerFilename === 'readme.mdx';
+            const langCode = isMainReadme ? 'Default' : extractLangCode(filename);
+            if (langCode) {
+                const exists = readmeLangs.some((r: ReadmeLangEntry) => r.lang === langCode);
+                if (exists && onLangSwitch) {
+                    return (
+                        <a
+                            href={hrefStr}
+                            {...props}
+                            onClick={(e: React.MouseEvent) => {
+                                e.preventDefault();
+                                onLangSwitch(langCode);
+                            }}
+                            className="cursor-pointer"
+                        >
+                            {children}
+                        </a>
+                    );
+                }
+                return (
+                    <span className="text-fill-color/30 cursor-not-allowed">{children}</span>
+                );
+            }
+        }
     }
 
     const isGithubAsset = hrefStr.includes('github.com/user-attachments/assets/');
@@ -335,7 +365,13 @@ export default function RepoContentTabs({ mdFiles, licenseName, owner, repoName,
 
                                 return <img {...props} src={src} style={style} className={`inline-block !my-1 !mx-0.5 ${props.className || ''}`} />;
                             },
-                            a: MarkdownLink
+                            a: (linkProps: any) => (
+                                <MarkdownLink
+                                    {...linkProps}
+                                    onLangSwitch={activeTabObj?.id === 'readme' && readmeLangs.length > 1 ? setSelectedLang : undefined}
+                                    readmeLangs={activeTabObj?.id === 'readme' ? readmeLangs : undefined}
+                                />
+                            )
                         }}
                     >
                         {activeContent}
