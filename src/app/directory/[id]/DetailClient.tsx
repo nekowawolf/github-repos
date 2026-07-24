@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { FaExternalLinkAlt, FaCode, FaServer, FaDatabase, FaShieldAlt, FaGraduationCap, FaGithub, FaStar, FaCodeBranch, FaRegClock, FaRegUserCircle, FaGlobe } from "react-icons/fa";
+import { FaExternalLinkAlt, FaCode, FaServer, FaDatabase, FaShieldAlt, FaGraduationCap, FaStar, FaCodeBranch, FaRegClock, FaRegUserCircle, FaGlobe, FaVideo } from "react-icons/fa";
 import { FaXTwitter, FaInstagram } from "react-icons/fa6";
 import { BsDiscord } from "react-icons/bs";
 import { GoCpu } from "react-icons/go";
@@ -27,7 +27,8 @@ const getCategoryIcon = (category: string, className: string = "w-8 h-8") => {
         case 'security': return <FaShieldAlt className={className} />;
         case 'learning': return <FaGraduationCap className={className} />;
         case 'design': return <MdOutlineDesignServices className={className} />;
-        default: return <FaGithub className={className} />;
+        case 'video': return <FaVideo className={className} />;
+        default: return null;
     }
 };
 
