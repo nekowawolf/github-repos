@@ -3,12 +3,13 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { FaExternalLinkAlt, FaCode, FaServer, FaDatabase, FaShieldAlt, FaGraduationCap, FaStar, FaCodeBranch, FaRegClock, FaRegUserCircle, FaGlobe, FaVideo } from "react-icons/fa";
+import { FaExternalLinkAlt, FaCode, FaServer, FaDatabase, FaShieldAlt, FaGraduationCap, FaStar, FaCodeBranch, FaRegClock, FaRegUserCircle, FaGlobe, FaRegFileImage, FaFileAlt } from "react-icons/fa";
 import { FaXTwitter, FaInstagram } from "react-icons/fa6";
 import { BsDiscord } from "react-icons/bs";
 import { GoCpu } from "react-icons/go";
 import { RiRobot2Line } from "react-icons/ri";
-import { MdOutlineDesignServices } from "react-icons/md";
+import { MdOutlineDesignServices, MdOutlineOndemandVideo } from "react-icons/md";
+import { LuAudioLines } from "react-icons/lu";
 import { IoIosArrowUp } from "react-icons/io";
 import BackButton from "@/components/BackButton";
 import RepoContentTabs from "@/components/RepoContentTabs";
@@ -27,7 +28,10 @@ const getCategoryIcon = (category: string, className: string = "w-8 h-8") => {
         case 'security': return <FaShieldAlt className={className} />;
         case 'learning': return <FaGraduationCap className={className} />;
         case 'design': return <MdOutlineDesignServices className={className} />;
-        case 'video': return <FaVideo className={className} />;
+        case 'image': return <FaRegFileImage className={className} />;
+        case 'video': return <MdOutlineOndemandVideo className={className} />;
+        case 'audio': return <LuAudioLines className={className} />;
+        case 'document': return <FaFileAlt className={className} />;
         default: return null;
     }
 };

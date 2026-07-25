@@ -7,10 +7,11 @@ import { useGithubRepos } from '@/hooks/useGithubRepos';
 import { Spinner } from '@/components/ui/spinner';
 import { FallbackImage } from '@/components/FallbackImage';
 import { Suspense, useRef, useState, useEffect } from 'react';
-import { FaCode, FaServer, FaDatabase, FaShieldAlt, FaGraduationCap, FaGithub } from 'react-icons/fa';
+import { FaCode, FaServer, FaDatabase, FaShieldAlt, FaGraduationCap, FaGithub, FaRegFileImage, FaFileAlt } from 'react-icons/fa';
+import { LuAudioLines } from "react-icons/lu";
 import { GoCpu } from "react-icons/go";
 import { RiRobot2Line } from "react-icons/ri";
-import { MdOutlineDesignServices, MdVideoLibrary } from "react-icons/md";
+import { MdOutlineDesignServices, MdOutlineOndemandVideo } from "react-icons/md";
 import { CgClose } from "react-icons/cg";
 
 const ITEMS_PER_PAGE = 8;
@@ -23,8 +24,11 @@ const categories = [
     "Infrastructure",
     "Data",
     "Design",
+    "Image",
     "Video",
+    "Audio",
     "Security",
+    "Document",
     "Learning"
 ];
 
@@ -38,7 +42,10 @@ const getCategoryIcon = (category: string) => {
         case 'security': return <FaShieldAlt className="w-8 h-8" />;
         case 'learning': return <FaGraduationCap className="w-8 h-8" />;
         case 'design': return <MdOutlineDesignServices className="w-8 h-8" />;
-        case 'video': return <MdVideoLibrary className="w-8 h-8" />;
+        case 'image': return <FaRegFileImage className="w-8 h-8" />;
+        case 'video': return <MdOutlineOndemandVideo className="w-8 h-8" />;
+        case 'audio': return <LuAudioLines className="w-8 h-8" />;
+        case 'document': return <FaFileAlt className="w-8 h-8" />;
         default: return <FaGithub className="w-8 h-8" />;
     }
 };
