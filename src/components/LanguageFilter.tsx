@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { FiChevronDown, FiCheck } from 'react-icons/fi';
 import { IoLanguageOutline } from 'react-icons/io5';
+import * as Flags from 'country-flag-icons/react/3x2';
 
 // --- Language code mapping ---
 const LANG_ALIAS_MAP: Record<string, string> = {
@@ -94,7 +95,17 @@ export default function LanguageFilter({
                 `}
             >
                 <IoLanguageOutline className={`w-4 h-4 ${isOpen || hasActiveFilter ? 'text-blue-400' : ''}`} />
-                {hasActiveFilter && <span className="text-xs">{selectedLang}</span>}
+                {hasActiveFilter && (
+                    <div className="flex items-center gap-1.5">
+                        {Flags[selectedLang as keyof typeof Flags] && (
+                            (() => {
+                                const FlagComponent = Flags[selectedLang as keyof typeof Flags];
+                                return <FlagComponent className="w-3.5 h-2.5 rounded-sm object-cover" />;
+                            })()
+                        )}
+                        <span className="text-xs">{selectedLang}</span>
+                    </div>
+                )}
                 <FiChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
             </button>
 
@@ -121,6 +132,12 @@ export default function LanguageFilter({
                                         }`}
                                 >
                                     <div className="flex items-center gap-2">
+                                        {lang !== 'Default' && Flags[lang as keyof typeof Flags] && (
+                                            (() => {
+                                                const FlagComponent = Flags[lang as keyof typeof Flags];
+                                                return <FlagComponent className="w-4 h-3 rounded-sm object-cover" />;
+                                            })()
+                                        )}
                                         <span>{lang === 'Default' ? 'Default' : lang}</span>
                                     </div>
                                     {selectedLang === lang && <FiCheck className="w-4 h-4" />}
