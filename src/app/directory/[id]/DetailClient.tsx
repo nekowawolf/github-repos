@@ -36,11 +36,22 @@ const getCategoryIcon = (category: string, className: string = "w-8 h-8") => {
     }
 };
 
+const formatNumber = (num: number) => {
+    if (num >= 1000000) {
+        return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'm';
+    }
+    if (num >= 1000) {
+        return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+    }
+    return num.toString();
+};
+
 export default function DetailClient() {
     const { id } = useParams();
     const [repo, setRepo] = useState<GithubRepo | null>(null);
     const [repoData, setRepoData] = useState<any>(null);
     const [mdFiles, setMdFiles] = useState<{name: string, content: string}[]>([]);
+    const [suggestedRepos, setSuggestedRepos] = useState<GithubRepo[]>([]);
     const [loading, setLoading] = useState(true);
     const [showScrollTop, setShowScrollTop] = useState(false);
 
@@ -66,6 +77,18 @@ export default function DetailClient() {
                 const foundRepo = repos.find((t) => t._id.toString() === id);
                 if (foundRepo) {
                     setRepo(foundRepo);
+                    
+                    const otherRepos = repos.filter(r => r._id.toString() !== id);
+                    const sameCat = otherRepos.filter(r => r.category === foundRepo.category);
+                    const shuffledSame = [...sameCat].sort(() => 0.5 - Math.random());
+                    const selectedSame = shuffledSame.slice(0, 3);
+                    
+                    const remaining = otherRepos.filter(r => !selectedSame.some(s => s._id === r._id));
+                    const shuffledRemaining = [...remaining].sort(() => 0.5 - Math.random());
+                    const selectedRand = shuffledRemaining.slice(0, 3);
+                    
+                    setSuggestedRepos([...selectedSame, ...selectedRand].sort(() => 0.5 - Math.random()));
+
                     const details = await fetchGithubRepoDetails(foundRepo.owner, foundRepo.repo_name);
                     setRepoData(details.repoData);
                     setMdFiles(details.mdFiles);
@@ -113,7 +136,7 @@ export default function DetailClient() {
                 <BackButton fallbackUrl="/directory" label="Back to list" />
 
                 {/* Header Section */}
-                <div className="glass-card rounded-3xl p-7 mb-8 border border-white/10 relative overflow-hidden">
+                <div className="glass-card rounded-3xl p-7 mb-8 border border-[var(--border-divider)] relative overflow-hidden">
                     <div className="absolute bottom-0 right-0 transform translate-y-1/2 opacity-[0.03] pointer-events-none">
                         {getCategoryIcon(repo.category, "w-64 h-64")}
                     </div>
@@ -134,7 +157,7 @@ export default function DetailClient() {
                                                 alt={repo.owner}
                                                 width={80}
                                                 height={80}
-                                                className="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover border border-white/10"
+                                                className="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover border border-[var(--border-divider)]"
                                             />
                                         ) : (
                                             <div className="w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center bg-blue-500/10 text-blue-400 border border-blue-500/20">
@@ -252,6 +275,71 @@ export default function DetailClient() {
                     repoName={repo.repo_name}
                     defaultBranch={repoData?.default_branch || 'master'}
                 />
+
+                {/* Suggested Repositories Section */}
+                {suggestedRepos.length > 0 && (
+                    <div className="glass-card rounded-3xl p-8 mt-8 mb-8 border border-[var(--border-divider)] overflow-hidden">
+                        <div className="flex items-center gap-3 mb-6 pb-4 border-b border-[var(--border-divider)]">
+                            <h2 className="text-2xl font-bold text-fill-color">Explore Other Repositories</h2>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {suggestedRepos.map((sRepo) => (
+                                <Link 
+                                    key={sRepo._id} 
+                                    href={`/directory/${sRepo._id}`}
+                                    className="flex flex-col h-full p-5 rounded-2xl bg-[rgba(var(--fill-color-rgb),0.03)] border border-[var(--border-divider)] hover:bg-[rgba(var(--fill-color-rgb),0.06)] hover:border-blue-500/30 transition-all cursor-pointer group"
+                                >
+                                    <div className="flex items-start justify-between mb-3">
+                                        <div className="flex items-center gap-3">
+                                            {sRepo.stats?.image_url ? (
+                                                <img
+                                                    src={sRepo.stats.image_url}
+                                                    alt={sRepo.owner}
+                                                    width={40}
+                                                    height={40}
+                                                    className="w-10 h-10 rounded-full object-cover border border-[var(--border-divider)] shrink-0"
+                                                />
+                                            ) : (
+                                                <div className="w-10 h-10 rounded-full flex items-center justify-center bg-blue-500/10 text-blue-400 border border-blue-500/20 shrink-0">
+                                                    {getCategoryIcon(sRepo.category, "w-5 h-5")}
+                                                </div>
+                                            )}
+                                            <div className="flex flex-col">
+                                                <span className="text-[11px] text-fill-color/60 font-mono">@{sRepo.owner}</span>
+                                                <h3 className="text-sm font-bold text-fill-color group-hover:text-blue-400 transition-colors line-clamp-1">
+                                                    {sRepo.name}
+                                                </h3>
+                                            </div>
+                                        </div>
+                                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 whitespace-nowrap ml-2">
+                                            {sRepo.category}
+                                        </span>
+                                    </div>
+                                    
+                                    <p className="text-xs text-fill-color/60 line-clamp-2 mb-4 flex-grow">
+                                        {sRepo.description}
+                                    </p>
+                                    
+                                    <div className="flex items-center gap-4 mt-auto pt-4 border-t border-[var(--border-divider)] text-fill-color/70 text-xs">
+                                        <div className="flex items-center gap-1.5">
+                                            <FaStar className="w-3.5 h-3.5" />
+                                            <span>{formatNumber(sRepo.stats?.stars || 0)}</span>
+                                        </div>
+                                        <div className="flex items-center gap-1.5">
+                                            <FaCodeBranch className="w-3.5 h-3.5" />
+                                            <span>{formatNumber(sRepo.stats?.forks || 0)}</span>
+                                        </div>
+                                        <div className="flex items-center gap-1.5">
+                                            <FaCode className="w-3.5 h-3.5" />
+                                            <span className="truncate max-w-[80px]">{sRepo.stats?.language || 'Multiple'}</span>
+                                        </div>
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* Scroll to Top Button */}

@@ -236,7 +236,7 @@ function GithubReposContentInner() {
                                         className="relative group rounded-2xl p-[1px] overflow-hidden block hover:scale-[1.02] transition-transform duration-300 cursor-pointer"
                                     >
                                         <div className="absolute inset-0 bg-gradient-to-br from-blue-500/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                                        <div className="relative glass-card rounded-2xl p-6 flex flex-col h-full bg-card-color/80 backdrop-blur-xl border border-white/5">
+                                        <div className="relative glass-card rounded-2xl p-6 flex flex-col h-full bg-card-color/80 backdrop-blur-xl border border-[var(--border-divider)]">
 
                                             <div className="flex items-start justify-between mb-4">
                                                 <div className="flex items-center gap-3">
@@ -246,7 +246,7 @@ function GithubReposContentInner() {
                                                             alt={repo.owner}
                                                             width={48}
                                                             height={48}
-                                                            className="w-12 h-12 rounded-full object-cover border border-white/10"
+                                                            className="w-12 h-12 rounded-full object-cover border border-[var(--border-divider)]"
                                                         />
                                                     ) : (
                                                         <div className="w-12 h-12 rounded-full flex items-center justify-center bg-blue-500/10 text-blue-400 border border-blue-500/20">
@@ -269,7 +269,7 @@ function GithubReposContentInner() {
                                                 {repo.description}
                                             </p>
 
-                                            <div className="flex items-center gap-4 pt-4 border-t border-white/5 text-fill-color/70 text-xs">
+                                            <div className="flex items-center gap-4 pt-4 border-t border-[var(--border-divider)] text-fill-color/70 text-xs">
                                                 {repo.stats ? (
                                                     <>
                                                         <div className="flex items-center gap-1.5" title={`${repo.stats.stars} stars`}>

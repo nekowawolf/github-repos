@@ -262,9 +262,9 @@ export default function RepoContentTabs({ mdFiles, licenseName, owner, repoName,
     if (tabs.length === 0) return null;
 
     return (
-        <div className="glass-card rounded-3xl p-8 border border-white/10 overflow-hidden mt-8">
+        <div className="glass-card rounded-3xl p-8 border border-[var(--border-divider)] overflow-hidden mt-8">
             {/* Tabs & Language Filter */}
-            <div className="flex flex-row items-start justify-between gap-3 mb-6 pb-4 border-b border-white/10">
+            <div className="flex flex-row items-start justify-between gap-3 mb-6 pb-4 border-b border-[var(--border-divider)]">
                 <div className="relative flex-1 min-w-0 overflow-hidden">
                     <div 
                         ref={scrollRef}
