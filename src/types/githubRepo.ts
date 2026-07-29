@@ -1,3 +1,10 @@
+export interface GithubStats {
+    stars: number;
+    forks: number;
+    language: string;
+    image_url: string;
+}
+
 export interface GithubRepo {
     _id: string;
     name: string;
@@ -10,4 +17,6 @@ export interface GithubRepo {
     twitter?: string;
     instagram?: string;
     discord?: string;
+    createdAt?: string;
+    stats?: GithubStats;
 }

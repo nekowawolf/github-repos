@@ -50,6 +50,16 @@ const getCategoryIcon = (category: string) => {
     }
 };
 
+const formatNumber = (num: number) => {
+    if (num >= 1000000) {
+        return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'm';
+    }
+    if (num >= 1000) {
+        return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+    }
+    return num.toString();
+};
+
 export default function GithubReposContent() {
     return (
         <Suspense fallback={
@@ -228,33 +238,56 @@ function GithubReposContentInner() {
                                         <div className="absolute inset-0 bg-gradient-to-br from-blue-500/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                                         <div className="relative glass-card rounded-2xl p-6 flex flex-col h-full bg-card-color/80 backdrop-blur-xl border border-white/5">
 
-                                            <div className="flex items-center justify-between mb-4">
-                                                <div className="w-14 h-14 rounded-xl flex items-center justify-center bg-blue-500/10 text-blue-400 border border-blue-500/20 group-hover:bg-blue-500 group-hover:text-white transition-colors duration-300">
-                                                    {getCategoryIcon(repo.category)}
+                                            <div className="flex items-start justify-between mb-4">
+                                                <div className="flex items-center gap-3">
+                                                    {repo.stats?.image_url ? (
+                                                        <img
+                                                            src={repo.stats.image_url}
+                                                            alt={repo.owner}
+                                                            width={48}
+                                                            height={48}
+                                                            className="w-12 h-12 rounded-full object-cover border border-white/10"
+                                                        />
+                                                    ) : (
+                                                        <div className="w-12 h-12 rounded-full flex items-center justify-center bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                                                            {getCategoryIcon(repo.category)}
+                                                        </div>
+                                                    )}
+                                                    <div className="flex flex-col">
+                                                        <span className="text-xs text-fill-color/60 font-mono">@{repo.owner}</span>
+                                                        <h3 className="text-lg font-bold text-fill-color group-hover:text-blue-400 transition-colors line-clamp-1">
+                                                            {repo.name}
+                                                        </h3>
+                                                    </div>
                                                 </div>
-                                                <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                                                <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 whitespace-nowrap ml-2">
                                                     {repo.category}
                                                 </span>
                                             </div>
-
-                                            <h3 className="text-xl font-bold text-fill-color mb-2 group-hover:text-blue-400 transition-colors line-clamp-1">
-                                                {repo.name}
-                                            </h3>
 
                                             <p className="text-sm text-fill-color/60 line-clamp-3 mb-4 flex-grow">
                                                 {repo.description}
                                             </p>
 
-                                            <div className="flex items-center justify-between pt-4 border-t border-white/5">
-                                                <a 
-                                                    href={`https://github.com/${repo.owner}`} 
-                                                    target="_blank" 
-                                                    rel="noreferrer" 
-                                                    onClick={(e) => e.stopPropagation()}
-                                                    className="text-xs font-mono opacity-70 hover:opacity-100 transition-opacity text-fill-color"
-                                                >
-                                                    @{repo.owner}
-                                                </a>
+                                            <div className="flex items-center gap-4 pt-4 border-t border-white/5 text-fill-color/70 text-xs">
+                                                {repo.stats ? (
+                                                    <>
+                                                        <div className="flex items-center gap-1.5" title={`${repo.stats.stars} stars`}>
+                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
+                                                            <span>{formatNumber(repo.stats.stars)}</span>
+                                                        </div>
+                                                        <div className="flex items-center gap-1.5" title={`${repo.stats.forks} forks`}>
+                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="18" r="3"></circle><circle cx="6" cy="6" r="3"></circle><circle cx="18" cy="6" r="3"></circle><path d="M18 9v1a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V9"></path><path d="M12 12v3"></path></svg>
+                                                            <span>{formatNumber(repo.stats.forks)}</span>
+                                                        </div>
+                                                        <div className="flex items-center gap-1.5" title={repo.stats.language}>
+                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                                                            <span className="line-clamp-1 max-w-[80px]">{repo.stats.language}</span>
+                                                        </div>
+                                                    </>
+                                                ) : (
+                                                    <span className="text-fill-color/40 italic">No stats available</span>
+                                                )}
                                             </div>
                                         </div>
                                     </Link>

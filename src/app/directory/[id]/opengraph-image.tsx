@@ -36,21 +36,10 @@ export default async function Image({ params }: Props) {
     );
   }
 
-  let stars = 0;
-  let forks = 0;
-  let language = 'Multiple';
-  try {
-    const res = await fetch(`https://api.github.com/repos/${repo.owner}/${repo.repo_name}`, {
-      next: { revalidate: 86400 }
-    });
-    if (res.ok) {
-      const data = await res.json();
-      stars = data.stargazers_count || 0;
-      forks = data.forks_count || 0;
-      language = data.language || 'Multiple';
-    }
-  } catch (e) {
-  }
+  const stars = repo.stats?.stars || 0;
+  const forks = repo.stats?.forks || 0;
+  const language = repo.stats?.language || 'Multiple';
+  const imageUrl = repo.stats?.image_url || `https://github.com/${repo.owner}.png`;
 
   return new ImageResponse(
     (
@@ -82,22 +71,34 @@ export default async function Image({ params }: Props) {
           }}
         >
           <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
-              <img
-                src={`https://github.com/${repo.owner}.png`}
-                alt="avatar"
-                width={80}
-                height={80}
-                style={{ borderRadius: '50%' }}
-              />
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <span style={{ fontSize: 24, color: 'rgba(255, 255, 255, 0.7)' }}>
-                  {repo.owner}
-                </span>
-                <span style={{ fontSize: 48, fontWeight: 'bold', color: '#ffffff' }}>
-                  {repo.name}
-                </span>
+            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', width: '100%' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+                <img
+                  src={imageUrl}
+                  alt="avatar"
+                  width={80}
+                  height={80}
+                  style={{ borderRadius: '50%', objectFit: 'cover' }}
+                />
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <span style={{ fontSize: 24, color: 'rgba(255, 255, 255, 0.7)' }}>
+                    @{repo.owner}
+                  </span>
+                  <span style={{ fontSize: 48, fontWeight: 'bold', color: '#ffffff' }}>
+                    {repo.name}
+                  </span>
+                </div>
               </div>
+              <span style={{ 
+                background: 'rgba(59, 130, 246, 0.1)', 
+                color: '#60a5fa', 
+                padding: '8px 24px', 
+                borderRadius: '999px',
+                border: '1px solid rgba(59, 130, 246, 0.2)',
+                fontSize: 24
+              }}>
+                {repo.category}
+              </span>
             </div>
             
             <p style={{ 
@@ -138,18 +139,6 @@ export default async function Image({ params }: Props) {
               </svg>
               <span style={{ fontSize: 28, color: 'rgba(255, 255, 255, 0.7)' }}>Lang</span>
               <span style={{ fontSize: 32, fontWeight: 'bold', color: '#ffffff' }}>{language}</span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginLeft: 'auto' }}>
-              <span style={{ 
-                background: 'rgba(59, 130, 246, 0.1)', 
-                color: '#60a5fa', 
-                padding: '8px 24px', 
-                borderRadius: '999px',
-                border: '1px solid rgba(59, 130, 246, 0.2)',
-                fontSize: 24
-              }}>
-                {repo.category}
-              </span>
             </div>
           </div>
         </div>

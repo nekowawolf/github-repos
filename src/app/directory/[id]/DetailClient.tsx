@@ -120,20 +120,43 @@ export default function DetailClient() {
 
                     <div className="relative z-10 flex flex-col md:flex-row gap-6 items-start">
                         <div className="flex-1 w-full">
-                            <a 
-                                href={`https://github.com/${repo.owner}`}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="cursor-pointer flex items-center gap-1.5 mb-4 opacity-70 hover:opacity-100 transition-opacity text-fill-color w-fit"
-                            >
-                                <FaRegUserCircle className="w-4 h-4" />
-                                <span className="text-sm font-medium">{repo.owner}</span>
-                            </a>
-                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
-                                <h1 className="text-3xl md:text-4xl font-bold text-fill-color">
-                                    {repo.name}
-                                </h1>
-                                <span className="px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-sm border border-blue-500/20 whitespace-nowrap self-start md:self-auto">
+                            <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-6">
+                                <div className="flex items-center gap-4">
+                                    <a 
+                                        href={`https://github.com/${repo.owner}`}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="cursor-pointer hover:opacity-80 transition-opacity"
+                                    >
+                                        {repo.stats?.image_url ? (
+                                            <img
+                                                src={repo.stats.image_url}
+                                                alt={repo.owner}
+                                                width={80}
+                                                height={80}
+                                                className="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover border border-white/10"
+                                            />
+                                        ) : (
+                                            <div className="w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                                                {getCategoryIcon(repo.category, "w-8 h-8 md:w-10 md:h-10")}
+                                            </div>
+                                        )}
+                                    </a>
+                                    <div className="flex flex-col">
+                                        <a 
+                                            href={`https://github.com/${repo.owner}`}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            className="cursor-pointer text-sm md:text-base font-mono opacity-70 hover:opacity-100 transition-opacity text-fill-color mb-1 w-fit"
+                                        >
+                                            @{repo.owner}
+                                        </a>
+                                        <h1 className="text-3xl md:text-4xl font-bold text-fill-color">
+                                            {repo.name}
+                                        </h1>
+                                    </div>
+                                </div>
+                                <span className="px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-sm border border-blue-500/20 whitespace-nowrap self-start mt-2 md:mt-0">
                                     {repo.category}
                                 </span>
                             </div>
@@ -150,21 +173,21 @@ export default function DetailClient() {
                                             <FaStar className="w-3.5 h-3.5" />
                                             Stars
                                         </div>
-                                        <div className="font-mono text-xl font-bold text-fill-color">{repoData.stargazers_count?.toLocaleString() || 0}</div>
+                                        <div className="font-mono text-xl font-bold text-fill-color">{(repo.stats?.stars ?? repoData.stargazers_count ?? 0).toLocaleString()}</div>
                                     </div>
                                     <div className="bg-[rgba(var(--fill-color-rgb),0.05)] rounded-xl p-4 border border-[var(--border-divider)] flex flex-col justify-center">
                                         <div className="flex items-center gap-2 text-xs text-fill-color/70 uppercase font-bold tracking-wider mb-1">
                                             <FaCodeBranch className="w-3.5 h-3.5" />
                                             Forks
                                         </div>
-                                        <div className="font-mono text-xl font-bold text-fill-color">{repoData.forks_count?.toLocaleString() || 0}</div>
+                                        <div className="font-mono text-xl font-bold text-fill-color">{(repo.stats?.forks ?? repoData.forks_count ?? 0).toLocaleString()}</div>
                                     </div>
                                     <div className="bg-[rgba(var(--fill-color-rgb),0.05)] rounded-xl p-4 border border-[var(--border-divider)] flex flex-col justify-center">
                                         <div className="flex items-center gap-2 text-xs text-fill-color/70 uppercase font-bold tracking-wider mb-1">
                                             <FaCode className="w-3.5 h-3.5" />
                                             Language
                                         </div>
-                                        <div className="font-semibold text-xl text-fill-color">{repoData.language || 'Multiple'}</div>
+                                        <div className="font-semibold text-xl text-fill-color">{repo.stats?.language || repoData.language || 'Multiple'}</div>
                                     </div>
                                     <div className="bg-[rgba(var(--fill-color-rgb),0.05)] rounded-xl p-4 border border-[var(--border-divider)] flex flex-col justify-center">
                                         <div className="flex items-center gap-2 text-xs text-fill-color/70 uppercase font-bold tracking-wider mb-1">
