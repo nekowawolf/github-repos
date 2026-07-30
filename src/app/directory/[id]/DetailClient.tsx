@@ -144,12 +144,12 @@ export default function DetailClient() {
                     <div className="relative z-10 flex flex-col md:flex-row gap-6 items-start">
                         <div className="flex-1 w-full">
                             <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-6">
-                                <div className="flex items-center gap-4">
+                                <div className="flex items-center gap-4 w-full min-w-0">
                                     <a 
                                         href={`https://github.com/${repo.owner}`}
                                         target="_blank"
                                         rel="noreferrer"
-                                        className="cursor-pointer hover:opacity-80 transition-opacity"
+                                        className="cursor-pointer shrink-0"
                                     >
                                         {repo.stats?.image_url ? (
                                             <img
@@ -165,16 +165,16 @@ export default function DetailClient() {
                                             </div>
                                         )}
                                     </a>
-                                    <div className="flex flex-col">
+                                    <div className="flex flex-col min-w-0 flex-1">
                                         <a 
                                             href={`https://github.com/${repo.owner}`}
                                             target="_blank"
                                             rel="noreferrer"
-                                            className="cursor-pointer text-sm md:text-base font-mono opacity-70 hover:opacity-100 transition-opacity text-fill-color mb-1 w-fit"
+                                            className="cursor-pointer text-sm md:text-base font-mono opacity-70 hover:opacity-100 transition-opacity text-fill-color mb-1 truncate"
                                         >
                                             @{repo.owner}
                                         </a>
-                                        <h1 className="text-3xl md:text-4xl font-bold text-fill-color">
+                                        <h1 className="text-3xl md:text-4xl font-bold text-fill-color break-words">
                                             {repo.name}
                                         </h1>
                                     </div>

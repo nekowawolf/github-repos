@@ -323,6 +323,26 @@ export default function RepoContentTabs({ mdFiles, licenseName, owner, repoName,
                                     <table {...props} className="w-full" />
                                 </div>
                             ),
+                            div: (props: any) => {
+                                const style = { ...props.style };
+                                if (props.align) style.textAlign = props.align;
+                                return <div {...props} style={style} />;
+                            },
+                            h1: (props: any) => {
+                                const style = { ...props.style };
+                                if (props.align) style.textAlign = props.align;
+                                return <h1 {...props} style={style} />;
+                            },
+                            h2: (props: any) => {
+                                const style = { ...props.style };
+                                if (props.align) style.textAlign = props.align;
+                                return <h2 {...props} style={style} />;
+                            },
+                            h3: (props: any) => {
+                                const style = { ...props.style };
+                                if (props.align) style.textAlign = props.align;
+                                return <h3 {...props} style={style} />;
+                            },
                             p: (props: any) => {
                                 const style = { ...props.style };
                                 if (props.align) {
@@ -349,21 +369,54 @@ export default function RepoContentTabs({ mdFiles, licenseName, owner, repoName,
                                     }
 
                                     const resolvedPath = basePath.replace(/^(\.\/|\.\.\/|\/)+/g, '');
-                                    src = `https://raw.githubusercontent.com/${owner}/${repoName}/${defaultBranch}/${resolvedPath}`;
+                                    src = `https://cdn.jsdelivr.net/gh/${owner}/${repoName}@${defaultBranch}/${resolvedPath}`;
 
                                     if (query) src += query;
                                     if (hash) src += hash;
+                                } else if (src && src.startsWith('https://raw.githubusercontent.com/')) {
+                                    src = src.replace(
+                                        /^https:\/\/raw\.githubusercontent\.com\/([^\/]+)\/([^\/]+)\/([^\/]+)\/(.*)$/,
+                                        'https://cdn.jsdelivr.net/gh/$1/$2@$3/$4'
+                                    );
                                 }
 
                                 const style = { ...props.style };
-                                if (props.width) {
-                                    style.width = !isNaN(Number(props.width)) ? `${props.width}px` : props.width;
-                                }
+                                
                                 if (props.height) {
                                     style.height = !isNaN(Number(props.height)) ? `${props.height}px` : props.height;
                                 }
+                                
+                                if (props.width && isNaN(Number(props.width))) {
+                                    style.width = props.width;
+                                }
 
                                 return <img {...props} src={src} style={style} className={`inline-block !my-1 !mx-0.5 ${props.className || ''}`} />;
+                            },
+                            source: (props: any) => {
+                                let srcset = props.srcSet || props.srcset || '';
+                                if (typeof srcset === 'string' && srcset) {
+                                    const parts = srcset.split(',').map(part => {
+                                        const trimmed = part.trim();
+                                        const spaceIdx = trimmed.indexOf(' ');
+                                        let url = spaceIdx !== -1 ? trimmed.substring(0, spaceIdx) : trimmed;
+                                        const rest = spaceIdx !== -1 ? trimmed.substring(spaceIdx) : '';
+                                        
+                                        if (url && !url.startsWith('http') && !url.startsWith('data:')) {
+                                            const resolvedPath = url.replace(/^(\.\/|\.\.\/|\/)+/g, '');
+                                            url = `https://cdn.jsdelivr.net/gh/${owner}/${repoName}@${defaultBranch}/${resolvedPath}`;
+                                        } else if (url && url.startsWith('https://raw.githubusercontent.com/')) {
+                                            url = url.replace(
+                                                /^https:\/\/raw\.githubusercontent\.com\/([^\/]+)\/([^\/]+)\/([^\/]+)\/(.*)$/,
+                                                'https://cdn.jsdelivr.net/gh/$1/$2@$3/$4'
+                                            );
+                                        }
+                                        return url + rest;
+                                    });
+                                    srcset = parts.join(', ');
+                                }
+                                const newProps = { ...props, srcSet: srcset };
+                                delete newProps.srcset;
+                                return <source {...newProps} />;
                             },
                             a: (linkProps: any) => (
                                 <MarkdownLink
