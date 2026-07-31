@@ -11,12 +11,13 @@ import { RiRobot2Line } from "react-icons/ri";
 import { MdOutlineDesignServices, MdOutlineOndemandVideo } from "react-icons/md";
 import { LuAudioLines } from "react-icons/lu";
 import { IoIosArrowUp } from "react-icons/io";
+import { CiBookmark } from "react-icons/ci";
 import BackButton from "@/components/BackButton";
 import RepoContentTabs from "@/components/RepoContentTabs";
 import { fetchGithubReposData, fetchGithubRepoDetails } from "@/services/githubRepoService";
 import { GithubRepo } from "@/types/githubRepo";
 import { Spinner } from "@/components/ui/spinner";
-import NwwOneeAIChat from "@/components/NwwOneeAIChat";
+import NwwOneeAIChat, { chatStore } from "@/components/NwwOneeAIChat";
 
 const getCategoryIcon = (category: string, className: string = "w-8 h-8") => {
     switch (category.toLowerCase()) {
@@ -170,7 +171,7 @@ export default function DetailClient() {
                                             href={`https://github.com/${repo.owner}`}
                                             target="_blank"
                                             rel="noreferrer"
-                                            className="cursor-pointer text-sm md:text-base font-mono opacity-70 hover:opacity-100 transition-opacity text-fill-color mb-1 truncate"
+                                            className="cursor-pointer text-sm md:text-base font-mono opacity-70 hover:opacity-100 transition-opacity text-fill-color mb-1 truncate w-fit"
                                         >
                                             @{repo.owner}
                                         </a>
@@ -179,9 +180,20 @@ export default function DetailClient() {
                                         </h1>
                                     </div>
                                 </div>
-                                <span className="px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-sm border border-blue-500/20 whitespace-nowrap self-start mt-2 md:mt-0">
-                                    {repo.category}
-                                </span>
+                                <div className="flex items-center gap-3 self-start mt-2 md:mt-0">
+                                    <span className="px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-sm border border-blue-500/20 whitespace-nowrap">
+                                        {repo.category}
+                                    </span>
+                                    <button 
+                                        onClick={() => {
+                                            chatStore.setIsOpen(true);
+                                            chatStore.setActiveView('user');
+                                        }}
+                                        className="cursor-pointer opacity-70 hover:opacity-100 transition-all text-fill-color"
+                                    >
+                                        <CiBookmark className="w-6 h-6" />
+                                    </button>
+                                </div>
                             </div>
 
                             <p className="text-fill-color/70 leading-relaxed max-w-3xl text-lg mb-6">
@@ -233,13 +245,13 @@ export default function DetailClient() {
                                         rel="noopener noreferrer"
                                         className="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3.5 py-2 sm:px-4 sm:py-2 rounded-xl font-medium text-[15px] sm:text-[15px] text-white bg-blue-600 hover:bg-blue-500 transition-all shadow-lg shadow-blue-500/20"
                                     >
-                                        View Repository
                                         <FaExternalLinkAlt className="w-[15px] h-[15px] sm:w-3.5 sm:h-3.5" />
+                                        Repository
                                     </a>
                                 )}
 
                                 {(repo.website || repo.twitter || repo.instagram || repo.discord) && (
-                                    <div className="flex items-center gap-2.5 sm:gap-2.5 ml-auto sm:ml-4 bg-[rgba(var(--fill-color-rgb),0.05)] px-3.5 py-1.5 sm:px-3.5 sm:py-1.5 rounded-xl border border-[var(--border-divider)]">
+                                    <div className="flex items-center gap-4 ml-auto sm:ml-4 bg-[rgba(var(--fill-color-rgb),0.05)] px-4 py-2 sm:px-4 sm:py-2 rounded-xl border border-[var(--border-divider)]">
                                         {repo.website && (
                                             <a href={repo.website} target="_blank" rel="noopener noreferrer" className="cursor-pointer opacity-70 hover:opacity-100 transition-all text-fill-color">
                                                 <FaGlobe className="w-[19px] h-[19px] sm:w-[18px] sm:h-[18px]" />

@@ -9,12 +9,13 @@ import { FcGoogle } from 'react-icons/fc';
 import { FaArrowLeft } from 'react-icons/fa6';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const chatStore = {
+export const chatStore = {
   _state: {
     isOpen: false,
     messages: [] as {role: 'user'|'ai', content: string}[],
     inputValue: '',
     isTyping: false,
+    activeView: 'chat' as 'chat' | 'user' | 'history',
   },
   _listeners: new Set<() => void>(),
 
@@ -51,6 +52,12 @@ const chatStore = {
   setIsTyping(val: boolean) {
     if (chatStore._state.isTyping === val) return;        
     chatStore._state = { ...chatStore._state, isTyping: val };
+    chatStore._emit();
+  },
+
+  setActiveView(val: 'chat' | 'user' | 'history') {
+    if (chatStore._state.activeView === val) return;
+    chatStore._state = { ...chatStore._state, activeView: val };
     chatStore._emit();
   },
 };
@@ -183,9 +190,9 @@ export default function NwwOneeAIChat() {
   const messages = useChatSelector(s => s.messages);
   const inputValue = useChatSelector(s => s.inputValue);
   const isTyping = useChatSelector(s => s.isTyping);
+  const activeView = useChatSelector(s => s.activeView);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const [activeView, setActiveView] = useState<'chat' | 'user' | 'history'>('chat');
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -231,64 +238,91 @@ export default function NwwOneeAIChat() {
             exit="hidden"
             transition={chatPanelTransition}
             style={{ willChange: 'transform, opacity' }}
-            className="w-[380px] max-w-[calc(100vw-32px)] bg-[var(--card-color2)] border-color rounded-2xl overflow-hidden flex flex-col origin-bottom-right"
+            className="w-[380px] max-w-[calc(100vw-32px)] bg-[var(--card-color2)] border-color rounded-2xl overflow-hidden flex flex-col origin-bottom-right relative"
           >
           {/* Header */}
-          <ChatHeader activeView={activeView} setActiveView={setActiveView} />
+          <ChatHeader activeView={activeView} setActiveView={(v) => chatStore.setActiveView(v)} />
 
           {/* Body */}
           <div className="flex-1 flex flex-col bg-transparent overflow-hidden">
             {activeView === 'chat' && (
-              <>
+              <div className="w-full h-[349px] flex flex-col">
                 {messages.length === 0 ? (
                   <StarterButtons onSend={handleSend} />
-            ) : (
-              <div className="p-5 flex-1 overflow-y-auto flex flex-col gap-5 max-h-[350px] scrollbar-thin scrollbar-thumb-blue-500/20 scrollbar-track-transparent">
-                {messageList}
-                
-                {isTyping && <TypingIndicator />}
-                <div ref={messagesEndRef} />
+                ) : (
+                  <div className="p-5 flex-1 overflow-y-auto flex flex-col gap-5 scrollbar-thin scrollbar-thumb-blue-500/20 scrollbar-track-transparent pb-24">
+                    {messageList}
+                    
+                    {isTyping && <TypingIndicator />}
+                    <div ref={messagesEndRef} />
+                  </div>
+                )}
               </div>
-            )}
-              </>
             )}
 
             {activeView === 'user' && (
-              <div className="flex-1 flex flex-col items-center justify-center p-5 pb-2 text-center min-h-[300px] relative">
-                <button
-                  onClick={() => setActiveView('chat')}
-                  className="absolute top-5 left-5 flex items-center gap-2 text-fill-color/70 hover:text-fill-color transition-colors cursor-pointer"
-                >
-                  <FaArrowLeft className="w-4 h-4" />
-                  <span className="text-sm font-medium">Back to chat</span>
-                </button>
-                <button disabled className="flex items-center gap-3 px-5 py-2.5 border border-color rounded-xl cursor-not-allowed bg-[var(--card-color)] text-fill-color shadow-sm">
-                  <FcGoogle className="w-5 h-5" />
-                  <span className="text-sm font-medium">Login with Google</span>
-                </button>
-                <p className="mt-4 text-xs text-fill-color/70 font-medium">Currently in development</p>
+              <div className="w-full h-[349px] flex flex-col">
+                <div className="w-full h-[48px] p-4 pb-0">
+                  <button
+                    onClick={() => chatStore.setActiveView('chat')}
+                    className="flex items-center gap-2 text-fill-color/70 hover:text-fill-color transition-colors cursor-pointer w-fit"
+                  >
+                    <FaArrowLeft className="w-4 h-4" />
+                    <span className="text-sm font-medium">Back to chat</span>
+                  </button>
+                </div>
+                <div className="w-full flex-1 flex flex-col items-center justify-center px-5 pb-12 text-center">
+                  <div className="w-full max-w-[260px] flex flex-col items-center">
+                    <button disabled className="w-full flex items-center justify-center gap-2.5 px-4 py-2 border border-color rounded-xl cursor-not-allowed bg-[var(--card-color)] text-fill-color shadow-sm">
+                      <FcGoogle className="w-4 h-4" />
+                      <span className="text-sm font-medium">Login with Google</span>
+                    </button>
+                    
+                    <div className="flex items-center gap-3 w-full my-3 opacity-60">
+                      <div className="flex-1 border-t border-color"></div>
+                      <span className="text-[10px] text-fill-color font-medium uppercase tracking-wider">or</span>
+                      <div className="flex-1 border-t border-color"></div>
+                    </div>
+
+                    <div className="w-full flex flex-col gap-2.5">
+                      <input 
+                        type="email" 
+                        placeholder="Enter your email" 
+                        className="w-full px-3 py-2 bg-[var(--card-color)] border border-color rounded-xl text-sm text-fill-color outline-none placeholder:text-fill-color/40"
+                      />
+                      <button disabled className="w-full py-2 bg-blue-600/50 text-white rounded-xl text-sm font-medium cursor-not-allowed shadow-sm">
+                        Continue with email
+                      </button>
+                    </div>
+
+                    <p className="mt-2 text-[11px] text-fill-color/70 font-medium">Currently in development</p>
+                  </div>
+                </div>
               </div>
             )}
 
             {activeView === 'history' && (
-              <div className="flex-1 flex flex-col items-center justify-center p-5 pb-2 text-center min-h-[300px] relative">
-                <button
-                  onClick={() => setActiveView('chat')}
-                  className="absolute top-5 left-5 flex items-center gap-2 text-fill-color/70 hover:text-fill-color transition-colors cursor-pointer"
-                >
-                  <FaArrowLeft className="w-4 h-4" />
-                  <span className="text-sm font-medium">Back to chat</span>
-                </button>
-                <MdHistory className="w-16 h-16 text-fill-color/30 mb-1" />
-                <h4 className="text-sm font-semibold text-fill-color mb-2">No chat history</h4>
-                <p className="text-xs text-fill-color/70 font-medium">Currently in development</p>
+              <div className="w-full h-[349px] flex flex-col">
+                <div className="w-full h-[48px] p-4 pb-0">
+                  <button
+                    onClick={() => chatStore.setActiveView('chat')}
+                    className="flex items-center gap-2 text-fill-color/70 hover:text-fill-color transition-colors cursor-pointer w-fit"
+                  >
+                    <FaArrowLeft className="w-4 h-4" />
+                    <span className="text-sm font-medium">Back to chat</span>
+                  </button>
+                </div>
+                <div className="w-full flex-1 flex flex-col items-center justify-center px-5 pb-12 text-center">
+                  <MdHistory className="w-16 h-16 text-fill-color/30 mb-2" />
+                  <h4 className="text-sm font-semibold text-fill-color mb-1">No chat history</h4>
+                  <p className="mt-1 text-[11px] text-fill-color/70 font-medium">Currently in development</p>
+                </div>
               </div>
             )}
           </div>
 
           {/* Footer (Input) */}
-          {activeView === 'chat' && (
-            <div className="p-4 bg-transparent pb-5">
+          <div className={`absolute bottom-0 left-0 w-full p-4 bg-transparent pb-5 z-10 ${activeView !== 'chat' ? 'hidden' : ''}`}>
             <div className="relative flex items-center justify-between border-color glass-card rounded-full px-2 py-2 shadow-sm">
               <input
                 type="text"
@@ -296,18 +330,19 @@ export default function NwwOneeAIChat() {
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
                 placeholder="How can I help today?"
+                tabIndex={activeView !== 'chat' ? -1 : undefined}
                 className="w-full bg-transparent px-3 text-sm text-fill-color outline-none placeholder:text-fill-color/60"
               />
               <button 
                 onClick={() => handleSend(inputValue)}
                 disabled={!inputValue.trim() || isTyping}
+                tabIndex={activeView !== 'chat' ? -1 : undefined}
                 className="w-8 h-8 rounded-full bg-blue-600 hover:bg-blue-500 disabled:bg-blue-600/50 disabled:cursor-not-allowed flex items-center justify-center text-white transition-all cursor-pointer shrink-0 shadow-md shadow-blue-500/20"
               >
                 <FaArrowUp className="w-3.5 h-3.5" />
               </button>
             </div>
           </div>
-          )}
           </motion.div>
         )}
       </AnimatePresence>
