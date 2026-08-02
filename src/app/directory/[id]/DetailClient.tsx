@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { FaExternalLinkAlt, FaCode, FaServer, FaDatabase, FaShieldAlt, FaGraduationCap, FaStar, FaCodeBranch, FaRegClock, FaRegUserCircle, FaGlobe, FaRegFileImage, FaFileAlt } from "react-icons/fa";
 import { FaXTwitter, FaInstagram } from "react-icons/fa6";
 import { BsDiscord } from "react-icons/bs";
@@ -14,7 +15,7 @@ import { IoIosArrowUp } from "react-icons/io";
 import { CiBookmark } from "react-icons/ci";
 import BackButton from "@/components/BackButton";
 import RepoContentTabs from "@/components/RepoContentTabs";
-import { fetchGithubReposData, fetchGithubRepoDetails } from "@/services/githubRepoService";
+import { fetchGithubRepoDetails } from "@/services/githubRepoService";
 import { GithubRepo } from "@/types/githubRepo";
 import { Spinner } from "@/components/ui/spinner";
 import NwwOneeAIChat, { chatStore } from "@/components/NwwOneeAIChat";
@@ -74,7 +75,11 @@ export default function DetailClient() {
         const loadData = async () => {
             setLoading(true);
             try {
-                const repos = await fetchGithubReposData();
+                const fullUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/githubrepo`;
+                const response = await fetch(fullUrl);
+                if (!response.ok) throw new Error("Network response was not ok");
+                const rawData = await response.json();
+                const repos: GithubRepo[] = Array.isArray(rawData) ? rawData : (rawData?.data || []);
                 const foundRepo = repos.find((t) => t._id.toString() === id);
                 if (foundRepo) {
                     setRepo(foundRepo);
@@ -153,7 +158,7 @@ export default function DetailClient() {
                                         className="cursor-pointer shrink-0"
                                     >
                                         {repo.stats?.image_url ? (
-                                            <img
+                                            <Image
                                                 src={repo.stats.image_url}
                                                 alt={repo.owner}
                                                 width={80}
@@ -305,7 +310,7 @@ export default function DetailClient() {
                                     <div className="flex items-start justify-between mb-3">
                                         <div className="flex items-center gap-3">
                                             {sRepo.stats?.image_url ? (
-                                                <img
+                                                <Image
                                                     src={sRepo.stats.image_url}
                                                     alt={sRepo.owner}
                                                     width={40}

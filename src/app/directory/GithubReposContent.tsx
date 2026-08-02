@@ -2,6 +2,7 @@
 
 import NwwOneeAIChat from "@/components/NwwOneeAIChat";
 import Link from 'next/link';
+import Image from 'next/image';
 import Pagination from '@/components/Pagination';
 import { useGithubRepos } from '@/hooks/useGithubRepos';
 import { Spinner } from '@/components/ui/spinner';
@@ -241,7 +242,7 @@ function GithubReposContentInner() {
                                             <div className="flex items-start justify-between mb-4">
                                                 <div className="flex items-center gap-3">
                                                     {repo.stats?.image_url ? (
-                                                        <img
+                                                        <Image
                                                             src={repo.stats.image_url}
                                                             alt={repo.owner}
                                                             width={48}

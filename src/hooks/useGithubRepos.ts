@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { GithubRepo } from '@/types/githubRepo';
-import { fetchGithubReposData } from '@/services/githubRepoService';
+
 
 let isInitialLoad = true;
 
@@ -31,7 +31,11 @@ export function useGithubRepos(itemsPerPage: number) {
                         forceShuffle = true;
                     }
                 }
-                const data = await fetchGithubReposData();
+                const fullUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/githubrepo`;
+                const response = await fetch(fullUrl);
+                if (!response.ok) throw new Error("Network response was not ok");
+                const rawData = await response.json();
+                const data = Array.isArray(rawData) ? rawData : (rawData?.data || []);
                 let finalData = [...data];
 
                 if (typeof sessionStorage !== 'undefined') {
