@@ -17,6 +17,6 @@ export interface GithubRepo {
     twitter?: string;
     instagram?: string;
     discord?: string;
-    createdAt?: string;
+    created_at?: string;
     stats?: GithubStats;
 }
