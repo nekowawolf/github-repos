@@ -149,12 +149,12 @@ function GithubReposContentInner() {
     return (
         <div className="min-h-screen body-color text-fill-color p-8 pt-12 font-sans">
             <div className="max-w-7xl mx-auto flex flex-col items-center">
-                <div className="w-full max-w-2xl mb-8 text-center">
+                <div className="w-full max-w-2xl mb-8 text-center px-4">
                     <h1 className="text-3xl font-bold mb-2">
                         GitHub Repositories
                     </h1>
-                    <p className="text-fill-color/70 max-w-md mx-auto">
-                        Explore our curated collection of top GitHub repositories across various categories.
+                    <p className="text-fill-color/70 w-full sm:max-w-md mx-auto">
+                        Explore a curated directory of GitHub repositories to find useful tools and projects across every category.
                     </p>
                 </div>
 

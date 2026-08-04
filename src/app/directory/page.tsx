@@ -3,7 +3,7 @@ import Footer from "@/components/Footer";
 import GithubReposContent from "./GithubReposContent";
 import { githubRepoMetadata } from "@/constants/metadataTemplates";
 
-export const metadata = githubRepoMetadata("GitHub Repos", "Explore top GitHub repositories");
+export const metadata = githubRepoMetadata("GitHub Repos", "Explore a curated directory of GitHub repositories to find useful tools and projects across every category.");
 
 export default function GithubReposPage() {
   return (

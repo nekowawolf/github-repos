@@ -12,8 +12,8 @@ export async function generateMetadata({ params }: Props) {
   const resolvedParams = await params;
   const reposData = await fetchGithubReposData();
   const repo = reposData.find((t) => t._id.toString() === resolvedParams.id);
-  if (!repo) return githubRepoMetadata("Not Found", "Repository not found");
-  return githubRepoMetadata(repo.name, repo.description);
+  if (!repo) return githubRepoMetadata("Not Found", "Repository not found", false);
+  return githubRepoMetadata(repo.name, repo.description, false);
 }
 
 export default function GithubRepoDetails() {
