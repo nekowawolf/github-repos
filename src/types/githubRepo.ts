@@ -3,6 +3,7 @@ export interface GithubStats {
     forks: number;
     language: string;
     image_url: string;
+    last_update?: string;
 }
 
 export interface GithubRepo {

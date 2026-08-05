@@ -235,7 +235,7 @@ export default function DetailClient() {
                                             Updated
                                         </div>
                                         <div className="text-sm font-medium text-fill-color">
-                                            {new Date(repoData.updated_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                                            {new Date(repo.stats?.last_update || repoData.pushed_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
                                         </div>
                                     </div>
                                 </div>
