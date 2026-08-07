@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
 import { FaExternalLinkAlt, FaCode, FaServer, FaDatabase, FaShieldAlt, FaGraduationCap, FaStar, FaCodeBranch, FaRegClock, FaRegUserCircle, FaGlobe, FaRegFileImage, FaFileAlt } from "react-icons/fa";
 import { FaXTwitter, FaInstagram } from "react-icons/fa6";
 import { BsDiscord } from "react-icons/bs";
@@ -158,7 +157,7 @@ export default function DetailClient() {
                                         className="cursor-pointer shrink-0"
                                     >
                                         {repo.stats?.image_url ? (
-                                            <Image
+                                            <img
                                                 src={repo.stats.image_url}
                                                 alt={repo.owner}
                                                 width={80}
@@ -176,7 +175,8 @@ export default function DetailClient() {
                                             href={`https://github.com/${repo.owner}`}
                                             target="_blank"
                                             rel="noreferrer"
-                                            className="cursor-pointer text-sm md:text-base font-mono opacity-70 hover:opacity-100 transition-opacity text-fill-color mb-1 truncate w-fit"
+                                            className="cursor-pointer text-sm md:text-base font-mono opacity-70 hover:opacity-100 transition-opacity text-fill-color mb-1 truncate max-w-full block"
+                                            title={`@${repo.owner}`}
                                         >
                                             @{repo.owner}
                                         </a>
@@ -227,7 +227,7 @@ export default function DetailClient() {
                                             <FaCode className="w-3.5 h-3.5" />
                                             Language
                                         </div>
-                                        <div className="font-semibold text-xl text-fill-color">{repo.stats?.language || repoData.language || 'Multiple'}</div>
+                                        <div className="font-semibold text-xl text-fill-color">{repo.stats?.language || repoData.language || 'N/A'}</div>
                                     </div>
                                     <div className="bg-[rgba(var(--fill-color-rgb),0.05)] rounded-xl p-4 border border-[var(--border-divider)] flex flex-col justify-center">
                                         <div className="flex items-center gap-2 text-xs text-fill-color/70 uppercase font-bold tracking-wider mb-1">
@@ -310,7 +310,7 @@ export default function DetailClient() {
                                     <div className="flex items-start justify-between mb-3">
                                         <div className="flex items-center gap-3">
                                             {sRepo.stats?.image_url ? (
-                                                <Image
+                                                <img
                                                     src={sRepo.stats.image_url}
                                                     alt={sRepo.owner}
                                                     width={40}
@@ -322,8 +322,8 @@ export default function DetailClient() {
                                                     {getCategoryIcon(sRepo.category, "w-5 h-5")}
                                                 </div>
                                             )}
-                                            <div className="flex flex-col">
-                                                <span className="text-[11px] text-fill-color/60 font-mono">@{sRepo.owner}</span>
+                                            <div className="flex flex-col min-w-0">
+                                                <span className="text-[11px] text-fill-color/60 font-mono truncate" title={`@${sRepo.owner}`}>@{sRepo.owner}</span>
                                                 <h3 className="text-sm font-bold text-fill-color group-hover:text-blue-400 transition-colors line-clamp-1">
                                                     {sRepo.name}
                                                 </h3>
@@ -349,7 +349,7 @@ export default function DetailClient() {
                                         </div>
                                         <div className="flex items-center gap-1.5">
                                             <FaCode className="w-3.5 h-3.5" />
-                                            <span className="truncate max-w-[80px]">{sRepo.stats?.language || 'Multiple'}</span>
+                                            <span className="truncate max-w-[80px]">{sRepo.stats?.language || 'N/A'}</span>
                                         </div>
                                     </div>
                                 </Link>

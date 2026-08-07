@@ -20,4 +20,10 @@ export interface GithubRepo {
     discord?: string;
     created_at?: string;
     stats?: GithubStats;
+    added_by?: AddedByInfo;
+}
+
+export interface AddedByInfo {
+    name?: string;
+    url?: string;
 }

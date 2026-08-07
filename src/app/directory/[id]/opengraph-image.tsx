@@ -38,7 +38,7 @@ export default async function Image({ params }: Props) {
 
   const stars = repo.stats?.stars || 0;
   const forks = repo.stats?.forks || 0;
-  const language = repo.stats?.language || 'Multiple';
+  const language = repo.stats?.language || 'N/A';
   const imageUrl = repo.stats?.image_url || `https://github.com/${repo.owner}.png`;
 
   return new ImageResponse(

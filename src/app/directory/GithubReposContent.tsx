@@ -2,7 +2,6 @@
 
 import NwwOneeAIChat from "@/components/NwwOneeAIChat";
 import Link from 'next/link';
-import Image from 'next/image';
 import Pagination from '@/components/Pagination';
 import { useGithubRepos } from '@/hooks/useGithubRepos';
 import { Spinner } from '@/components/ui/spinner';
@@ -242,7 +241,7 @@ function GithubReposContentInner() {
                                             <div className="flex items-start justify-between mb-4">
                                                 <div className="flex items-center gap-3">
                                                     {repo.stats?.image_url ? (
-                                                        <Image
+                                                        <img
                                                             src={repo.stats.image_url}
                                                             alt={repo.owner}
                                                             width={48}
@@ -254,8 +253,8 @@ function GithubReposContentInner() {
                                                             {getCategoryIcon(repo.category)}
                                                         </div>
                                                     )}
-                                                    <div className="flex flex-col">
-                                                        <span className="text-xs text-fill-color/60 font-mono">@{repo.owner}</span>
+                                                    <div className="flex flex-col min-w-0">
+                                                        <span className="text-xs text-fill-color/60 font-mono truncate" title={`@${repo.owner}`}>@{repo.owner}</span>
                                                         <h3 className="text-lg font-bold text-fill-color group-hover:text-blue-400 transition-colors line-clamp-1">
                                                             {repo.name}
                                                         </h3>
@@ -283,7 +282,7 @@ function GithubReposContentInner() {
                                                         </div>
                                                         <div className="flex items-center gap-1.5" title={repo.stats.language}>
                                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-                                                            <span className="line-clamp-1 max-w-[80px]">{repo.stats.language}</span>
+                                                            <span className="line-clamp-1 max-w-[80px]">{repo.stats.language || 'N/A'}</span>
                                                         </div>
                                                     </>
                                                 ) : (
