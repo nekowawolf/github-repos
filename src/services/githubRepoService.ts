@@ -170,3 +170,41 @@ export const fetchGithubRepoDetails = async (owner: string, repoName: string, re
         return { repoData: null, mdFiles: [] };
     }
 };
+
+export const fetchGithubCommits = async (owner: string, repoName: string, perPage: number = 8, retryCount = 0): Promise<any[]> => {
+    try {
+        const tokens = [process.env.GITHUB_TOKEN, process.env.GITHUB_TOKEN2].filter(Boolean);
+        let currentTokenIndex = 0;
+        
+        if (tokens.length > 1 && Date.now() < useBackupTokenUntil) {
+            currentTokenIndex = 1;
+        }
+
+        const headers: Record<string, string> = {};
+        if (tokens.length > 0) {
+            headers['Authorization'] = `Bearer ${tokens[currentTokenIndex]}`;
+        }
+
+        const res = await fetch(`https://api.github.com/repos/${owner}/${repoName}/commits?per_page=${perPage}`, {
+            headers,
+            next: { revalidate: 60 }
+        });
+
+        if ((res.status === 403 || res.status === 401) && tokens.length > 1 && retryCount === 0) {
+            if (currentTokenIndex === 0) {
+                useBackupTokenUntil = Date.now() + 5 * 60 * 60 * 1000;
+                console.warn(`Github API rate limit hit on Commits using Token 1. Switching to Token 2 for 5 hours. Retrying...`);
+            } else {
+                useBackupTokenUntil = 0;
+                console.warn(`Github API rate limit hit on Commits using Token 2. Reverting back to Token 1. Retrying...`);
+            }
+            return fetchGithubCommits(owner, repoName, perPage, retryCount + 1);
+        }
+
+        if (!res.ok) return [];
+        return await res.json();
+    } catch (error) {
+        console.error("Error fetching commits from Github API:", error);
+        return [];
+    }
+};
