@@ -117,10 +117,21 @@ export default function DetailClient() {
                 {displayedActivities.map((repo) => (
                   <div
                     key={repo._id}
-                    onClick={() => router.push(`/directory/${repo._id}`)}
-                    className="group flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 relative transition-transform duration-300 hover:translate-x-2 cursor-pointer w-full"
+                    onClick={() => {
+                      if (window.innerWidth >= 640) {
+                        router.push(`/directory/${repo._id}`);
+                      }
+                    }}
+                    className="group flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 relative transition-transform duration-300 sm:hover:translate-x-2 sm:cursor-pointer cursor-default w-full"
                   >
-                    <div className="flex items-center gap-3 shrink-0">
+                    <div 
+                      onClick={(e) => {
+                        if (window.innerWidth < 640) {
+                          router.push(`/directory/${repo._id}`);
+                        }
+                      }}
+                      className="flex items-center gap-3 shrink-0 cursor-pointer w-fit"
+                    >
                       {repo.stats?.image_url ? (
                         <img
                           src={repo.stats.image_url}
@@ -209,7 +220,15 @@ export default function DetailClient() {
             /last-commits
           </h1>
           <p className="text-fill-color/60 text-sm max-w-full sm:max-w-md leading-relaxed">
-            Recent commits and contributions to the project.
+            Recent commits and contributions to the project.{" "}
+            <a
+              href="https://github.com/nekowawolf/github-repos"
+              target="_blank"
+              rel="noreferrer"
+              className="text-blue-500 hover:text-blue-400 transition-colors font-medium cursor-pointer inline-block mt-1 sm:mt-0"
+            >
+              Contribute
+            </a>
           </p>
         </div>
 

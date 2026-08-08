@@ -175,7 +175,7 @@ export default function DetailClient() {
                                             href={`https://github.com/${repo.owner}`}
                                             target="_blank"
                                             rel="noreferrer"
-                                            className="cursor-pointer text-sm md:text-base font-mono opacity-70 hover:opacity-100 transition-opacity text-fill-color mb-1 truncate max-w-full block"
+                                            className="cursor-pointer text-sm md:text-base font-mono opacity-70 hover:opacity-100 transition-opacity text-fill-color mb-1 truncate max-w-full w-fit block"
                                             title={`@${repo.owner}`}
                                         >
                                             @{repo.owner}
