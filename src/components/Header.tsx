@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { FaSun, FaMoon } from 'react-icons/fa6';
 import { HiOutlineX } from 'react-icons/hi';
 import { FaGithub, FaBars, FaGlobe } from 'react-icons/fa';
@@ -12,6 +13,9 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
+  const pathname = usePathname();
+  
+  const isActive = (path: string) => pathname === path || pathname?.startsWith(`${path}/`);
 
   useEffect(() => {
     let lastScrollY = window.scrollY;
@@ -85,19 +89,19 @@ export default function Header() {
             <nav className="hidden sm:flex items-center gap-6">
               <Link
                 href="/directory"
-                className="text-fill-color/70 font-semibold hover:!text-blue-600 transition-colors duration-300"
+                className={`font-semibold transition-colors duration-300 ${isActive('/directory') ? '!text-blue-600' : 'text-fill-color/70 hover:!text-blue-600'}`}
               >
                 GitHub Repos
               </Link>
               <Link
-                href="/news"
-                className="text-fill-color/70 font-semibold hover:!text-blue-600 transition-colors duration-300"
+                href="/blog"
+                className={`font-semibold transition-colors duration-300 ${isActive('/blog') ? '!text-blue-600' : 'text-fill-color/70 hover:!text-blue-600'}`}
               >
-                News
+                Blog
               </Link>
               <Link
                 href="/activity"
-                className="text-fill-color/70 font-semibold hover:!text-blue-600 transition-colors duration-300"
+                className={`font-semibold transition-colors duration-300 ${isActive('/activity') ? '!text-blue-600' : 'text-fill-color/70 hover:!text-blue-600'}`}
               >
                 Activity
               </Link>
@@ -119,7 +123,7 @@ export default function Header() {
                 <AiOutlineLink />
               </Link>
               <Link
-                href="https://github.com/nekowawolf/" target="_blank"
+                href="https://github.com/nekowawolf/github-repos" target="_blank"
                 className="card-color w-9 h-9 text-fill-color rounded-full border border-color hidden sm:flex items-center justify-center hover:opacity-80"
               >
                 <FaGithub />
@@ -154,21 +158,21 @@ export default function Header() {
             <Link
               href="/directory"
               onClick={() => setIsMenuOpen(false)}
-              className="block font-semibold text-fill-color/70 hover:!text-blue-600 transition-colors duration-300"
+              className={`block font-semibold transition-colors duration-300 ${isActive('/directory') ? '!text-blue-600' : 'text-fill-color/70 hover:!text-blue-600'}`}
             >
               GitHub Repos
             </Link>
             <Link
-              href="/news"
+              href="/blog"
               onClick={() => setIsMenuOpen(false)}
-              className="block font-semibold text-fill-color/70 hover:!text-blue-600 transition-colors duration-300"
+              className={`block font-semibold transition-colors duration-300 ${isActive('/blog') ? '!text-blue-600' : 'text-fill-color/70 hover:!text-blue-600'}`}
             >
-              News
+              Blog
             </Link>
             <Link
               href="/activity"
               onClick={() => setIsMenuOpen(false)}
-              className="block font-semibold text-fill-color/70 hover:!text-blue-600 transition-colors duration-300"
+              className={`block font-semibold transition-colors duration-300 ${isActive('/activity') ? '!text-blue-600' : 'text-fill-color/70 hover:!text-blue-600'}`}
             >
               Activity
             </Link>
@@ -187,7 +191,7 @@ export default function Header() {
                 <AiOutlineLink />
               </Link>
               <Link
-                href="https://github.com/nekowawolf/" target="_blank"
+                href="https://github.com/nekowawolf/github-repos" target="_blank"
                 className="card-color w-9 h-9 text-fill-color rounded-full border border-color flex items-center justify-center"
               >
                 <FaGithub />

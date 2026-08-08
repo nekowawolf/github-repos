@@ -3,9 +3,9 @@ import Footer from "@/components/Footer";
 import { githubRepoMetadata } from "@/constants/metadataTemplates";
 import DetailClient from "./DetailClient";
 
-export const metadata = githubRepoMetadata("News", "The latest news and updates.");
+export const metadata = githubRepoMetadata("Blog", "Articles, reviews, deep dives, and analysis.");
 
-export default function NewsPage() {
+export default function BlogPage() {
   return (
     <>
       <Header />
