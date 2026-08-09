@@ -5,6 +5,7 @@ import { Spinner } from '@/components/ui/spinner';
 import { FaCheck, FaCode, FaExternalLinkAlt } from 'react-icons/fa';
 import { FaCodeCommit } from 'react-icons/fa6';
 import { RxDotsHorizontal } from 'react-icons/rx';
+import { PiDotsThreeFill } from 'react-icons/pi';
 import { fetchGithubCommits } from '@/services/githubRepoService';
 
 const CommitMobileDropdown = ({ commitUrl, treeUrl }: { commitUrl: string, treeUrl: string }) => {
@@ -53,6 +54,42 @@ const CommitMobileDropdown = ({ commitUrl, treeUrl }: { commitUrl: string, treeU
             <FaCode className="w-4 h-4 shrink-0" />
             <span className="font-medium">Browse repository at this point</span>
           </a>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const CommitMessage = ({ message, url }: { message: string, url: string }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const subject = message.split('\n')[0];
+  const body = message.substring(subject.length).trim();
+  const hasBody = body.length > 0;
+
+  return (
+    <div className="flex flex-col w-full">
+      <div className="flex items-center gap-1">
+        <a 
+          href={url} 
+          target="_blank" 
+          rel="noreferrer" 
+          className={`text-sm font-bold text-fill-color hover:text-blue-500 transition-colors ${!isExpanded ? 'line-clamp-1' : 'break-words'}`}
+        >
+          {subject}
+        </a>
+        {hasBody && (
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="shrink-0 flex items-center justify-center cursor-pointer text-fill-color opacity-70 hover:opacity-100 transition-all"
+            title="Toggle commit body"
+          >
+            <PiDotsThreeFill className="w-5 h-5 sm:w-[18px] sm:h-[18px]" />
+          </button>
+        )}
+      </div>
+      {hasBody && isExpanded && (
+        <div className="mt-2 p-3 text-xs sm:text-sm text-fill-color/80 bg-[rgba(var(--fill-color-rgb),0.03)] border border-[var(--border-divider)] rounded-lg whitespace-pre-wrap break-words font-mono">
+          {body}
         </div>
       )}
     </div>
@@ -128,12 +165,10 @@ export default function LastCommits() {
 
                 <div className="border border-[var(--border-divider)] rounded-xl bg-[rgba(var(--fill-color-rgb),0.02)]">
                   {(dateCommits as any[]).map((commit: any, idx: number) => (
-                    <div key={commit.sha} className={`flex flex-row items-center justify-between p-4 ${idx !== (dateCommits as any[]).length - 1 ? 'border-b border-[var(--border-divider)]' : ''}`}>
-                      <div className="flex flex-col gap-1.5 flex-1 min-w-0 pr-2 sm:pr-4">
-                        <a href={commit.html_url} target="_blank" rel="noreferrer" className="text-sm font-bold text-fill-color hover:text-blue-500 transition-colors line-clamp-1">
-                          {commit.commit.message.split('\n')[0]}
-                        </a>
-                        <div className="flex flex-wrap items-center gap-2 text-xs text-fill-color/70">
+                    <div key={commit.sha} className={`flex flex-row items-start justify-between p-4 ${idx !== (dateCommits as any[]).length - 1 ? 'border-b border-[var(--border-divider)]' : ''}`}>
+                      <div className="flex flex-col gap-2.5 flex-1 min-w-0 pr-2 sm:pr-4">
+                        <CommitMessage message={commit.commit.message} url={commit.html_url} />
+                        <div className="flex flex-wrap items-center gap-2 text-xs text-fill-color/70 mt-1">
                           {commit.author?.avatar_url && (
                             <img src={commit.author.avatar_url} alt={commit.commit.author.name} className="w-5 h-5 rounded-full object-cover shrink-0" />
                           )}
