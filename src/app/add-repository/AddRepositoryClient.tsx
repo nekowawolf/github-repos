@@ -1,13 +1,75 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import BackButton from "@/components/BackButton";
 import { toast } from "sonner";
+import { fetchGithubReposData } from "@/services/githubRepoService";
+import { Spinner } from "@/components/ui/spinner";
+import { FaRegCircleCheck } from "react-icons/fa6";
+import { LiaTimesCircleSolid } from "react-icons/lia";
+import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 export default function AddRepositoryClient() {
   const [repoUrl, setRepoUrl] = useState("");
   const [addedByName, setAddedByName] = useState("");
   const [addedByUrl, setAddedByUrl] = useState("");
+
+  const [existingUrls, setExistingUrls] = useState<string[]>([]);
+  const [isCheckingUrl, setIsCheckingUrl] = useState(false);
+  const [urlExists, setUrlExists] = useState<boolean | null>(null);
+  const [showTooltip, setShowTooltip] = useState(false);
+  const tooltipRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (tooltipRef.current && !tooltipRef.current.contains(event.target as Node)) {
+        setShowTooltip(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    const loadRepos = async () => {
+      try {
+        const repos = await fetchGithubReposData();
+        const urls = repos.map(r => (r.repo_url || '').toLowerCase().replace(/\/$/, ''));
+        setExistingUrls(urls);
+      } catch (err) {
+        console.error("Failed to load existing repos for validation", err);
+      }
+    };
+    loadRepos();
+  }, []);
+
+  useEffect(() => {
+    setShowTooltip(false);
+    if (!repoUrl) {
+      setUrlExists(null);
+      setIsCheckingUrl(false);
+      return;
+    }
+
+    const githubRegex = /^https?:\/\/(www\.)?github\.com\/[a-zA-Z0-9-]+\/[a-zA-Z0-9_.-]+(\/.*)?$/;
+    if (!githubRegex.test(repoUrl)) {
+      setUrlExists(null);
+      setIsCheckingUrl(false);
+      return;
+    }
+
+    setIsCheckingUrl(true);
+    const timer = setTimeout(() => {
+      const cleanUrl = repoUrl.toLowerCase().replace(/\/$/, '');
+      const exists = existingUrls.includes(cleanUrl);
+      setUrlExists(exists);
+      setIsCheckingUrl(false);
+    }, 600);
+
+    return () => clearTimeout(timer);
+  }, [repoUrl, existingUrls]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,6 +82,11 @@ export default function AddRepositoryClient() {
     const githubRegex = /^https?:\/\/(www\.)?github\.com\/[a-zA-Z0-9-]+\/[a-zA-Z0-9_.-]+(\/.*)?$/;
     if (!githubRegex.test(repoUrl)) {
       toast.error("Invalid GitHub URL format");
+      return;
+    }
+
+    if (urlExists === true) {
+      toast.error("This repo is already listed.");
       return;
     }
     
@@ -55,7 +122,32 @@ export default function AddRepositoryClient() {
 
         <form onSubmit={handleSubmit} noValidate className="flex flex-col space-y-6 w-full">
           <div className="flex flex-col space-y-2">
-            <label className="text-sm font-semibold text-fill-color">Repository URL <span className="text-red-500">*</span></label>
+            <div className="flex items-center gap-2">
+              <label className="text-sm font-semibold text-fill-color">Repository URL <span className="text-red-500">*</span></label>
+              {isCheckingUrl && <Spinner className="w-3.5 h-3.5 text-blue-500" />}
+              {!isCheckingUrl && urlExists !== null && (
+                <div ref={tooltipRef} className="flex items-center gap-1.5 relative">
+                  {urlExists ? (
+                    <LiaTimesCircleSolid className="w-[17px] h-[17px] text-red-500" />
+                  ) : (
+                    <FaRegCircleCheck className="w-3.5 h-3.5 text-green-500" />
+                  )}
+                  <button 
+                    type="button" 
+                    onClick={() => setShowTooltip(!showTooltip)}
+                    className="text-fill-color/50 hover:text-fill-color cursor-pointer transition-colors outline-none"
+                  >
+                    <AiOutlineExclamationCircle className="w-4 h-4" />
+                  </button>
+                  
+                  {showTooltip && (
+                    <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 w-max bg-[var(--card-color)] border border-[var(--border-divider)] px-3 py-2 rounded-lg shadow-lg z-10 text-xs font-medium animate-in fade-in zoom-in duration-200">
+                      {urlExists ? "This repo is already listed." : "This repo is not listed yet."}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
             <input
               type="url"
               value={repoUrl}
