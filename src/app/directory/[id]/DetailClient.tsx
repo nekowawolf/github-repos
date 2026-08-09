@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { FaExternalLinkAlt, FaCode, FaServer, FaDatabase, FaShieldAlt, FaGraduationCap, FaStar, FaCodeBranch, FaRegClock, FaRegUserCircle, FaGlobe, FaRegFileImage, FaFileAlt } from "react-icons/fa";
-import { FaXTwitter, FaInstagram } from "react-icons/fa6";
+import { FaExternalLinkAlt, FaCode, FaServer, FaDatabase, FaShieldAlt, FaGraduationCap, FaStar, FaCodeBranch, FaRegClock, FaRegUserCircle, FaGlobe, FaRegFileImage, FaFileAlt, FaTelegramPlane, FaWhatsapp, FaLink, FaTimes } from "react-icons/fa";
+import { FaXTwitter, FaInstagram, FaThreads } from "react-icons/fa6";
 import { BsDiscord } from "react-icons/bs";
 import { GoCpu } from "react-icons/go";
 import { RiRobot2Line } from "react-icons/ri";
@@ -12,12 +12,14 @@ import { MdOutlineDesignServices, MdOutlineOndemandVideo } from "react-icons/md"
 import { LuAudioLines } from "react-icons/lu";
 import { IoIosArrowUp } from "react-icons/io";
 import { CiBookmark } from "react-icons/ci";
+import { PiShareFatThin } from "react-icons/pi";
 import BackButton from "@/components/BackButton";
 import RepoContentTabs from "@/components/RepoContentTabs";
 import { fetchGithubRepoDetails } from "@/services/githubRepoService";
 import { GithubRepo } from "@/types/githubRepo";
 import { Spinner } from "@/components/ui/spinner";
 import NwwOneeAIChat, { chatStore } from "@/components/NwwOneeAIChat";
+import { toast } from "sonner";
 
 const getCategoryIcon = (category: string, className: string = "w-8 h-8") => {
     switch (category.toLowerCase()) {
@@ -54,6 +56,7 @@ export default function DetailClient() {
     const [mdFiles, setMdFiles] = useState<{name: string, content: string}[]>([]);
     const [suggestedRepos, setSuggestedRepos] = useState<GithubRepo[]>([]);
     const [loading, setLoading] = useState(true);
+    const [isShareOpen, setIsShareOpen] = useState(false);
     const [showScrollTop, setShowScrollTop] = useState(false);
 
     useEffect(() => {
@@ -197,6 +200,12 @@ export default function DetailClient() {
                                         className="cursor-pointer opacity-70 hover:opacity-100 transition-all text-fill-color"
                                     >
                                         <CiBookmark className="w-6 h-6" />
+                                    </button>
+                                    <button 
+                                        onClick={() => setIsShareOpen(true)}
+                                        className="cursor-pointer opacity-70 hover:opacity-100 transition-all text-fill-color"
+                                    >
+                                        <PiShareFatThin className="w-6 h-6" />
                                     </button>
                                 </div>
                             </div>
@@ -370,6 +379,45 @@ export default function DetailClient() {
                 </button>
             </div>
             <NwwOneeAIChat />
+            {/* Share Modal */}
+            {isShareOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={() => setIsShareOpen(false)}>
+                    <div className="w-full max-w-sm bg-[var(--card-color)] border border-[var(--border-divider)] rounded-3xl p-6 shadow-2xl relative" onClick={e => e.stopPropagation()}>
+                        <button onClick={() => setIsShareOpen(false)} className="cursor-pointer absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-[rgba(var(--fill-color-rgb),0.05)] hover:bg-[rgba(var(--fill-color-rgb),0.1)] text-fill-color/70 hover:text-fill-color transition-colors">
+                            <FaTimes className="w-4 h-4" />
+                        </button>
+                        <h2 className="text-xl font-bold text-fill-color mb-6">Share</h2>
+                        
+                        <p className="text-sm font-medium text-fill-color/70 mb-3">Share link via</p>
+                        <div className="flex items-center gap-3 overflow-x-auto pb-4 scrollbar-hide">
+                            <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}`} target="_blank" rel="noreferrer" className="cursor-pointer w-14 h-14 shrink-0 rounded-2xl bg-[rgba(var(--fill-color-rgb),0.05)] border border-[var(--border-divider)] flex items-center justify-center hover:bg-[rgba(var(--fill-color-rgb),0.1)] transition-colors text-fill-color">
+                                <FaXTwitter className="w-6 h-6" />
+                            </a>
+                            <a href={`https://instagram.com`} target="_blank" rel="noreferrer" className="cursor-pointer w-14 h-14 shrink-0 rounded-2xl bg-[rgba(var(--fill-color-rgb),0.05)] border border-[var(--border-divider)] flex items-center justify-center hover:bg-[rgba(var(--fill-color-rgb),0.1)] transition-colors text-fill-color">
+                                <FaInstagram className="w-6 h-6" />
+                            </a>
+                            <a href={`https://www.threads.net/intent/post?text=${encodeURIComponent(window.location.href)}`} target="_blank" rel="noreferrer" className="cursor-pointer w-14 h-14 shrink-0 rounded-2xl bg-[rgba(var(--fill-color-rgb),0.05)] border border-[var(--border-divider)] flex items-center justify-center hover:bg-[rgba(var(--fill-color-rgb),0.1)] transition-colors text-fill-color">
+                                <FaThreads className="w-6 h-6" />
+                            </a>
+                            <a href={`https://discord.com`} target="_blank" rel="noreferrer" className="cursor-pointer w-14 h-14 shrink-0 rounded-2xl bg-[rgba(var(--fill-color-rgb),0.05)] border border-[var(--border-divider)] flex items-center justify-center hover:bg-[rgba(var(--fill-color-rgb),0.1)] transition-colors text-fill-color">
+                                <BsDiscord className="w-6 h-6" />
+                            </a>
+                            <a href={`https://t.me/share/url?url=${encodeURIComponent(window.location.href)}`} target="_blank" rel="noreferrer" className="cursor-pointer w-14 h-14 shrink-0 rounded-2xl bg-[rgba(var(--fill-color-rgb),0.05)] border border-[var(--border-divider)] flex items-center justify-center hover:bg-[rgba(var(--fill-color-rgb),0.1)] transition-colors text-fill-color">
+                                <FaTelegramPlane className="w-6 h-6" />
+                            </a>
+                            <a href={`https://api.whatsapp.com/send?text=${encodeURIComponent(window.location.href)}`} target="_blank" rel="noreferrer" className="cursor-pointer w-14 h-14 shrink-0 rounded-2xl bg-[rgba(var(--fill-color-rgb),0.05)] border border-[var(--border-divider)] flex items-center justify-center hover:bg-[rgba(var(--fill-color-rgb),0.1)] transition-colors text-fill-color">
+                                <FaWhatsapp className="w-6 h-6" />
+                            </a>
+                        </div>
+
+                        <p className="text-sm font-medium text-fill-color/70 mb-3 mt-4">Page direct</p>
+                        <button onClick={() => { navigator.clipboard.writeText(window.location.href); toast.success('Link copied to clipboard!'); setIsShareOpen(false); }} className="cursor-pointer w-full h-12 rounded-xl bg-[rgba(var(--fill-color-rgb),0.05)] border border-[var(--border-divider)] flex items-center justify-center gap-2 hover:bg-[rgba(var(--fill-color-rgb),0.1)] transition-colors text-fill-color font-medium">
+                            <FaLink className="w-4 h-4" />
+                            Copy link
+                        </button>
+                    </div>
+                </div>
+            )}
         </main>
     );
 }
