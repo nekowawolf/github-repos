@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { GithubRepo } from '@/types/githubRepo';
 import { Spinner } from '@/components/ui/spinner';
 import { FaGithub } from 'react-icons/fa';
 import Pagination2 from '@/components/Pagination2';
-import { chatStore } from '@/components/NwwOneeAIChat';
 
 const ITEMS_PER_PAGE = 5;
 
@@ -63,15 +63,12 @@ export default function LastRepos() {
 
         <p className="text-fill-color/60 text-sm max-w-full sm:max-w-md leading-relaxed">
           Latest repositories added to the ecosystem directory by contributors.{" "}
-          <button
-            onClick={() => {
-              chatStore.setIsOpen(true);
-              chatStore.setActiveView("user");
-            }}
+          <Link
+            href="/add-repository"
             className="text-blue-500 hover:text-blue-400 transition-colors font-medium cursor-pointer inline-block mt-1 sm:mt-0"
           >
             Add Repository
-          </button>
+          </Link>
         </p>
       </div>
 
