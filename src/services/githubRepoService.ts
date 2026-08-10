@@ -208,3 +208,32 @@ export const fetchGithubCommits = async (owner: string, repoName: string, perPag
         return [];
     }
 };
+
+export const submitGithubRepo = async (repoUrl: string, name: string, link: string, turnstileToken: string) => {
+    try {
+        const fullUrl = `${API_BASE_URL}/repo-submissions`;
+        const response = await fetch(fullUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                repo_url: repoUrl,
+                name: name,
+                link: link,
+                turnstile_token: turnstileToken
+            })
+        });
+
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.error || 'Failed to submit repository');
+        }
+        
+        return data;
+    } catch (error) {
+        console.error("Error submitting github repo:", error);
+        throw error;
+    }
+};

@@ -3,7 +3,8 @@
 import { useState, useEffect, useRef } from "react";
 import BackButton from "@/components/BackButton";
 import { toast } from "sonner";
-import { fetchGithubReposData } from "@/services/githubRepoService";
+import { fetchGithubReposData, submitGithubRepo } from "@/services/githubRepoService";
+import { Turnstile } from '@marsidev/react-turnstile';
 import { Spinner } from "@/components/ui/spinner";
 import { FaRegCircleCheck } from "react-icons/fa6";
 import { LiaTimesCircleSolid } from "react-icons/lia";
@@ -13,6 +14,11 @@ export default function AddRepositoryClient() {
   const [repoUrl, setRepoUrl] = useState("");
   const [addedByName, setAddedByName] = useState("");
   const [addedByUrl, setAddedByUrl] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const turnstileRef = useRef<any>(null);
+
+
 
   const [existingUrls, setExistingUrls] = useState<string[]>([]);
   const [isCheckingUrl, setIsCheckingUrl] = useState(false);
@@ -71,7 +77,7 @@ export default function AddRepositoryClient() {
     return () => clearTimeout(timer);
   }, [repoUrl, existingUrls]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!repoUrl) {
@@ -103,7 +109,26 @@ export default function AddRepositoryClient() {
       }
     }
 
-    toast.info("This feature is still in development.");
+    if (!turnstileToken) {
+      toast.error("Please verify that you are a human.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      await submitGithubRepo(repoUrl, addedByName, addedByUrl, turnstileToken);
+      toast.success("Repository submitted successfully.");
+      
+      setRepoUrl("");
+      setAddedByName("");
+      setAddedByUrl("");
+      setTurnstileToken("");
+      turnstileRef.current?.reset();
+    } catch (err: any) {
+      toast.error(err.message || "Failed to submit repository");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -179,12 +204,24 @@ export default function AddRepositoryClient() {
             />
           </div>
 
-          <button
-            type="submit"
-            className="mt-4 px-6 py-3 rounded-xl font-medium text-[15px] text-white bg-blue-600 hover:bg-blue-500 transition-all shadow-lg shadow-blue-500/20 flex items-center justify-center w-fit cursor-pointer"
-          >
-            Add Repo
-          </button>
+          <div className="mt-6 flex flex-col sm:flex-row sm:items-center justify-start gap-5">
+            <div className="order-1 sm:order-2 flex-shrink-0 flex justify-center w-full sm:w-auto">
+               <Turnstile
+                  ref={turnstileRef}
+                  siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""}
+                  onSuccess={(token) => setTurnstileToken(token)}
+                  onError={() => setTurnstileToken("")}
+                  onExpire={() => setTurnstileToken("")}
+               />
+            </div>
+            <button
+              type="submit"
+              disabled={!turnstileToken || isSubmitting}
+              className="order-2 sm:order-1 px-6 py-3 rounded-xl font-medium text-[15px] text-white bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-blue-500/20 flex items-center justify-center cursor-pointer w-full sm:w-fit"
+            >
+              {isSubmitting ? <Spinner className="w-5 h-5 text-white" /> : "Add Repo"}
+            </button>
+          </div>
         </form>
       </div>
     </main>
