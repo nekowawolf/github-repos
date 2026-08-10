@@ -1,12 +1,13 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { FaExternalLinkAlt, FaCode, FaServer, FaDatabase, FaShieldAlt, FaGraduationCap, FaStar, FaCodeBranch, FaRegClock, FaRegUserCircle, FaGlobe, FaRegFileImage, FaFileAlt, FaTelegramPlane, FaWhatsapp, FaLink, FaTimes } from "react-icons/fa";
 import { FaXTwitter, FaInstagram, FaThreads } from "react-icons/fa6";
 import { BsDiscord } from "react-icons/bs";
-import { GoCpu } from "react-icons/go";
+import { GoCpu, GoShield } from "react-icons/go";
+import { RxDotsHorizontal } from "react-icons/rx";
 import { RiRobot2Line } from "react-icons/ri";
 import { MdOutlineDesignServices, MdOutlineOndemandVideo } from "react-icons/md";
 import { LuAudioLines } from "react-icons/lu";
@@ -47,6 +48,62 @@ const formatNumber = (num: number) => {
         return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
     }
     return num.toString();
+};
+
+const RepoOptionsDropdown = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setIsOpen(false);
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    return (
+        <div className="relative flex items-center justify-center" ref={dropdownRef}>
+            <button 
+                onClick={(e) => {
+                    e.stopPropagation();
+                    setIsOpen(!isOpen);
+                }}
+                className="cursor-pointer opacity-70 hover:opacity-100 transition-all text-fill-color"
+            >
+                <RxDotsHorizontal className="w-6 h-6" />
+            </button>
+
+            {isOpen && (
+                <div className="absolute z-50 mt-4 w-max min-w-[180px] rounded-xl bg-[var(--card-color)] border border-[var(--border-divider)] shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 left-0 md:left-auto md:right-0 top-full origin-top-left md:origin-top-right py-1">
+                    <button 
+                        onClick={() => {
+                            chatStore.setIsOpen(true);
+                            chatStore.setActiveView('user');
+                            setIsOpen(false);
+                        }}
+                        className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-fill-color/70 hover:bg-blue-500/10 hover:text-blue-400 transition-colors cursor-pointer text-left"
+                    >
+                        <CiBookmark className="w-5 h-5 shrink-0" />
+                        <span className="font-medium">Save repository</span>
+                    </button>
+                    <button 
+                        onClick={() => {
+                            chatStore.setIsOpen(true);
+                            chatStore.setActiveView('user');
+                            setIsOpen(false);
+                        }}
+                        className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-fill-color/70 hover:bg-red-500/10 hover:text-red-400 transition-colors cursor-pointer text-left"
+                    >
+                        <GoShield className="w-5 h-5 shrink-0" />
+                        <span className="font-medium">Report repository</span>
+                    </button>
+                </div>
+            )}
+        </div>
+    );
 };
 
 export default function DetailClient() {
@@ -188,25 +245,17 @@ export default function DetailClient() {
                                         </h1>
                                     </div>
                                 </div>
-                                <div className="flex items-center gap-3 self-start mt-2 md:mt-0">
+                                <div className="flex items-center gap-4 self-start mt-2 md:mt-0">
                                     <span className="px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-sm border border-blue-500/20 whitespace-nowrap">
                                         {repo.category}
                                     </span>
-                                    <button 
-                                        onClick={() => {
-                                            chatStore.setIsOpen(true);
-                                            chatStore.setActiveView('user');
-                                        }}
-                                        className="cursor-pointer opacity-70 hover:opacity-100 transition-all text-fill-color"
-                                    >
-                                        <CiBookmark className="w-6 h-6" />
-                                    </button>
                                     <button 
                                         onClick={() => setIsShareOpen(true)}
                                         className="cursor-pointer opacity-70 hover:opacity-100 transition-all text-fill-color"
                                     >
                                         <PiShareFatThin className="w-6 h-6" />
                                     </button>
+                                    <RepoOptionsDropdown />
                                 </div>
                             </div>
 
