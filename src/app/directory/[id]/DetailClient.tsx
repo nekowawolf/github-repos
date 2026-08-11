@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useLayoutEffect } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { FaExternalLinkAlt, FaCode, FaServer, FaDatabase, FaShieldAlt, FaGraduationCap, FaStar, FaCodeBranch, FaRegClock, FaRegUserCircle, FaGlobe, FaRegFileImage, FaFileAlt, FaTelegramPlane, FaWhatsapp, FaLink, FaTimes } from "react-icons/fa";
@@ -53,6 +53,7 @@ const formatNumber = (num: number) => {
 const RepoOptionsDropdown = () => {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const menuRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
@@ -63,6 +64,22 @@ const RepoOptionsDropdown = () => {
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
+
+    useLayoutEffect(() => {
+        if (isOpen && menuRef.current) {
+            if (window.innerWidth < 768) {
+                menuRef.current.style.left = '0px';
+                const rect = menuRef.current.getBoundingClientRect();
+                const rightMargin = 32;
+                if (rect.right > window.innerWidth - rightMargin) {
+                    const overflow = rect.right - (window.innerWidth - rightMargin);
+                    menuRef.current.style.left = `-${overflow}px`;
+                }
+            } else {
+                menuRef.current.style.left = '';
+            }
+        }
+    }, [isOpen]);
 
     return (
         <div className="relative flex items-center justify-center" ref={dropdownRef}>
@@ -77,7 +94,10 @@ const RepoOptionsDropdown = () => {
             </button>
 
             {isOpen && (
-                <div className="absolute z-50 mt-4 w-max min-w-[180px] rounded-xl bg-[var(--card-color)] border border-[var(--border-divider)] shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 left-0 md:left-auto md:right-0 top-full origin-top-left md:origin-top-right py-1">
+                <div 
+                    ref={menuRef}
+                    className="absolute z-50 mt-4 w-max min-w-[180px] rounded-xl bg-[var(--card-color)] border border-[var(--border-divider)] shadow-xl overflow-hidden left-0 md:left-auto md:right-0 top-full origin-top-left md:origin-top-right py-1"
+                >
                     <button 
                         onClick={() => {
                             chatStore.setIsOpen(true);
