@@ -199,7 +199,7 @@ export default function AddRepositoryClient() {
               type="url"
               value={addedByUrl}
               onChange={(e) => setAddedByUrl(e.target.value)}
-              placeholder="https://yourwebsite.com or social link"
+              placeholder="Your website, portfolio, or social link"
               className="w-full px-4 py-3 bg-[rgba(var(--fill-color-rgb),0.03)] border border-[var(--border-divider)] rounded-xl text-fill-color focus:outline-none focus:border-blue-500 transition-colors"
             />
           </div>
