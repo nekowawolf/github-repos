@@ -24,11 +24,11 @@ const CommitMobileDropdown = ({ commitUrl, treeUrl }: { commitUrl: string, treeU
 
   return (
     <div className="relative sm:hidden" ref={dropdownRef}>
-      <button 
+      <button
         onClick={(e) => {
           e.stopPropagation();
           setIsOpen(!isOpen);
-        }} 
+        }}
         className="p-1 text-fill-color/70 hover:bg-[rgba(var(--fill-color-rgb),0.1)] rounded-md transition-colors cursor-pointer flex items-center justify-center"
       >
         <RxDotsHorizontal className="w-5 h-5" />
@@ -36,19 +36,19 @@ const CommitMobileDropdown = ({ commitUrl, treeUrl }: { commitUrl: string, treeU
 
       {isOpen && (
         <div className="absolute z-50 mt-1 w-max min-w-[210px] rounded-xl bg-[var(--card-color)] border border-[var(--border-divider)] shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 right-0 origin-top-right py-1">
-          <a 
-            href={commitUrl} 
-            target="_blank" 
-            rel="noreferrer" 
+          <a
+            href={commitUrl}
+            target="_blank"
+            rel="noreferrer"
             className="flex items-center gap-2.5 px-3 py-2 text-xs text-fill-color/70 hover:bg-blue-500/10 hover:text-blue-400 transition-colors whitespace-nowrap"
           >
             <FaCodeCommit className="w-4 h-4 shrink-0" />
             <span className="font-medium">View commit details</span>
           </a>
-          <a 
-            href={treeUrl} 
-            target="_blank" 
-            rel="noreferrer" 
+          <a
+            href={treeUrl}
+            target="_blank"
+            rel="noreferrer"
             className="flex items-center gap-2.5 px-3 py-2 text-xs text-fill-color/70 hover:bg-blue-500/10 hover:text-blue-400 transition-colors whitespace-nowrap"
           >
             <FaCode className="w-4 h-4 shrink-0" />
@@ -69,10 +69,10 @@ const CommitMessage = ({ message, url }: { message: string, url: string }) => {
   return (
     <div className="flex flex-col w-full">
       <div className="flex items-center gap-1">
-        <a 
-          href={url} 
-          target="_blank" 
-          rel="noreferrer" 
+        <a
+          href={url}
+          target="_blank"
+          rel="noreferrer"
           className={`text-sm font-bold text-fill-color hover:text-blue-500 transition-colors ${!isExpanded ? 'line-clamp-1' : 'break-words'}`}
         >
           {subject}
@@ -179,9 +179,9 @@ export default function LastCommits() {
                         </div>
                       </div>
                       <div className="shrink-0 flex items-center gap-2">
-                        <CommitMobileDropdown 
-                          commitUrl={commit.html_url} 
-                          treeUrl={`https://github.com/nekowawolf/github-repos/tree/${commit.sha}`} 
+                        <CommitMobileDropdown
+                          commitUrl={commit.html_url}
+                          treeUrl={`https://github.com/nekowawolf/github-repos/tree/${commit.sha}`}
                         />
                         <div className="hidden sm:flex items-center font-mono text-xs border border-[var(--border-divider)] rounded-md overflow-hidden bg-transparent">
                           <a href={commit.html_url} target="_blank" rel="noreferrer" className="px-2 py-1 text-blue-500 hover:bg-[rgba(var(--fill-color-rgb),0.05)] transition-colors border-r border-[var(--border-divider)]">{commit.sha.substring(0, 7)}</a>

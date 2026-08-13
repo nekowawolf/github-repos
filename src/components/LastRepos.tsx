@@ -21,17 +21,19 @@ export default function LastRepos() {
       try {
         const fullUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/githubrepo`;
         const response = await fetch(fullUrl);
-        if (!response.ok) throw new Error("Network response was not ok");
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
         const rawData = await response.json();
-        
-        const data = Array.isArray(rawData) ? rawData : (rawData?.data || []);
-        
+
+        const data = Array.isArray(rawData) ? rawData : (rawData as any)?.data || [];
+
         const sortedData = [...data].sort((a, b) => {
           const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
           const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
           return dateB - dateA;
         });
-        setActivities(sortedData);
+        setActivities(sortedData as any);
       } catch (error) {
         console.error("Failed to load activities:", error);
         setActivities([]);
@@ -90,7 +92,7 @@ export default function LastRepos() {
                   }}
                   className="group flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 relative transition-transform duration-300 sm:hover:translate-x-2 sm:cursor-pointer cursor-default w-full"
                 >
-                  <div 
+                  <div
                     onClick={(e) => {
                       if (window.innerWidth < 640) {
                         router.push(`/directory/${repo._id}`);
@@ -102,11 +104,11 @@ export default function LastRepos() {
                       <img
                         src={repo.stats.image_url}
                         alt={repo.owner}
-                        className="w-7 h-7 rounded-full object-cover border border-[var(--border-divider)] shrink-0"
+                        className="w-8 h-8 rounded-full object-cover border border-[var(--border-divider)] shrink-0"
                       />
                     ) : (
-                      <div className="w-7 h-7 rounded-full flex items-center justify-center bg-blue-500/10 text-blue-400 border border-blue-500/20 shrink-0">
-                        <FaGithub className="w-3.5 h-3.5" />
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center bg-blue-500/10 text-blue-400 border border-blue-500/20 shrink-0">
+                        <FaGithub className="w-4 h-4" />
                       </div>
                     )}
                     <span className="text-lg sm:text-xl font-bold text-fill-color group-hover:text-blue-500 transition-colors duration-300 tracking-tight truncate max-w-[200px] sm:max-w-[300px]">
