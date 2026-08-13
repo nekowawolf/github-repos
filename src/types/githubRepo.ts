@@ -27,3 +27,21 @@ export interface AddedByInfo {
     name?: string;
     url?: string;
 }
+
+export interface RepoGrowthStats {
+    stars: number;
+    forks: number;
+}
+
+export interface RepoHistoryData {
+    period: string;
+    available: boolean;
+    current: RepoGrowthStats;
+    previous: RepoGrowthStats | null;
+    growth: RepoGrowthStats | null;
+}
+
+export interface RepoHistoryResponse {
+    message: string;
+    data: RepoHistoryData;
+}

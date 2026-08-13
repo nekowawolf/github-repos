@@ -237,3 +237,21 @@ export const submitGithubRepo = async (repoUrl: string, name: string, link: stri
         throw error;
     }
 };
+
+export const fetchGithubRepoHistory = async (id: string, period: string) => {
+    try {
+        const fullUrl = `${API_BASE_URL}/githubrepo/${id}/history?period=${period}`;
+        const response = await fetch(fullUrl);
+        
+        if (!response.ok) {
+            console.warn(`Failed to fetch history for ${id}: ${response.statusText}`);
+            return null;
+        }
+        
+        const data = await response.json();
+        return data.data;
+    } catch (error) {
+        console.error("Error fetching github repo history:", error);
+        return null;
+    }
+};
