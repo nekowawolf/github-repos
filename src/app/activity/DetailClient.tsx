@@ -4,6 +4,7 @@ import NwwOneeAIChat from "@/components/NwwOneeAIChat";
 import LastRepos from "@/components/LastRepos";
 import LastCommits from "@/components/LastCommits";
 import StatsHistory from "@/components/StatsHistory";
+import Support from "@/components/Support";
 
 export default function DetailClient() {
   return (
@@ -11,6 +12,7 @@ export default function DetailClient() {
       <div className="w-full max-w-3xl mx-auto flex flex-col">
         <LastRepos />
         <StatsHistory />
+        <Support />
         <LastCommits />
       </div>
       <NwwOneeAIChat />
