@@ -6,7 +6,6 @@ import { FaCheck, FaCode, FaExternalLinkAlt } from 'react-icons/fa';
 import { FaCodeCommit } from 'react-icons/fa6';
 import { RxDotsHorizontal } from 'react-icons/rx';
 import { PiDotsThreeFill } from 'react-icons/pi';
-import { fetchGithubCommits } from '@/services/githubRepoService';
 
 const CommitMobileDropdown = ({ commitUrl, treeUrl }: { commitUrl: string, treeUrl: string }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -104,8 +103,14 @@ export default function LastCommits() {
   useEffect(() => {
     const loadCommits = async () => {
       try {
-        const data = await fetchGithubCommits('nekowawolf', 'github-repos', 8);
-        setCommits(Array.isArray(data) ? data : []);
+        const fullUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/githubrepo/commits/nekowawolf/github-repos?per_page=8`;
+        const res = await fetch(fullUrl);
+        if (res.ok) {
+          const result = await res.json();
+          setCommits(Array.isArray(result.data) ? result.data : []);
+        } else {
+          setCommits([]);
+        }
       } catch (error) {
         console.error("Failed to load commits:", error);
       } finally {

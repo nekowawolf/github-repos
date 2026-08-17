@@ -16,7 +16,6 @@ import { CiBookmark } from "react-icons/ci";
 import { PiShareFatThin } from "react-icons/pi";
 import BackButton from "@/components/BackButton";
 import RepoContentTabs from "@/components/RepoContentTabs";
-import { fetchGithubRepoDetails } from "@/services/githubRepoService";
 import { GithubRepo } from "@/types/githubRepo";
 import { Spinner } from "@/components/ui/spinner";
 import NwwOneeAIChat, { chatStore } from "@/components/NwwOneeAIChat";
@@ -174,9 +173,14 @@ export default function DetailClient() {
                     
                     setSuggestedRepos([...selectedSame, ...selectedRand].sort(() => 0.5 - Math.random()));
 
-                    const details = await fetchGithubRepoDetails(foundRepo.owner, foundRepo.repo_name);
-                    setRepoData(details.repoData);
-                    setMdFiles(details.mdFiles);
+                    const detailsRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/githubrepo/${id}/details`);
+                    if (detailsRes.ok) {
+                        const detailsResult = await detailsRes.json();
+                        if (detailsResult.data) {
+                            setRepoData(detailsResult.data.repoData);
+                            setMdFiles(detailsResult.data.mdFiles);
+                        }
+                    }
                 }
             } catch (error) {
                 console.error(error);
