@@ -4,7 +4,8 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export const fetchGithubReposData = async (): Promise<GithubRepo[]> => {
     try {
-        const fullUrl = `${API_BASE_URL}/githubrepo`;
+        const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || API_BASE_URL;
+        const fullUrl = `${baseUrl}/githubrepo`;
         console.log('Fetching github repos data from:', fullUrl);
 
         const response = await fetch(fullUrl);
