@@ -5,12 +5,35 @@ import { useRouter } from 'next/navigation';
 import { GithubRepo, RepoHistoryData } from '@/types/githubRepo';
 import { Spinner } from '@/components/ui/spinner';
 import { FaGithub, FaStar, FaCodeBranch } from 'react-icons/fa';
-import { FiFilter } from 'react-icons/fi';
+import { FiFilter, FiChevronDown, FiCheck } from 'react-icons/fi';
 import { HiSortAscending, HiSortDescending } from 'react-icons/hi';
 import Pagination2 from '@/components/Pagination2';
 
 const ITEMS_PER_PAGE = 5;
 
+const LANGUAGE_COLORS: Record<string, string> = {
+  TypeScript: '#3178c6',
+  JavaScript: '#f1e05a',
+  Go: '#00ADD8',
+  Python: '#3572A5',
+  Java: '#b07219',
+  'C++': '#f34b7d',
+  C: '#555555',
+  'C#': '#178600',
+  Ruby: '#701516',
+  Rust: '#dea584',
+  PHP: '#4F5D95',
+  HTML: '#e34c26',
+  CSS: '#563d7c',
+  Vue: '#41b883',
+  Swift: '#F05138',
+  Kotlin: '#A97BFF',
+  Dart: '#00B4AB',
+  Shell: '#89e051',
+  Solidity: '#AA6746',
+  Svelte: '#ff3e00',
+  Astro: '#ff5a03'
+};
 const PERIODS = [
   { value: 'today', label: '24 Hours' },
   { value: 'week', label: '7 Days' },
@@ -43,13 +66,19 @@ export default function StatsHistory() {
   const [statsType, setStatsType] = useState<'stars' | 'forks'>('stars');
   const [sortBy, setSortBy] = useState<'total' | 'growth'>('total');
   const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
+  const [language, setLanguage] = useState<string>('All');
 
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [draftPeriod, setDraftPeriod] = useState(period);
   const [draftStatsType, setDraftStatsType] = useState(statsType);
   const [draftSortBy, setDraftSortBy] = useState(sortBy);
   const [draftSortOrder, setDraftSortOrder] = useState(sortOrder);
+  const [draftLanguage, setDraftLanguage] = useState<string>('All');
+  const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
+  
   const filterRef = useRef<HTMLDivElement>(null);
+
+  const availableLanguages = Array.from(new Set(allRepos.map(r => r.stats?.language).filter(Boolean))).sort() as string[];
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -64,6 +93,8 @@ export default function StatsHistory() {
     setDraftStatsType(statsType);
     setDraftSortBy(sortBy);
     setDraftSortOrder(sortOrder);
+    setDraftLanguage(language);
+    setIsLangDropdownOpen(false);
     setIsFilterOpen(true);
   };
 
@@ -72,6 +103,7 @@ export default function StatsHistory() {
     setStatsType(draftStatsType);
     setSortBy(draftSortBy);
     setSortOrder(draftSortOrder);
+    setLanguage(draftLanguage);
     setCurrentPage(1);
     setIsFilterOpen(false);
   };
@@ -124,7 +156,12 @@ export default function StatsHistory() {
         );
       }
 
-      const combined = allRepos.map(repo => ({
+      let filteredRepos = allRepos;
+      if (language !== 'All') {
+        filteredRepos = allRepos.filter(r => r.stats?.language === language);
+      }
+
+      const combined = filteredRepos.map(repo => ({
         repo,
         history: currentCache[repo._id] || null
       }));
@@ -155,7 +192,7 @@ export default function StatsHistory() {
     };
 
     loadHistoryAndSort();
-  }, [allRepos, period, statsType, sortBy, sortOrder]);
+  }, [allRepos, period, statsType, sortBy, sortOrder, language]);
 
 
   const totalItems = displayData.length;
@@ -169,7 +206,7 @@ export default function StatsHistory() {
     setCurrentPage(page);
   };
 
-  const hasActiveFilter = period !== 'today' || statsType !== 'stars' || sortBy !== 'total' || sortOrder !== 'desc';
+  const hasActiveFilter = period !== 'today' || statsType !== 'stars' || sortBy !== 'total' || sortOrder !== 'desc' || language !== 'All';
 
   return (
     <>
@@ -245,6 +282,62 @@ export default function StatsHistory() {
                           {s.label.replace('Sort by ', '')}
                         </button>
                       ))}
+                    </div>
+                  </div>
+
+                  {/* Language */}
+                  <div className="flex flex-col space-y-2">
+                    <span className="text-xs font-bold text-fill-color/50 uppercase tracking-wider ml-1">Language</span>
+                    <div className="flex flex-col bg-[rgba(var(--fill-color-rgb),0.03)] rounded-lg border border-[var(--border-divider)] overflow-hidden">
+                      <button
+                        onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
+                        className={`w-full flex items-center justify-between px-3 py-2 text-xs font-semibold transition-colors ${
+                          isLangDropdownOpen || draftLanguage !== 'All' 
+                            ? 'bg-blue-600/10 text-blue-500' 
+                            : 'text-fill-color/70 hover:text-fill-color hover:bg-[rgba(var(--fill-color-rgb),0.05)]'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2">
+                          {draftLanguage !== 'All' && (
+                            <span 
+                              className="w-2.5 h-2.5 rounded-full" 
+                              style={{ backgroundColor: LANGUAGE_COLORS[draftLanguage] || '#8b949e' }}
+                            />
+                          )}
+                          <span>{draftLanguage}</span>
+                        </div>
+                        <FiChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${isLangDropdownOpen ? 'rotate-180' : ''}`} />
+                      </button>
+                      
+                      {isLangDropdownOpen && (
+                        <div className="max-h-40 overflow-y-auto custom-scrollbar p-1 border-t border-[var(--border-divider)] bg-[rgba(var(--card-color),0.5)]">
+                          {['All', ...availableLanguages].map(lang => (
+                            <button
+                              key={lang}
+                              onClick={() => {
+                                setDraftLanguage(lang);
+                                setIsLangDropdownOpen(false);
+                              }}
+                              className={`w-full flex items-center justify-between px-2 py-1.5 text-xs rounded-md transition-colors ${
+                                draftLanguage === lang 
+                                  ? 'bg-blue-600/20 text-blue-500 font-semibold' 
+                                  : 'text-fill-color/70 hover:bg-[rgba(var(--fill-color-rgb),0.1)] hover:text-fill-color'
+                              }`}
+                            >
+                              <div className="flex items-center gap-2">
+                                {lang !== 'All' && (
+                                  <span 
+                                    className="w-2 h-2 rounded-full shrink-0" 
+                                    style={{ backgroundColor: LANGUAGE_COLORS[lang] || '#8b949e' }}
+                                  />
+                                )}
+                                <span>{lang}</span>
+                              </div>
+                              {draftLanguage === lang && <FiCheck className="w-3.5 h-3.5 shrink-0" />}
+                            </button>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </div>
 
