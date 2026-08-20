@@ -326,6 +326,11 @@ export default function RepoContentTabs({ mdFiles, licenseName, owner, repoName,
                             div: (props: any) => {
                                 const style = { ...props.style };
                                 if (props.align) style.textAlign = props.align;
+                                
+                                if (style.display === 'flex' && !style.justifyContent) {
+                                    style.justifyContent = 'center';
+                                }
+                                
                                 return <div {...props} style={style} />;
                             },
                             h1: (props: any) => {
@@ -382,8 +387,8 @@ export default function RepoContentTabs({ mdFiles, licenseName, owner, repoName,
 
                                 const style = { ...props.style };
                                 
-                                if (props.height) {
-                                    style.height = !isNaN(Number(props.height)) ? `${props.height}px` : props.height;
+                                if (props.height && isNaN(Number(props.height))) {
+                                    style.height = props.height;
                                 }
                                 
                                 if (props.width && isNaN(Number(props.width))) {
