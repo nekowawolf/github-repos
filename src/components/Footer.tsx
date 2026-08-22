@@ -66,7 +66,7 @@ export default function Footer() {
                     <div className="flex flex-col items-start space-y-6">
                         <div className="flex items-center space-x-4">
                             <img
-                                src="https://nekowawolf.github.io/cdn-images/images/2026/1768368937_logo.jpg"
+                                src="https://cdn.nekowawolf.xyz/image/2026/1787422451_logo.webp"
                                 alt="Logo"
                                 className="w-12 h-12 rounded-xl object-cover ring-2 ring-gray-500/20"
                             />

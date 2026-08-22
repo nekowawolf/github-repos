@@ -84,8 +84,8 @@ const chatPanelTransition = {
   mass: 0.8,
 };
 
-const AVATAR_URL = 'https://nekowawolf.github.io/cdn-images/images/2026/1784456222_nwwonee_ai.webp';
-const HI_IMAGE_URL = 'https://nekowawolf.github.io/cdn-images/images/2026/1784456024_nwwonee_hi.webp';
+const AVATAR_URL = 'https://cdn.nekowawolf.xyz/image/2026/1787422276_nwwonee_ai.webp';
+const HI_IMAGE_URL = 'https://cdn.nekowawolf.xyz/image/2026/1787422399_nwwonee_hi.webp';
 
 const ChatHeader = memo(function ChatHeader({
   activeView,

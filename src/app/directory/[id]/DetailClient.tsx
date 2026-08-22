@@ -204,7 +204,7 @@ export default function DetailClient() {
             <main className="flex-grow pt-36 min-h-screen flex items-center justify-center text-fill-color">
                 <div className="text-center flex flex-col items-center">
                     <img
-                        src="https://nekowawolf.github.io/cdn-images/images/2026/1784476217_nwwonee_search.webp"
+                        src="https://cdn.nekowawolf.xyz/image/2026/1787422427_nwwonee_search.webp"
                         alt="Repository Not Found"
                         width={160}
                         height={160}
