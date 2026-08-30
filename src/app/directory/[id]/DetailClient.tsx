@@ -3,8 +3,8 @@
 import { useEffect, useState, useRef, useLayoutEffect } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { FaExternalLinkAlt, FaCode, FaServer, FaDatabase, FaShieldAlt, FaGraduationCap, FaStar, FaCodeBranch, FaRegClock, FaRegUserCircle, FaGlobe, FaRegFileImage, FaFileAlt, FaTelegramPlane, FaWhatsapp, FaLink, FaTimes } from "react-icons/fa";
-import { FaXTwitter, FaInstagram, FaThreads } from "react-icons/fa6";
+import { FaExternalLinkAlt, FaCode, FaServer, FaDatabase, FaShieldAlt, FaGraduationCap, FaStar, FaCodeBranch, FaRegClock, FaRegUserCircle, FaGlobe, FaRegFileImage, FaFileAlt, FaLink, FaTimes } from "react-icons/fa";
+import { FaXTwitter, FaInstagram } from "react-icons/fa6";
 import { BsDiscord } from "react-icons/bs";
 import { GoCpu, GoShield } from "react-icons/go";
 import { RxDotsHorizontal } from "react-icons/rx";
@@ -469,17 +469,8 @@ export default function DetailClient() {
                             <a href={`https://instagram.com`} target="_blank" rel="noreferrer" className="cursor-pointer w-14 h-14 shrink-0 rounded-2xl bg-[rgba(var(--fill-color-rgb),0.05)] border border-[var(--border-divider)] flex items-center justify-center hover:bg-[rgba(var(--fill-color-rgb),0.1)] transition-colors text-fill-color">
                                 <FaInstagram className="w-6 h-6" />
                             </a>
-                            <a href={`https://www.threads.net/intent/post?text=${encodeURIComponent(window.location.href)}`} target="_blank" rel="noreferrer" className="cursor-pointer w-14 h-14 shrink-0 rounded-2xl bg-[rgba(var(--fill-color-rgb),0.05)] border border-[var(--border-divider)] flex items-center justify-center hover:bg-[rgba(var(--fill-color-rgb),0.1)] transition-colors text-fill-color">
-                                <FaThreads className="w-6 h-6" />
-                            </a>
                             <a href={`https://discord.com`} target="_blank" rel="noreferrer" className="cursor-pointer w-14 h-14 shrink-0 rounded-2xl bg-[rgba(var(--fill-color-rgb),0.05)] border border-[var(--border-divider)] flex items-center justify-center hover:bg-[rgba(var(--fill-color-rgb),0.1)] transition-colors text-fill-color">
                                 <BsDiscord className="w-6 h-6" />
-                            </a>
-                            <a href={`https://t.me/share/url?url=${encodeURIComponent(window.location.href)}`} target="_blank" rel="noreferrer" className="cursor-pointer w-14 h-14 shrink-0 rounded-2xl bg-[rgba(var(--fill-color-rgb),0.05)] border border-[var(--border-divider)] flex items-center justify-center hover:bg-[rgba(var(--fill-color-rgb),0.1)] transition-colors text-fill-color">
-                                <FaTelegramPlane className="w-6 h-6" />
-                            </a>
-                            <a href={`https://api.whatsapp.com/send?text=${encodeURIComponent(window.location.href)}`} target="_blank" rel="noreferrer" className="cursor-pointer w-14 h-14 shrink-0 rounded-2xl bg-[rgba(var(--fill-color-rgb),0.05)] border border-[var(--border-divider)] flex items-center justify-center hover:bg-[rgba(var(--fill-color-rgb),0.1)] transition-colors text-fill-color">
-                                <FaWhatsapp className="w-6 h-6" />
                             </a>
                         </div>
 
