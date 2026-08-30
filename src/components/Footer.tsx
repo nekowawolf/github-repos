@@ -58,6 +58,19 @@ export default function Footer() {
         }
     };
 
+    const ecosystemLinks = [
+        { id: 'airdrop', label: '/airdrop', url: 'https://airdrop.nekowawolf.xyz' },
+        { id: 'crypto-community', label: '/crypto-community', url: 'https://cc.nekowawolf.xyz/' },
+        { id: 'web3-tools', label: '/web3-tools', url: 'https://web3.nekowawolf.xyz/' },
+        { id: 'ai-tools', label: '/ai-tools', url: 'https://ai.nekowawolf.xyz/' },
+        { id: 'github-repos', label: '/github-repos', url: 'https://github.nekowawolf.xyz/' },
+        { id: 'net', label: '/net', url: 'https://net.nekowawolf.xyz/' },
+        { id: 'creators', label: '/creators', url: 'https://creators.nekowawolf.xyz/' },
+    ];
+    
+    const currentProject = 'github-repos'; 
+    const filteredLinks = ecosystemLinks.filter(link => link.id !== currentProject);
+
     return (
                 <footer className="relative py-10 mt-20 overflow-hidden after:absolute after:inset-0 after:bg-gradient-to-t after:from-blue-600/30 after:via-blue-500/10 after:to-transparent after:pointer-events-none">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16 relative z-10">
@@ -97,46 +110,19 @@ export default function Footer() {
                     <div className="flex flex-col w-full md:w-auto md:min-w-[200px]">
                         <h4 className="text-lg font-bold text-fill-color uppercase tracking-widest mb-6">/ECOSYSTEM</h4>
                         <div className="flex flex-col space-y-4 items-start font-mono text-sm">
-                            <a
-                                href="https://airdrop.nekowawolf.xyz"
-                                target="_blank"
-                                className="flex items-center group text-fill-color/60 hover:!text-blue-600 transition-colors duration-300"
-                            >
-                                <svg className="w-5 h-5 mr-3 text-fill-color/30 flex-shrink-0 -mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 2v14h14" />
-                                </svg>
-                                <span className="group-hover:translate-x-1 transition-transform duration-300">/Airdrops</span>
-                            </a>
-                            <a
-                                href="https://cc.nekowawolf.xyz/"
-                                target="_blank"
-                                className="flex items-center group text-fill-color/60 hover:!text-blue-600 transition-colors duration-300"
-                            >
-                                <svg className="w-5 h-5 mr-3 text-fill-color/30 flex-shrink-0 -mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 2v14h14" />
-                                </svg>
-                                <span className="group-hover:translate-x-1 transition-transform duration-300">/Crypto Community</span>
-                            </a>
-                            <a
-                                href="https://web3.nekowawolf.xyz/"
-                                target="_blank"
-                                className="flex items-center group text-fill-color/60 hover:!text-blue-600 transition-colors duration-300"
-                            >
-                                <svg className="w-5 h-5 mr-3 text-fill-color/30 flex-shrink-0 -mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 2v14h14" />
-                                </svg>
-                                <span className="group-hover:translate-x-1 transition-transform duration-300">/Web3 Tools</span>
-                            </a>
-                            <a
-                                href="https://ai.nekowawolf.xyz/"
-                                target="_blank"
-                                className="flex items-center group text-fill-color/60 hover:!text-blue-600 transition-colors duration-300"
-                            >
-                                <svg className="w-5 h-5 mr-3 text-fill-color/30 flex-shrink-0 -mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 2v14h14" />
-                                </svg>
-                                <span className="group-hover:translate-x-1 transition-transform duration-300">/AI Tools</span>
-                            </a>
+                            {filteredLinks.map((link) => (
+                                <a
+                                    key={link.id}
+                                    href={link.url}
+                                    target="_blank"
+                                    className="flex items-center group text-fill-color/60 hover:!text-blue-600 transition-colors duration-300"
+                                >
+                                    <svg className="w-5 h-5 mr-3 text-fill-color/30 flex-shrink-0 -mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 2v14h14" />
+                                    </svg>
+                                    <span className="group-hover:translate-x-1 transition-transform duration-300">{link.label}</span>
+                                </a>
+                            ))}
                         </div>
                     </div>
                 </div>
