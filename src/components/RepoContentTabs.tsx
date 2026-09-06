@@ -106,9 +106,9 @@ const MarkdownLink = ({ href, children, onLangSwitch, readmeLangs, ...props }: a
 
     if (!videoError && (isVideoExt || (isGithubAsset && isRawLink))) {
         return (
-            <video 
-                src={hrefStr} 
-                controls 
+            <video
+                src={hrefStr}
+                controls
                 className="w-full max-h-[600px] rounded-xl my-6 border border-[var(--border-divider)] bg-[rgba(var(--fill-color-rgb),0.03)]"
                 onError={() => setVideoError(true)}
             />
@@ -132,10 +132,10 @@ export default function RepoContentTabs({ mdFiles, licenseName, owner, repoName,
 
             if (isMainReadme) {
                 if (!groupedTabs.has('readme')) {
-                    groupedTabs.set('readme', { 
-                        id: 'readme', label: 'README', 
-                        icon: <FaMarkdown className="w-4 h-4" />, 
-                        content: f.content, filename: f.name 
+                    groupedTabs.set('readme', {
+                        id: 'readme', label: 'README',
+                        icon: <FaMarkdown className="w-4 h-4" />,
+                        content: f.content, filename: f.name
                     });
                 }
                 readmeLangs.push({ lang: 'Default', content: f.content, filename: f.name });
@@ -162,7 +162,7 @@ export default function RepoContentTabs({ mdFiles, licenseName, owner, repoName,
             }
             baseId = lowerName; label = f.name.replace(/\.mdx?$/i, ''); icon = <FaMarkdown className="w-4 h-4" />;
         }
-        
+
         if (!groupedTabs.has(baseId)) {
             groupedTabs.set(baseId, { id: baseId, label, icon, content: f.content, filename: f.name });
         }
@@ -220,13 +220,13 @@ export default function RepoContentTabs({ mdFiles, licenseName, owner, repoName,
         };
 
         const timeoutId = setTimeout(checkOverflow, 50);
-        
+
         window.addEventListener('resize', checkOverflow);
         const scrollElement = scrollRef.current;
         if (scrollElement) {
             scrollElement.addEventListener('scroll', checkOverflow);
         }
-        
+
         return () => {
             clearTimeout(timeoutId);
             window.removeEventListener('resize', checkOverflow);
@@ -266,7 +266,7 @@ export default function RepoContentTabs({ mdFiles, licenseName, owner, repoName,
             {/* Tabs & Language Filter */}
             <div className="flex flex-row items-start justify-between gap-3 mb-6 pb-4 border-b border-[var(--border-divider)]">
                 <div className="relative flex-1 min-w-0 overflow-hidden">
-                    <div 
+                    <div
                         ref={scrollRef}
                         onMouseDown={onMouseDown}
                         onMouseLeave={onMouseLeave}
@@ -278,11 +278,10 @@ export default function RepoContentTabs({ mdFiles, licenseName, owner, repoName,
                             <button
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
-                                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-2 cursor-pointer whitespace-nowrap flex-shrink-0 ${
-                                    activeTab === tab.id
+                                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-2 cursor-pointer whitespace-nowrap flex-shrink-0 ${activeTab === tab.id
                                         ? 'bg-blue-600 text-white border border-transparent'
                                         : 'bg-[rgba(var(--fill-color-rgb),0.05)] text-fill-color/60 hover:text-fill-color hover:bg-[rgba(var(--fill-color-rgb),0.1)] border border-[var(--border-divider)]'
-                                }`}
+                                    }`}
                             >
                                 {tab.icon}
                                 {tab.label}
@@ -290,9 +289,9 @@ export default function RepoContentTabs({ mdFiles, licenseName, owner, repoName,
                         ))}
                     </div>
                     {/* Fade indicator */}
-                    <div 
+                    <div
                         ref={fadeRef}
-                        className="absolute right-0 top-0 h-[38px] w-12 bg-gradient-to-l from-blue-600/20 to-transparent pointer-events-none transition-opacity duration-200" 
+                        className="absolute right-0 top-0 h-[38px] w-12 bg-gradient-to-l from-blue-600/20 to-transparent pointer-events-none transition-opacity duration-200"
                         style={{ opacity: 0, visibility: 'hidden' }}
                     />
                 </div>
@@ -326,11 +325,11 @@ export default function RepoContentTabs({ mdFiles, licenseName, owner, repoName,
                             div: (props: any) => {
                                 const style = { ...props.style };
                                 if (props.align) style.textAlign = props.align;
-                                
+
                                 if (style.display === 'flex' && !style.justifyContent) {
                                     style.justifyContent = 'center';
                                 }
-                                
+
                                 return <div {...props} style={style} />;
                             },
                             h1: (props: any) => {
@@ -386,13 +385,13 @@ export default function RepoContentTabs({ mdFiles, licenseName, owner, repoName,
                                 }
 
                                 const style = { ...props.style };
-                                
-                                if (props.height && isNaN(Number(props.height))) {
-                                    style.height = props.height;
+
+                                if (props.height) {
+                                    style.height = isNaN(Number(props.height)) ? props.height : `${props.height}px`;
                                 }
                                 
-                                if (props.width && isNaN(Number(props.width))) {
-                                    style.width = props.width;
+                                if (props.width) {
+                                    style.width = isNaN(Number(props.width)) ? props.width : `${props.width}px`;
                                 }
 
                                 return <img {...props} src={src} style={style} className={`inline-block !my-1 !mx-0.5 ${props.className || ''}`} />;
@@ -405,7 +404,7 @@ export default function RepoContentTabs({ mdFiles, licenseName, owner, repoName,
                                         const spaceIdx = trimmed.indexOf(' ');
                                         let url = spaceIdx !== -1 ? trimmed.substring(0, spaceIdx) : trimmed;
                                         const rest = spaceIdx !== -1 ? trimmed.substring(spaceIdx) : '';
-                                        
+
                                         if (url && !url.startsWith('http') && !url.startsWith('data:')) {
                                             const resolvedPath = url.replace(/^(\.\/|\.\.\/|\/)+/g, '');
                                             url = `https://cdn.jsdelivr.net/gh/${owner}/${repoName}@${defaultBranch}/${resolvedPath}`;
