@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
@@ -394,7 +394,31 @@ export default function RepoContentTabs({ mdFiles, licenseName, owner, repoName,
                                     style.width = isNaN(Number(props.width)) ? props.width : `${props.width}px`;
                                 }
 
-                                return <img {...props} src={src} style={style} className={`inline-block !my-1 !mx-0.5 ${props.className || ''}`} />;
+                                const isBadge = src.includes('shields.io') || src.includes('badge.svg') || src.includes('producthunt.com') || src.includes('trendshift.io');
+                                const imgClass = isBadge ? '!m-[2px] !rounded-none' : '!my-1 !mx-0.5';
+
+                                return <img {...props} src={src} style={style} className={`inline-block ${imgClass} ${props.className || ''}`} />;
+                            },
+                            picture: (props: any) => {
+                                let sourceWidth: string | undefined = undefined;
+                                React.Children.forEach(props.children, (child: any) => {
+                                    if (child?.props?.srcSet || child?.props?.srcset || child?.props?.media) {
+                                        if (child.props.width) {
+                                            sourceWidth = child.props.width;
+                                        }
+                                    }
+                                });
+                                
+                                const newChildren = React.Children.map(props.children, (child: any) => {
+                                    if (child?.props?.src || child?.type === 'img') {
+                                        return React.cloneElement(child, {
+                                            width: sourceWidth || child.props.width
+                                        });
+                                    }
+                                    return child;
+                                });
+
+                                return <picture {...props} style={{ ...props.style, display: 'inline' }}>{newChildren}</picture>;
                             },
                             source: (props: any) => {
                                 let srcset = props.srcSet || props.srcset || '';

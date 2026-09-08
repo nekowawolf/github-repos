@@ -160,14 +160,14 @@ function GithubReposContentInner() {
                 </div>
 
                 {/* Search Bar */}
-                <div className="w-full max-w-xl mb-6 relative">
-                    <GoSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-fill-color w-5 h-5" />
+                <div className="w-full max-w-xl mb-6 relative search-container">
+                    <GoSearch className="search-icon absolute left-4 top-1/2 -translate-y-1/2 text-fill-color w-5 h-5" />
                     <input
                         type="text"
                         placeholder="Search Repositories"
                         value={localSearchQuery}
                         onChange={handleSearchChange}
-                        className="w-full py-3 pl-12 pr-12 rounded-full card-color border border-color focus:outline-none focus:ring-2 focus:ring-blue-600/80 focus:border-blue-600 text-fill-color placeholder:text-fill-color/50 transition-colors"
+                        className="w-full py-3 pl-12 pr-12 rounded-full card-color border border-color text-fill-color placeholder:text-fill-color/50 custom-search-focus"
                     />
                     {localSearchQuery && (
                         <button

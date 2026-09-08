@@ -169,6 +169,24 @@ body {
   background: rgba(var(--fill-color-rgb), 0.5);
 }
 
+.custom-search-focus {
+  transition: all 0.2s ease-in-out;
+}
+
+.custom-search-focus:focus {
+  outline: none !important;
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3) !important;
+}
+
+.search-icon {
+  transition: color 0.2s ease-in-out;
+}
+
+.search-container:focus-within .search-icon {
+  color: #2563eb !important;
+}
+
 img[src*="#gh-dark-mode-only"],
 a[href*="#gh-dark-mode-only"] {
   display: inline-block !important;
