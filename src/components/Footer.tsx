@@ -66,6 +66,7 @@ export default function Footer() {
         { id: 'github-repos', label: '/github-repos', url: 'https://github.nekowawolf.xyz/' },
         { id: 'net', label: '/net', url: 'https://net.nekowawolf.xyz/' },
         { id: 'creators', label: '/creators', url: 'https://creators.nekowawolf.xyz/' },
+        { id: 'guild', label: '/guild', url: 'https://github.nekowawolf.xyz/' },
     ];
     
     const currentProject = 'github-repos'; 
