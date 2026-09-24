@@ -23,6 +23,7 @@ export default function AddRepositoryClient() {
   const [existingUrls, setExistingUrls] = useState<string[]>([]);
   const [isCheckingUrl, setIsCheckingUrl] = useState(false);
   const [urlExists, setUrlExists] = useState<boolean | null>(null);
+  const [repoError, setRepoError] = useState<string | null>(null);
   const [showTooltip, setShowTooltip] = useState(false);
   const tooltipRef = useRef<HTMLDivElement>(null);
 
@@ -56,19 +57,32 @@ export default function AddRepositoryClient() {
     if (!repoUrl) {
       setUrlExists(null);
       setIsCheckingUrl(false);
+      setRepoError(null);
       return;
     }
 
-    const githubRegex = /^https?:\/\/(www\.)?github\.com\/[a-zA-Z0-9-]+\/[a-zA-Z0-9_.-]+(\/.*)?$/;
-    if (!githubRegex.test(repoUrl)) {
+    const strictGithubRegex = /^https?:\/\/(www\.)?github\.com\/[a-zA-Z0-9-]+\/[a-zA-Z0-9_.-]+$/;
+    const baseGithubRegex = /^https?:\/\/(www\.)?github\.com\//;
+    
+    if (!baseGithubRegex.test(repoUrl)) {
+      setRepoError("URL must be a GitHub link");
       setUrlExists(null);
       setIsCheckingUrl(false);
       return;
     }
 
+    if (!strictGithubRegex.test(repoUrl)) {
+      setRepoError("Format must be: https://github.com/username/repo (no trailing slashes or subfolders)");
+      setUrlExists(null);
+      setIsCheckingUrl(false);
+      return;
+    } else {
+      setRepoError(null);
+    }
+
     setIsCheckingUrl(true);
     const timer = setTimeout(() => {
-      const cleanUrl = repoUrl.toLowerCase().replace(/\/$/, '');
+      const cleanUrl = repoUrl.toLowerCase();
       const exists = existingUrls.includes(cleanUrl);
       setUrlExists(exists);
       setIsCheckingUrl(false);
@@ -85,17 +99,8 @@ export default function AddRepositoryClient() {
       return;
     }
 
-    const githubRegex = /^https?:\/\/(www\.)?github\.com\/[a-zA-Z0-9-]+\/[a-zA-Z0-9_.-]+(\/.*)?$/;
-    if (!githubRegex.test(repoUrl)) {
-      toast.error("Invalid GitHub URL format");
-      return;
-    }
+    if (!!repoError || urlExists === true) return;
 
-    if (urlExists === true) {
-      toast.error("This repo is already listed.");
-      return;
-    }
-    
     if (!addedByName) {
       toast.error("Name (Added by) is required.");
       return;
@@ -145,7 +150,7 @@ export default function AddRepositoryClient() {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} noValidate className="flex flex-col space-y-6 w-full">
+        <form onSubmit={handleSubmit} className="flex flex-col space-y-6 w-full">
           <div className="flex flex-col space-y-2">
             <div className="flex items-center gap-2">
               <label className="text-sm font-semibold text-fill-color">Repository URL <span className="text-red-500">*</span></label>
@@ -173,13 +178,24 @@ export default function AddRepositoryClient() {
                 </div>
               )}
             </div>
-            <input
-              type="url"
-              value={repoUrl}
-              onChange={(e) => setRepoUrl(e.target.value)}
-              placeholder="https://github.com/owner/repo"
-              className="w-full px-4 py-3 bg-[rgba(var(--fill-color-rgb),0.03)] border border-[var(--border-divider)] rounded-xl text-fill-color focus:outline-none focus:border-blue-500 transition-colors"
-            />
+            <div className="relative">
+              <input
+                type="url"
+                value={repoUrl}
+                onChange={(e) => setRepoUrl(e.target.value)}
+                placeholder="https://github.com/owner/repo"
+                className={`w-full px-4 py-3 bg-[rgba(var(--fill-color-rgb),0.03)] border rounded-xl text-fill-color focus:outline-none transition-colors ${
+                  repoError || urlExists === true 
+                    ? 'border-red-500/50 focus:border-red-500' 
+                    : urlExists === false
+                      ? 'border-green-500/50 focus:border-green-500'
+                      : 'border-[var(--border-divider)] focus:border-blue-500'
+                }`}
+              />
+            </div>
+            {repoError && (
+              <p className="text-xs text-red-500 mt-1">{repoError}</p>
+            )}
           </div>
 
           <div className="flex flex-col space-y-2">
