@@ -87,7 +87,7 @@ export default function SupportUsClient() {
   return (
     <main className="flex-grow pt-36 pb-12 min-h-screen body-color text-fill-color px-4 sm:px-8 font-sans">
       <div className="max-w-3xl mx-auto">
-        <BackButton fallbackUrl="/activity" label="Back to Activity" />
+        <BackButton fallbackUrl="/activity" label="Back to Activity" forceFallback />
 
         <div className="mt-8 mb-12 flex flex-col items-start text-left space-y-2">
           <h1 className="text-xl sm:text-2xl font-bold font-sans tracking-tight flex items-center">
