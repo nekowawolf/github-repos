@@ -76,7 +76,7 @@ export default function Header() {
             {/* LEFT */}
           <Link href="/" className="cursor-pointer flex items-center gap-2">
             <img
-              src="https://cdn.nekowawolf.xyz/image/2026/1787422451_logo.webp"
+              src="https://cdn.nekowawolf.xyz/image/2026/1790671959_nwwonee_bot.webp"
               alt="Logo"
               className="h-8 sm:h-10 w-auto rounded-[5px]"
             />
