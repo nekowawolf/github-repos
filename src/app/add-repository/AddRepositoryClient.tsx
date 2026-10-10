@@ -145,8 +145,8 @@ export default function AddRepositoryClient() {
           <h1 className="text-xl sm:text-2xl font-bold font-sans tracking-tight flex items-center">
             /add-repository
           </h1>
-          <p className="text-fill-color/60 text-sm max-w-full sm:max-w-md leading-relaxed">
-            After submitting, please wait for review and approval.
+          <p className="text-fill-color/60 text-sm max-w-full sm:max-w-xl leading-relaxed">
+            Know a useful GitHub repository that belongs here? Submit its URL and help grow the ecosystem directory. Every submission is reviewed before publishing.
           </p>
         </div>
 
@@ -210,7 +210,7 @@ export default function AddRepositoryClient() {
           </div>
 
           <div className="flex flex-col space-y-2">
-            <label className="text-sm font-semibold text-fill-color">Link <span className="text-fill-color/40 font-normal">(opsional)</span></label>
+            <label className="text-sm font-semibold text-fill-color">Contributor link <span className="text-fill-color/40 font-normal">(optional)</span></label>
             <input
               type="url"
               value={addedByUrl}
@@ -235,7 +235,7 @@ export default function AddRepositoryClient() {
               disabled={!turnstileToken || isSubmitting}
               className="order-2 sm:order-1 px-6 py-3 rounded-xl font-medium text-[15px] text-white bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-blue-500/20 flex items-center justify-center cursor-pointer w-full sm:w-fit"
             >
-              {isSubmitting ? <Spinner className="w-5 h-5 text-white" /> : "Add Repo"}
+              {isSubmitting ? <Spinner className="w-5 h-5 text-white" /> : "Add Repository"}
             </button>
           </div>
         </form>
