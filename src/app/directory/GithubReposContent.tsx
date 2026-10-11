@@ -272,7 +272,7 @@ function GithubReposContentInner() {
                                                     </div>
                                                 </div>
                                                 <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 whitespace-nowrap ml-2">
-                                                    {repo.category}
+                                                    <span className="relative top-px">{repo.category}</span>
                                                 </span>
                                             </div>
 

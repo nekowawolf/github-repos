@@ -394,7 +394,7 @@ export default function DetailClient() {
                                             </div>
                                         </div>
                                         <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 whitespace-nowrap ml-2">
-                                            {sRepo.category}
+                                            <span className="relative top-px">{sRepo.category}</span>
                                         </span>
                                     </div>
                                     
