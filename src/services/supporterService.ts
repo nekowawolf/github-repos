@@ -22,12 +22,14 @@ export async function submitSupportRequest(
   name: string,
   url: string,
   platform: string,
+  proof: string,
   turnstileToken: string
 ): Promise<any> {
   const payload = {
     name,
     url,
     platform,
+    proof,
     turnstile_token: turnstileToken
   };
 

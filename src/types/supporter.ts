@@ -3,5 +3,6 @@ export interface Supporter {
   name: string;
   url: string;
   platform: string;
+  proof?: string;
   created_at?: string;
 }

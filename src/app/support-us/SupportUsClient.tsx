@@ -3,21 +3,23 @@
 import { useState, useRef, useEffect } from "react";
 import { toast } from "sonner";
 import { submitSupportRequest } from "@/services/supporterService";
-import { Turnstile } from '@marsidev/react-turnstile';
+import { Turnstile, TurnstileInstance } from '@marsidev/react-turnstile';
 import { Spinner } from "@/components/ui/spinner";
 import BackButton from "@/components/BackButton";
 import { FaCopy, FaCheck, FaEthereum } from 'react-icons/fa';
 import { SiKofi, SiSolana } from 'react-icons/si';
 import { BiLogoBitcoin } from "react-icons/bi";
 import { FiChevronDown, FiCheck as FiCheckIcon } from "react-icons/fi";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function SupportUsClient() {
   const [name, setName] = useState("");
   const [url, setUrl] = useState("");
   const [platform, setPlatform] = useState("Ko-fi");
+  const [proof, setProof] = useState("");
   const [turnstileToken, setTurnstileToken] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const turnstileRef = useRef<any>(null);
+  const turnstileRef = useRef<TurnstileInstance>(null);
 
   const [isPlatformDropdownOpen, setIsPlatformDropdownOpen] = useState(false);
   const platformDropdownRef = useRef<HTMLDivElement>(null);
@@ -55,9 +57,42 @@ export default function SupportUsClient() {
     }
 
     if (url) {
-      const urlRegex = /^https?:\/\/.+$/;
-      if (!urlRegex.test(url)) {
-        toast.error("Invalid URL");
+      try {
+        const link = new URL(url);
+        if (link.protocol !== 'https:' && link.protocol !== 'http:') throw new Error('Invalid URL');
+      } catch {
+        toast.error("Enter a valid HTTP or HTTPS link.");
+        return;
+      }
+    }
+
+    if (platform === "Ko-fi" && !proof.trim()) {
+      toast.error("Ko-fi URL is required.");
+      return;
+    }
+    if (platform === "Crypto" && !proof.trim()) {
+      toast.error("Crypto transaction URL is required.");
+      return;
+    }
+    if (platform === "Ko-fi") {
+      try {
+        const profile = new URL(proof);
+        if (profile.protocol !== "https:" || profile.hostname.toLowerCase() !== "ko-fi.com" || profile.port || profile.username || profile.password || proof !== proof.trim() || proof.length > 2048) {
+          throw new Error("Invalid profile");
+        }
+      } catch {
+        toast.error("Enter a Ko-fi URL, such as https://ko-fi.com/username.");
+        return;
+      }
+    }
+    if (platform === "Crypto") {
+      try {
+        const transaction = new URL(proof);
+        if (!['http:', 'https:'].includes(transaction.protocol) || transaction.username || transaction.password || proof !== proof.trim()) {
+          throw new Error("Invalid transaction URL");
+        }
+      } catch {
+        toast.error("Enter a valid Crypto transaction URL.");
         return;
       }
     }
@@ -69,16 +104,17 @@ export default function SupportUsClient() {
 
     setIsSubmitting(true);
     try {
-      await submitSupportRequest(name, url, platform, turnstileToken);
+      await submitSupportRequest(name, url, platform, proof, turnstileToken);
       toast.success("Support submitted successfully.");
       
       setName("");
       setUrl("");
       setPlatform("Ko-fi");
+      setProof("");
       setTurnstileToken("");
       turnstileRef.current?.reset();
-    } catch (err: any) {
-      toast.error(err.message || "Failed to submit request");
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Failed to submit request");
     } finally {
       setIsSubmitting(false);
     }
@@ -94,7 +130,7 @@ export default function SupportUsClient() {
             /submit-support-details
           </h1>
           <p className="text-fill-color/60 text-sm max-w-full sm:max-w-md leading-relaxed">
-            If you'd like your name to be displayed on our public supporters list, you can fill out and submit this form after supporting us (opsional).
+            If you&apos;d like your name to be displayed on our public supporters list, submit this form after supporting us (optional).
           </p>
         </div>
 
@@ -168,7 +204,7 @@ export default function SupportUsClient() {
             </div>
             
             <div className="flex flex-col space-y-2">
-              <label className="text-sm font-semibold text-fill-color">Link <span className="text-fill-color/40 font-normal">(opsional)</span></label>
+              <label className="text-sm font-semibold text-fill-color">Link <span className="text-fill-color/40 font-normal">(optional)</span></label>
               <input
                 type="url"
                 value={url}
@@ -200,6 +236,7 @@ export default function SupportUsClient() {
                                   key={opt}
                                   type="button"
                                   onClick={() => {
+                                      if (platform !== opt) setProof("");
                                       setPlatform(opt);
                                       setIsPlatformDropdownOpen(false);
                                   }}
@@ -220,6 +257,33 @@ export default function SupportUsClient() {
                   </div>
                 )}
               </div>
+            </div>
+
+            <div className="flex flex-col space-y-2">
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                  key={platform}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
+                  className="flex flex-col space-y-2"
+                >
+                  <label htmlFor="support-reference" className="text-sm font-semibold text-fill-color">
+                    {platform === "Ko-fi" ? "Ko-fi URL" : "Crypto transaction URL"} <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    id="support-reference"
+                    type="url"
+                    value={proof}
+                    onChange={(e) => setProof(e.target.value)}
+                    placeholder={platform === "Ko-fi" ? "https://ko-fi.com/username" : "https://etherscan.io/tx/0x5f..."}
+                    autoComplete="off"
+                    required
+                    className="w-full px-4 py-3 bg-[rgba(var(--fill-color-rgb),0.03)] border border-[var(--border-divider)] rounded-xl text-fill-color focus:outline-none focus:border-blue-500 transition-colors"
+                  />
+                </motion.div>
+              </AnimatePresence>
             </div>
 
             <div className="mt-6 flex flex-col sm:flex-row sm:items-center justify-start gap-5">

@@ -47,6 +47,16 @@ export default function Support() {
     setCurrentPage(page);
   };
 
+  const proofUrl = (value?: string) => {
+    if (!value) return null;
+    try {
+      const url = new URL(value);
+      return ['http:', 'https:'].includes(url.protocol) && !url.username && !url.password ? url.href : null;
+    } catch {
+      return null;
+    }
+  };
+
   return (
     <>
       <div className="w-full mt-24 mb-12 flex flex-col items-start text-left space-y-2">
@@ -77,9 +87,12 @@ export default function Support() {
                 {displayedSupporters.map((supporter) => (
                   <div
                     key={supporter._id}
-                    className="group flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 relative transition-transform duration-300 sm:hover:translate-x-2 w-full"
+                    className={`group flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 relative transition-transform duration-300 sm:hover:translate-x-2 w-full ${proofUrl(supporter.proof) ? 'cursor-pointer' : ''}`}
                   >
-                    <div className="flex items-center gap-3 shrink-0 w-fit">
+                    {proofUrl(supporter.proof) && (
+                      <a href={proofUrl(supporter.proof)!} target="_blank" rel="noopener noreferrer" aria-label={`View details for ${supporter.name}`} className="absolute inset-0 z-10" />
+                    )}
+                    <div className="flex items-center gap-3 shrink-0 w-fit pointer-events-none">
                       <div className="flex flex-col min-w-0">
                         {supporter.url ? (
                           <a 
@@ -87,7 +100,7 @@ export default function Support() {
                             target="_blank" 
                             rel="noopener noreferrer" 
                             onClick={(e) => e.stopPropagation()}
-                            className="cursor-pointer font-semibold opacity-70 hover:opacity-100 transition-all text-fill-color text-base truncate max-w-[200px] sm:max-w-[300px]"
+                            className="relative z-20 pointer-events-auto cursor-pointer font-semibold opacity-70 hover:opacity-100 transition-all text-fill-color text-base truncate max-w-[200px] sm:max-w-[300px]"
                           >
                             {supporter.name}
                           </a>
@@ -101,7 +114,7 @@ export default function Support() {
 
                     <span className="hidden sm:block flex-1 h-[1px] bg-[var(--border-divider)] group-hover:bg-blue-500/30 transition-colors duration-300 mx-4" />
 
-                    <div className="flex items-center justify-start sm:justify-end shrink-0 min-w-0 mt-1 sm:mt-0">
+                    <div className="flex items-center justify-start sm:justify-end shrink-0 min-w-0 mt-1 sm:mt-0 pointer-events-none">
                       <div className="flex items-center gap-1.5 text-xs text-fill-color/60 font-mono mr-1.5">
                         {supporter.platform === 'Ko-fi' ? <SiKofi className="text-[#FF5E5B]" /> : <BiLogoBitcoin className="text-[#F7931A]" />}
                         {supporter.platform}
@@ -110,14 +123,19 @@ export default function Support() {
                         )}
                       </div>
 
-                      <div className="relative flex items-center shrink-0 h-6 w-[90px]">
-                        <div className="flex items-center text-xs text-fill-color/60 font-mono">
+                      <div className="relative flex items-center shrink-0 h-6 overflow-hidden w-[105px]">
+                        <div className={`absolute inset-y-0 left-0 flex items-center text-xs text-fill-color/60 font-mono transition-all duration-300 ${proofUrl(supporter.proof) ? 'group-hover:opacity-0 group-hover:-translate-y-full' : ''}`}>
                           {supporter.created_at ? new Date(supporter.created_at).toLocaleDateString('en-US', {
                             year: 'numeric',
                             month: 'short',
                             day: 'numeric'
                           }) : ''}
                         </div>
+                        {proofUrl(supporter.proof) && (
+                          <div className="absolute inset-y-0 left-0 flex items-center text-xs text-blue-500 font-mono transition-all duration-300 translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 whitespace-nowrap">
+                            View Details →
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
