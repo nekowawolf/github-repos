@@ -335,3 +335,78 @@ a[href*="#gh-light-mode-only"] {
 .prose del {
   opacity: 0.5;
 }
+
+/* Blog: reuse the directory palette in both themes, with a quieter reading layout. */
+.blog-focus:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 4px;
+}
+
+.blog-search::-webkit-search-cancel-button {
+  display: none;
+}
+
+.blog-body h2,
+.blog-body h3 {
+  scroll-margin-top: 9rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.4;
+}
+
+.blog-body h2 {
+  margin-bottom: 1.25rem;
+  font-size: clamp(1.35rem, 2.5vw, 1.65rem);
+}
+
+.blog-body h3 {
+  margin-bottom: 1rem;
+  font-size: 1.125rem;
+}
+
+.blog-body p {
+  margin-top: 1rem;
+  font-size: 1rem;
+  line-height: 1.9;
+  color: rgba(var(--fill-color-rgb), 0.8);
+  overflow-wrap: anywhere;
+}
+
+.blog-toc-track {
+  position: relative;
+}
+
+.blog-toc-track::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 1px;
+  background: var(--border-divider);
+}
+
+.blog-toc-link {
+  color: rgba(var(--fill-color-rgb), 0.6);
+  transition: color 180ms ease;
+}
+
+.blog-toc-link:hover {
+  color: var(--fill-color);
+}
+
+.blog-toc-link[aria-current="location"] {
+  color: var(--stack-chip-text);
+}
+
+.blog-article-end {
+  border-top: 1px solid var(--border-divider);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .blog-toc-link {
+    transition: none;
+  }
+}

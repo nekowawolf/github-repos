@@ -26,7 +26,7 @@ export default function Pagination2({
 }: Pagination2Props) {
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-  if (totalItems === 0) return null;
+  if (totalPages <= 1) return null;
 
   const getPaginationRange = (): (number | '...')[] => {
     const delta = 1;
@@ -52,6 +52,7 @@ export default function Pagination2({
       <PaginationContent className="flex flex-wrap justify-center gap-1">
         <PaginationItem>
           <PaginationPrevious
+            disabled={currentPage <= 1}
             onClick={() => onPageChange(currentPage - 1)}
             className={cn(
               "cursor-pointer",
@@ -67,6 +68,7 @@ export default function Pagination2({
               <PaginationEllipsis className="text-xs sm:text-base" />
             ) : (
               <PaginationLink
+                aria-label={`Go to page ${page}`}
                 isActive={currentPage === page}
                 onClick={() => onPageChange(Number(page))}
                 className={cn(
@@ -85,6 +87,7 @@ export default function Pagination2({
 
         <PaginationItem>
           <PaginationNext
+            disabled={currentPage >= totalPages}
             onClick={() => onPageChange(currentPage + 1)}
             className={cn(
               "cursor-pointer",
