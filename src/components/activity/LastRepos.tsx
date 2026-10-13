@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { GithubRepo } from '@/types/githubRepo';
 import { Spinner } from '@/components/ui/spinner';
 import { FaGithub } from 'react-icons/fa';
-import Pagination2 from '@/components/Pagination2';
+import Pagination2 from '@/components/common/Pagination2';
 
 const ITEMS_PER_PAGE = 5;
 

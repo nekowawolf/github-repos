@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { FallbackImage } from '@/components/FallbackImage';
+import { FallbackImage } from '@/components/common/FallbackImage';
 import { formatBlogDate } from '@/lib/blog';
 import type { BlogPost } from '@/types/blog';
 

@@ -14,11 +14,11 @@ import { LuAudioLines } from "react-icons/lu";
 import { IoIosArrowUp } from "react-icons/io";
 import { CiBookmark } from "react-icons/ci";
 import { PiShareFatThin } from "react-icons/pi";
-import BackButton from "@/components/BackButton";
-import RepoContentTabs from "@/components/RepoContentTabs";
+import BackButton from "@/components/common/BackButton";
+import RepoContentTabs from "@/components/repositories/RepoContentTabs";
 import { GithubRepo } from "@/types/githubRepo";
 import { Spinner } from "@/components/ui/spinner";
-import NwwOneeAIChat, { chatStore } from "@/components/NwwOneeAIChat";
+import NwwOneeAIChat, { chatStore } from "@/components/chat/NwwOneeAIChat";
 import { toast } from "sonner";
 
 const getCategoryIcon = (category: string, className: string = "w-8 h-8") => {

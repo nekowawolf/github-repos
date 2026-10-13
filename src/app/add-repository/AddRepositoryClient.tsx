@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from "react";
-import BackButton from "@/components/BackButton";
+import BackButton from "@/components/common/BackButton";
 import { toast } from "sonner";
 import { fetchGithubReposData, submitGithubRepo } from "@/services/githubRepoService";
 import { Turnstile } from '@marsidev/react-turnstile';

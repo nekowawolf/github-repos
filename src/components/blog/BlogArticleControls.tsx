@@ -3,7 +3,7 @@
 import { useEffect, useState, useSyncExternalStore } from 'react';
 import { useReducedMotion } from 'framer-motion';
 import { IoIosArrowUp } from 'react-icons/io';
-import NwwOneeAIChat, { chatStore } from '@/components/NwwOneeAIChat';
+import NwwOneeAIChat, { chatStore } from '@/components/chat/NwwOneeAIChat';
 import BlogTableOfContents from '@/components/blog/BlogTableOfContents';
 import type { BlogHeading } from '@/types/blog';
 

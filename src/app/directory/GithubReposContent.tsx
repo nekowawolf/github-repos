@@ -1,11 +1,11 @@
 'use client';
 
-import NwwOneeAIChat from "@/components/NwwOneeAIChat";
+import NwwOneeAIChat from "@/components/chat/NwwOneeAIChat";
 import Link from 'next/link';
-import Pagination from '@/components/Pagination';
+import Pagination from '@/components/common/Pagination';
 import { useGithubRepos } from '@/hooks/useGithubRepos';
 import { Spinner } from '@/components/ui/spinner';
-import { FallbackImage } from '@/components/FallbackImage';
+import { FallbackImage } from '@/components/common/FallbackImage';
 import { Suspense, useRef, useState, useEffect } from 'react';
 import { FaCode, FaServer, FaDatabase, FaShieldAlt, FaGraduationCap, FaGithub, FaRegFileImage, FaFileAlt } from 'react-icons/fa';
 import { LuAudioLines } from "react-icons/lu";

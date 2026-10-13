@@ -1,10 +1,10 @@
 'use client';
 
-import NwwOneeAIChat from "@/components/NwwOneeAIChat";
-import LastRepos from "@/components/LastRepos";
-import LastCommits from "@/components/LastCommits";
-import StatsHistory from "@/components/StatsHistory";
-import Support from "@/components/Support";
+import NwwOneeAIChat from "@/components/chat/NwwOneeAIChat";
+import LastRepos from "@/components/activity/LastRepos";
+import LastCommits from "@/components/activity/LastCommits";
+import StatsHistory from "@/components/activity/StatsHistory";
+import Support from "@/components/support/Support";
 
 export default function DetailClient() {
   return (

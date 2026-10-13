@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { fetchSupportersData } from "@/services/supporterService";
 import { Spinner } from "@/components/ui/spinner";
-import Pagination2 from '@/components/Pagination2';
+import Pagination2 from '@/components/common/Pagination2';
 import { Supporter } from '@/types/supporter';
 import { SiKofi } from 'react-icons/si';
 import { BiLogoBitcoin } from 'react-icons/bi';

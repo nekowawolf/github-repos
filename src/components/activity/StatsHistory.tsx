@@ -7,7 +7,7 @@ import { Spinner } from '@/components/ui/spinner';
 import { FaGithub, FaStar, FaCodeBranch } from 'react-icons/fa';
 import { FiFilter, FiChevronDown, FiCheck } from 'react-icons/fi';
 import { HiSortAscending, HiSortDescending } from 'react-icons/hi';
-import Pagination2 from '@/components/Pagination2';
+import Pagination2 from '@/components/common/Pagination2';
 
 const ITEMS_PER_PAGE = 5;
 

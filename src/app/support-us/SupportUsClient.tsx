@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { submitSupportRequest } from "@/services/supporterService";
 import { Turnstile, TurnstileInstance } from '@marsidev/react-turnstile';
 import { Spinner } from "@/components/ui/spinner";
-import BackButton from "@/components/BackButton";
+import BackButton from "@/components/common/BackButton";
 import { FaCopy, FaCheck, FaEthereum } from 'react-icons/fa';
 import { SiKofi, SiSolana } from 'react-icons/si';
 import { BiLogoBitcoin } from "react-icons/bi";

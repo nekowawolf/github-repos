@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
 import BlogArticle from '@/components/blog/BlogArticle';
 import { fetchBlogPost, fetchBlogPosts } from '@/services/blogService';
 import { githubRepoMetadata } from '@/constants/metadataTemplates';

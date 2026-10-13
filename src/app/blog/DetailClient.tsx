@@ -4,11 +4,11 @@ import { useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { motion, useReducedMotion } from 'framer-motion';
 import { FiSearch, FiX } from 'react-icons/fi';
-import Pagination2 from '@/components/Pagination2';
-import { FallbackImage } from '@/components/FallbackImage';
+import Pagination2 from '@/components/common/Pagination2';
+import { FallbackImage } from '@/components/common/FallbackImage';
 import BlogAuthor from '@/components/blog/BlogAuthor';
 import BlogSortDropdown from '@/components/blog/BlogSortDropdown';
-import NwwOneeAIChat from '@/components/NwwOneeAIChat';
+import NwwOneeAIChat from '@/components/chat/NwwOneeAIChat';
 import { BLOG_POSTS_PER_PAGE, filterBlogPosts } from '@/lib/blog';
 import type { BlogPost, BlogSort } from '@/types/blog';
 

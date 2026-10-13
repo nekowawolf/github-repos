@@ -6,11 +6,11 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { FiArrowLeft, FiArrowUpRight, FiLink } from 'react-icons/fi';
 import { CiBookmark } from 'react-icons/ci';
 import { toast } from 'sonner';
-import { FallbackImage } from '@/components/FallbackImage';
+import { FallbackImage } from '@/components/common/FallbackImage';
 import BlogAuthor from '@/components/blog/BlogAuthor';
 import BlogArticleControls from '@/components/blog/BlogArticleControls';
 import BlogTableOfContents from '@/components/blog/BlogTableOfContents';
-import { chatStore } from '@/components/NwwOneeAIChat';
+import { chatStore } from '@/components/chat/NwwOneeAIChat';
 import { getBlogHeadings, getYouTubeEmbedUrl } from '@/lib/blog';
 import type { BlogPost } from '@/types/blog';
 
