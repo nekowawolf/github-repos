@@ -2,16 +2,13 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import BlogArticle from '@/components/blog/BlogArticle';
-import { fetchBlogPost, fetchBlogPosts } from '@/services/blogService';
+import DetailClient from './DetailClient';
+import { fetchBlogPost } from '@/services/blogService';
 import { githubRepoMetadata } from '@/constants/metadataTemplates';
 
 type Props = { params: Promise<{ slug: string }> };
 
-export async function generateStaticParams() {
-  const posts = await fetchBlogPosts();
-  return posts.map((post) => ({ slug: post.slug }));
-}
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
@@ -41,10 +38,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function BlogArticlePage({ params }: Props) {
-  const { slug } = await params;
-  const post = await fetchBlogPost(slug);
-  if (!post) notFound();
-
-  return <><Header /><BlogArticle post={post} /><Footer /></>;
+export default function BlogArticlePage() {
+  return <><Header /><DetailClient /><Footer /></>;
 }

@@ -6,6 +6,8 @@ import { fetchBlogPosts } from "@/services/blogService";
 
 export const metadata = githubRepoMetadata("Blog", "Articles, reviews, deep dives, and analysis.");
 
+export const dynamic = 'force-dynamic';
+
 export default async function BlogPage() {
   const posts = await fetchBlogPosts();
   return (
