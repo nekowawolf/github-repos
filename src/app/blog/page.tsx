@@ -4,7 +4,7 @@ import { githubRepoMetadata } from "@/constants/metadataTemplates";
 import DetailClient from "./DetailClient";
 import { fetchBlogPosts } from "@/services/blogService";
 
-export const metadata = githubRepoMetadata("Blog", "Articles, reviews, deep dives, and analysis.");
+export const metadata = githubRepoMetadata("Blog", "Articles, reviews, and technical deep dives covering open-source repositories.");
 
 export const dynamic = 'force-dynamic';
 

@@ -40,7 +40,7 @@ export default function DetailClient({ posts }: { posts: BlogPost[] }) {
         >
           <h1 className="text-xl sm:text-2xl font-bold font-sans tracking-tight flex items-center">/blog</h1>
           <p className="text-fill-color/60 text-sm max-w-full sm:max-w-md leading-relaxed">
-            Articles, reviews, and technical deep dives covering open-source repositories and development.
+            Articles, reviews, and technical deep dives covering open-source repositories.
           </p>
         </motion.header>
 
@@ -106,11 +106,15 @@ export default function DetailClient({ posts }: { posts: BlogPost[] }) {
           </div>
 
           {filteredPosts.length === 0 ? (
-            <div className="rounded-2xl border border-color card-color2 px-6 py-16 text-center">
-              <FiSearch aria-hidden="true" className="mx-auto mb-4 h-7 w-7 text-fill-color/60" />
-              <h2 className="text-lg font-semibold">No articles found</h2>
-              <p className="mt-2 text-sm text-fill-color/70">Try a different keyword or clear your search.</p>
-              {query && <button type="button" onClick={() => { setQuery(''); setCurrentPage(1); }} className="blog-focus mt-5 cursor-pointer text-sm font-medium text-blue-500">Clear search</button>}
+            <div className="py-1 text-center">
+              <FallbackImage
+                src="https://cdn.nekowawolf.xyz/image/2026/1787422427_nwwonee_search.webp"
+                alt="No data found"
+                width={160}
+                height={160}
+                className="mx-auto"
+              />
+              <p className="-mt-4 text-fill-color/50">No data available.</p>
             </div>
           ) : totalPages > 1 ? (
             <div className="mt-12 flex justify-center">

@@ -6,7 +6,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { FiArrowLeft, FiArrowUpRight, FiLink } from 'react-icons/fi';
 import { CiBookmark } from 'react-icons/ci';
 import { toast } from 'sonner';
-import { FallbackImage } from '@/components/common/FallbackImage';
+import ZoomableImage from '@/components/common/ZoomableImage';
 import BlogAuthor from '@/components/blog/BlogAuthor';
 import BlogArticleControls from '@/components/blog/BlogArticleControls';
 import BlogTableOfContents from '@/components/blog/BlogTableOfContents';
@@ -18,6 +18,7 @@ import type { BlogPost } from '@/types/blog';
 export default function BlogArticle({ post }: { post: BlogPost }) {
   const reducedMotion = useReducedMotion();
   const headings = useMemo(() => getBlogHeadings(post), [post]);
+  const images = useMemo(() => [post.image_url, ...post.media.screenshot_urls], [post.image_url, post.media.screenshot_urls]);
   const videoUrl = getYouTubeEmbedUrl(post.media.video_url);
 
   async function copyArticleLink() {
@@ -62,7 +63,7 @@ export default function BlogArticle({ post }: { post: BlogPost }) {
         </header>
 
         <div className="mx-auto mt-9 w-full -translate-x-0.4 overflow-hidden rounded-2xl border border-color sm:translate-x-0 sm:mt-10 lg:col-start-1">
-          <FallbackImage src={post.image_url} alt={post.name} width={1600} height={900} fetchPriority="high" className="mx-auto block h-auto w-full object-contain object-center" />
+          <ZoomableImage src={post.image_url} alt={post.name} width={1600} height={900} fetchPriority="high" className="blog-focus" imageClassName="mx-auto block h-auto w-full object-contain object-center" images={images} currentIndex={0} />
         </div>
 
         <div className="mt-10 min-w-0 lg:col-span-2 lg:mt-14 lg:grid lg:grid-cols-[minmax(0,1fr)_15rem] lg:gap-12">
@@ -82,22 +83,17 @@ export default function BlogArticle({ post }: { post: BlogPost }) {
 
                 {section.screenshot && post.media.screenshot_urls[section.screenshot.index] && (
                   <figure className="mx-auto my-8 w-full --translate-x-0.4 sm:translate-x-0">
-                    <a
-                      href={post.media.screenshot_urls[section.screenshot.index]}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <ZoomableImage
                       className="blog-focus block cursor-pointer overflow-hidden rounded-xl border border-color card-color2"
-                      aria-label={`Open image: ${section.screenshot.description} (new tab)`}
-                    >
-                      <FallbackImage
-                        src={post.media.screenshot_urls[section.screenshot.index]}
-                        alt={section.screenshot.description}
-                        width={1200}
-                        height={675}
-                        loading="lazy"
-                        className="mx-auto block h-auto w-full object-contain object-center"
-                      />
-                    </a>
+                      src={post.media.screenshot_urls[section.screenshot.index]}
+                      alt={section.screenshot.description}
+                      width={1200}
+                      height={675}
+                      loading="lazy"
+                      imageClassName="mx-auto block h-auto w-full object-contain object-center"
+                      images={images}
+                      currentIndex={section.screenshot.index + 1}
+                    />
                   </figure>
                 )}
 
