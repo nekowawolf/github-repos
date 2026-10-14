@@ -10,6 +10,7 @@ import { FallbackImage } from '@/components/common/FallbackImage';
 import BlogAuthor from '@/components/blog/BlogAuthor';
 import BlogArticleControls from '@/components/blog/BlogArticleControls';
 import BlogTableOfContents from '@/components/blog/BlogTableOfContents';
+import BlogText from '@/components/blog/BlogText';
 import { chatStore } from '@/components/chat/NwwOneeAIChat';
 import { getBlogHeadings, getYouTubeEmbedUrl } from '@/lib/blog';
 import type { BlogPost } from '@/types/blog';
@@ -39,7 +40,7 @@ export default function BlogArticle({ post }: { post: BlogPost }) {
         </Link>
         <header className="min-w-0 lg:col-start-1">
           <h1 className="text-3xl font-semibold leading-tight tracking-tight sm:text-5xl sm:leading-[1.15]">{post.name}</h1>
-          <p className="mt-5 text-base leading-8 text-fill-color/70 sm:text-lg">{post.description}</p>
+          <p className="mt-5 text-base leading-8 text-fill-color/70 sm:text-lg"><BlogText text={post.description} /></p>
           <div className="mt-7">
             <BlogAuthor post={post} variant="article" actions={
               <>
@@ -77,7 +78,7 @@ export default function BlogArticle({ post }: { post: BlogPost }) {
                 className="mb-12 last:mb-0"
               >
                 <h2 id={section._id} tabIndex={-1}>{section.name}</h2>
-                {section.paragraphs.map((paragraph, index) => <p key={index}>{paragraph}</p>)}
+                {section.paragraphs.map((paragraph, index) => <p key={index}><BlogText text={paragraph} /></p>)}
 
                 {section.screenshot && post.media.screenshot_urls[section.screenshot.index] && (
                   <figure className="mx-auto my-8 w-full --translate-x-0.4 sm:translate-x-0">
@@ -121,7 +122,7 @@ export default function BlogArticle({ post }: { post: BlogPost }) {
                 {section.subsections?.map((subsection) => (
                   <div key={subsection._id} className="mt-8">
                     <h3 id={subsection._id} tabIndex={-1}>{subsection.name}</h3>
-                    {subsection.paragraphs.map((paragraph, index) => <p key={index}>{paragraph}</p>)}
+                    {subsection.paragraphs.map((paragraph, index) => <p key={index}><BlogText text={paragraph} /></p>)}
                   </div>
                 ))}
               </motion.section>

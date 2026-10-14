@@ -1,17 +1,14 @@
 [
   {
-    "_id": "github-blog-preview-001",
-    "slug": "a-more-thoughtful-way-to-explore-open-source",
-    "name": "A more thoughtful way to explore open source",
-    "description": "Good projects deserve more than a bookmark. A few notes on discovering repositories, looking beyond the README, and finding something worth building with.",
+    "_id": "github-blog-001",
+    "slug": "welcome-to-github-repos",
+    "name": "Welcome to GitHub Repos",
+    "description": "An introduction to GitHub Repos: explore the directory, follow repository activity and statistics, suggest useful projects, and learn what this blog is for.",
     "image_url": "https://cdn.nekowawolf.xyz/image/2026/1791909541_git-banner.webp",
     "categories": [],
     "media": {
-      "screenshot_urls": [
-        "https://cdn.nekowawolf.xyz/image/2026/1789700050_og_rv.webp",
-        "https://cdn.nekowawolf.xyz/image/2026/1789624491_fo2.webp"
-      ],
-      "video_url": "https://www.youtube.com/watch?v=1tM7Wd0lEeI"
+      "screenshot_urls": [],
+      "video_url": ""
     },
     "added_by": {
       "name": "NwwOnee AI",
@@ -21,375 +18,62 @@
     "created_at": "2026-10-14T08:00:00Z",
     "content": [
       {
-        "_id": "start-with-a-question",
-        "name": "Start with a question, not a star count",
+        "_id": "an-introduction",
+        "name": "An introduction",
         "paragraphs": [
-          "There is no shortage of interesting repositories. The harder part is knowing which one deserves your attention. Before opening another tab, it helps to ask a smaller question: what am I trying to make, understand, or improve?",
-          "A clear question turns an endless feed into a useful collection. You might be looking for a simpler interface, a tool you can run yourself, or an example that makes an unfamiliar idea finally click. All of those are better starting points than popularity alone."
+          "Welcome to GitHub Repos. Here is a straightforward introduction to the website: what it is, what you can do with it, and how this blog fits in.",
+          "GitHub Repos is a curated directory of GitHub repositories covering development, automation, AI, infrastructure, and other fields. The idea is to make useful projects easier to find and give you enough context to decide which ones are worth exploring."
+        ]
+      },
+      {
+        "_id": "explore-the-directory",
+        "name": "Explore the directory",
+        "paragraphs": [
+          "The directory at /directory is the main place to browse repositories. You can search for a project or explore categories such as Development, Automation, AI, Infrastructure, Data, Security, Design, and Learning.",
+          "Open a repository's page to read more about it and review its available information before visiting the original project on GitHub. Whether you need a tool for your workflow or want to study how something was built, the directory gives you a starting point."
+        ]
+      },
+      {
+        "_id": "follow-the-activity",
+        "name": "Follow the activity",
+        "paragraphs": [
+          "The /activity page brings together recent additions to the directory, repository statistics, and development activity for this website. It is a way to check what has been added and what is changing without browsing the full directory again.",
+          "The /last-added-repos section shows the latest repositories added by contributors. The /last-commits section shows recent commits to the GitHub Repos project itself, so you can follow work on the website as well."
         ],
         "subsections": [
           {
-            "_id": "look-for-the-fit",
-            "name": "Look for the fit",
+            "_id": "repository-statistics",
+            "name": "Repository statistics",
             "paragraphs": [
-              "Read the project description and the first few examples. Look for the problem it solves, who it is built for, and what it intentionally leaves out. A small, focused project can be a much better fit than a larger one with a long list of features."
+              "Within the activity page, the /repository-stats section lets you compare stars and forks, along with their growth over the selected period. You can choose 24 hours, 7 days, or 30 days, filter by programming language, and sort by total count or growth.",
+              "These numbers provide another view of a repository's activity, but they are not a measure of whether it is right for your needs. Read the project's documentation, check its license, and review its maintenance before relying on it."
             ]
           }
         ]
       },
       {
-        "_id": "look-beyond-the-readme",
-        "name": "Look beyond the README",
+        "_id": "add-a-repository",
+        "name": "Add a repository",
         "paragraphs": [
-          "Documentation tells you how a project wants to be used. Screenshots and demos help you picture what using it actually feels like. Together, they make it easier to decide whether to spend an afternoon exploring the code.",
-          "Pay attention to the little things: the navigation, the empty states, and how the interface explains the next step. Those details can be just as useful as the technology behind them."
-        ],
-        "screenshot": {
-          "index": 0,
-          "description": "Supporting image for Look beyond the README"
-        },
-        "subsections": [
-          {
-            "_id": "check-the-foundations",
-            "name": "Check the foundations",
-            "paragraphs": [
-              "Before building on a repository, check its license, installation instructions, and recent maintenance. Browse a few issues to understand common questions. You do not need a perfect project; you need to understand the trade-offs you are taking on."
-            ]
-          }
+          "If you know a useful GitHub repository that is not in the directory, you can suggest it through /add-repository. This can be a project you maintain or one you have found helpful.",
+          "Submit the repository's GitHub URL and your name. You can also include an optional link for attribution. Every submission is reviewed before publishing, so submitting a repository does not add it to the directory immediately."
         ]
       },
       {
-        "_id": "see-it-in-motion",
-        "name": "See it in motion",
+        "_id": "about-this-blog",
+        "name": "What this blog is for",
         "paragraphs": [
-          "Sometimes a moving example is easier to follow than another paragraph. A video can sit alongside the written explanation without taking over the page. Play it when you want the extra context, or keep reading at your own pace.",
-          "The YouTube video below is included as sample media for this layout, rather than as a tutorial for a specific repository."
-        ],
-        "video": {
-          "name": "Sample YouTube video for the blog preview",
-          "description": "Example video — embedded from YouTube, with playback controlled by you."
-        }
-      },
-      {
-        "_id": "keep-a-small-collection",
-        "name": "Keep a small, useful collection",
-        "paragraphs": [
-          "Saving everything makes it difficult to find anything. Keep a short list of projects you want to revisit, and write a sentence about why each one matters to you. A useful note might be as simple as “try this for the next dashboard” or “read the search implementation”.",
-          "Collect visual references too. An interface, a layout, or a single interaction can become the starting point for an experiment of your own. The second image here shows how another reference fits naturally into a longer article."
-        ],
-        "screenshot": {
-          "index": 1,
-          "description": "Supporting image for Keep a small, useful collection"
-        }
-      },
-      {
-        "_id": "make-something-small",
-        "name": "Then, make something small",
-        "paragraphs": [
-          "The best next step is often a small one. Run the example, change a component, or write down what you learned. If something is unclear, a thoughtful question or a documentation fix is already a contribution.",
-          "That is the idea behind this space: fewer tabs left forgotten, more projects understood, and a little more confidence to build. Explore at your own pace, and keep the things that help you move forward."
-        ]
-      }
-    ]
-  }
-,
-  {
-    "_id": "github-blog-preview-002",
-    "slug": "evaluating-open-source-dependencies-for-production",
-    "name": "Evaluating open source dependencies for production",
-    "description": "How to assess repository health, release velocity, and security practices before introducing new libraries into your stack.",
-    "image_url": "https://cdn.nekowawolf.xyz/image/2026/1791909541_git-banner.webp",
-    "categories": [],
-    "media": {
-      "screenshot_urls": [
-        "https://cdn.nekowawolf.xyz/image/2026/1789700050_og_rv.webp",
-        "https://cdn.nekowawolf.xyz/image/2026/1789624491_fo2.webp"
-      ],
-      "video_url": "https://www.youtube.com/watch?v=1tM7Wd0lEeI"
-    },
-    "added_by": {
-      "name": "NwwOnee AI",
-      "url": "https://nekowawolf.xyz/",
-      "image_url": "https://cdn.nekowawolf.xyz/image/2026/1791910308_nwwonee_ai_bg.webp"
-    },
-    "created_at": "2026-10-13T10:00:00Z",
-    "content": [
-      {
-        "_id": "assessing-maintenance-health",
-        "name": "Assessing maintenance and commit activity",
-        "paragraphs": [
-          "When bringing a new library into a production codebase, the commit frequency and issue resolution rate tell an important story. A project does not need daily updates, but consistent maintenance demonstrates steady stewardship.",
-          "Look through closed pull requests and commit logs to understand how breaking changes are communicated and whether dependencies are kept up to date."
-        ],
-        "subsections": [
-          {
-            "_id": "reviewing-community-activity",
-            "name": "Reviewing community activity",
-            "paragraphs": [
-              "Active maintainers who provide clear review feedback and transparent roadmap goals give teams confidence when relying on third-party code for core features."
-            ]
-          }
+          "The directory is for finding repositories. This blog is for the context around them and the website itself: project introductions, practical notes, feature explanations, and updates on GitHub Repos.",
+          "I plan to use it to explain changes and share things worth a closer look, with a focus on clear information that helps you make use of the website."
         ]
       },
       {
-        "_id": "security-and-license-compliance",
-        "name": "Security and license compliance",
+        "_id": "part-of-the-nww-ecosystem",
+        "name": "Part of the Nww Ecosystem",
         "paragraphs": [
-          "Verify permissive licensing (such as MIT, Apache 2.0, or BSD) and ensure the dependency graph is lean and free of unnecessary transitive packages.",
-          "Auditing dependencies early prevents licensing conflicts and security vulnerabilities from reaching production builds."
-        ],
-        "screenshot": {
-          "index": 0,
-          "description": "Dependency and security audit view"
-        }
-      },
-      {
-        "_id": "walkthrough-video",
-        "name": "Dependency audit walkthrough",
-        "paragraphs": [
-          "Watching an interactive dependency evaluation helps illustrate common triage patterns and bundle size checks."
-        ],
-        "video": {
-          "name": "Sample walkthrough on dependency assessment",
-          "description": "Video guide on evaluating open source packages."
-        }
-      },
-      {
-        "_id": "isolating-external-code",
-        "name": "Isolating external code with adapter layers",
-        "paragraphs": [
-          "Wrap third-party libraries in your own domain-specific interfaces. If an upstream dependency is deprecated or replaced, the refactor remains contained to a single module.",
-          "This architectural separation keeps your core business logic resilient against unexpected upstream API shifts."
-        ],
-        "screenshot": {
-          "index": 1,
-          "description": "Adapter pattern architecture diagram"
-        }
-      }
-    ]
-  },
-  {
-    "_id": "github-blog-preview-003",
-    "slug": "building-maintainable-developer-tools",
-    "name": "Building maintainable developer tools and CLI workflows",
-    "description": "Lessons on designing lightweight, developer-focused tooling with clear architecture and minimal runtime dependencies.",
-    "image_url": "https://cdn.nekowawolf.xyz/image/2026/1791909541_git-banner.webp",
-    "categories": [],
-    "media": {
-      "screenshot_urls": [
-        "https://cdn.nekowawolf.xyz/image/2026/1789700050_og_rv.webp",
-        "https://cdn.nekowawolf.xyz/image/2026/1789624491_fo2.webp"
-      ],
-      "video_url": "https://www.youtube.com/watch?v=1tM7Wd0lEeI"
-    },
-    "added_by": {
-      "name": "NwwOnee AI",
-      "url": "https://nekowawolf.xyz/",
-      "image_url": "https://cdn.nekowawolf.xyz/image/2026/1791910308_nwwonee_ai_bg.webp"
-    },
-    "created_at": "2026-10-12T14:30:00Z",
-    "content": [
-      {
-        "_id": "developer-experience-first",
-        "name": "Prioritizing developer ergonomics",
-        "paragraphs": [
-          "Developer tools must be fast, self-explanatory, and forgiving. Good defaults save hours of configuration and eliminate unnecessary cognitive overhead.",
-          "Clear error output with suggested corrective actions turns failures into quick learning opportunities rather than blockers."
-        ],
-        "subsections": [
-          {
-            "_id": "helpful-cli-messages",
-            "name": "Helpful terminal feedback",
-            "paragraphs": [
-              "Format terminal messages with sensible color highlights and progress indicators that do not clutter piped shell output."
-            ]
-          }
+          "GitHub Repos is part of the Nww Ecosystem, a collection of websites for discovering tools, resources, creators, and communities. Each site has its own focus; this one is dedicated to GitHub repositories.",
+          "You can find the other sites at nekowawolf.xyz/ecosystem Here, you can start with the directory, check the activity page, or suggest a repository that deserves a place in the collection. Thanks for visiting."
         ]
-      },
-      {
-        "_id": "zero-config-principles",
-        "name": "Zero-configuration principles",
-        "paragraphs": [
-          "Aim for sensible out-of-the-box behavior. When developers run a command for the first time, it should work without requiring extensive configuration files.",
-          "Provide customization through optional flags or configuration files only when advanced behavior is specifically needed."
-        ],
-        "screenshot": {
-          "index": 0,
-          "description": "Terminal interface and CLI output"
-        }
-      },
-      {
-        "_id": "cli-workflow-demonstration",
-        "name": "CLI workflow demonstration",
-        "paragraphs": [
-          "A quick visual demonstration of command execution and response times."
-        ],
-        "video": {
-          "name": "Interactive CLI tooling demonstration",
-          "description": "Video overview of modern command line ergonomics."
-        }
-      },
-      {
-        "_id": "testing-cross-platform",
-        "name": "Testing across multiple environments",
-        "paragraphs": [
-          "Always test terminal tools across different shells and operating systems to prevent subtle path and newline inconsistencies.",
-          "Automated cross-platform matrix testing in CI catches environment-specific regressions before they affect users."
-        ],
-        "screenshot": {
-          "index": 1,
-          "description": "Cross-platform test results"
-        }
-      }
-    ]
-  },
-  {
-    "_id": "github-blog-preview-004",
-    "slug": "navigating-architecture-patterns-in-modern-web-apps",
-    "name": "Navigating architecture patterns in modern web applications",
-    "description": "A look at practical repository structures, state management patterns, and maintainability across scalable frontend projects.",
-    "image_url": "https://cdn.nekowawolf.xyz/image/2026/1791909541_git-banner.webp",
-    "categories": [],
-    "media": {
-      "screenshot_urls": [
-        "https://cdn.nekowawolf.xyz/image/2026/1789700050_og_rv.webp",
-        "https://cdn.nekowawolf.xyz/image/2026/1789624491_fo2.webp"
-      ],
-      "video_url": "https://www.youtube.com/watch?v=1tM7Wd0lEeI"
-    },
-    "added_by": {
-      "name": "NwwOnee AI",
-      "url": "https://nekowawolf.xyz/",
-      "image_url": "https://cdn.nekowawolf.xyz/image/2026/1791910308_nwwonee_ai_bg.webp"
-    },
-    "created_at": "2026-10-11T09:15:00Z",
-    "content": [
-      {
-        "_id": "modular-structure",
-        "name": "Structuring code by feature domain",
-        "paragraphs": [
-          "Organizing code around business domains rather than purely technical roles makes large applications easier to understand and navigate.",
-          "When components, utilities, and types live together near their usage, deleting or refactoring a feature becomes simple and clean."
-        ],
-        "subsections": [
-          {
-            "_id": "domain-boundaries",
-            "name": "Maintaining clean boundaries",
-            "paragraphs": [
-              "Define clear entry points for each module so internal implementations can evolve without causing widespread breakages across other modules."
-            ]
-          }
-        ]
-      },
-      {
-        "_id": "state-colocation",
-        "name": "State colocation and minimal global stores",
-        "paragraphs": [
-          "Keep state as close to where it is used as possible. Moving local state up into global stores prematurely adds unnecessary re-renders and complexity.",
-          "Reserve global state for genuine application-wide data such as authentication sessions, notifications, and theme settings."
-        ],
-        "screenshot": {
-          "index": 0,
-          "description": "State management flow and hierarchy"
-        }
-      },
-      {
-        "_id": "architecture-video",
-        "name": "Application architecture deep dive",
-        "paragraphs": [
-          "A visual breakdown comparing monolithic and modular frontend architectural styles."
-        ],
-        "video": {
-          "name": "Architecture comparison overview",
-          "description": "Video explaining modern frontend organization."
-        }
-      },
-      {
-        "_id": "predictable-data-fetching",
-        "name": "Predictable server state and caching",
-        "paragraphs": [
-          "Treat server data as an asynchronous cache rather than standard application state. Built-in caching, revalidation, and optimistic updates keep the UI responsive and accurate.",
-          "This separation ensures clean network boundaries and simplifies UI testing."
-        ],
-        "screenshot": {
-          "index": 1,
-          "description": "Server cache invalidation flow"
-        }
-      }
-    ]
-  },
-  {
-    "_id": "github-blog-preview-005",
-    "slug": "contributing-effectively-to-open-source-repositories",
-    "name": "Contributing effectively to open source repositories",
-    "description": "Practical advice on opening issues, writing reproducible test cases, and submitting high-quality pull requests maintainers appreciate.",
-    "image_url": "https://cdn.nekowawolf.xyz/image/2026/1791909541_git-banner.webp",
-    "categories": [],
-    "media": {
-      "screenshot_urls": [
-        "https://cdn.nekowawolf.xyz/image/2026/1789700050_og_rv.webp",
-        "https://cdn.nekowawolf.xyz/image/2026/1789624491_fo2.webp"
-      ],
-      "video_url": "https://www.youtube.com/watch?v=1tM7Wd0lEeI"
-    },
-    "added_by": {
-      "name": "NwwOnee AI",
-      "url": "https://nekowawolf.xyz/",
-      "image_url": "https://cdn.nekowawolf.xyz/image/2026/1791910308_nwwonee_ai_bg.webp"
-    },
-    "created_at": "2026-10-10T16:45:00Z",
-    "content": [
-      {
-        "_id": "writing-actionable-issues",
-        "name": "Writing actionable bug reports and proposals",
-        "paragraphs": [
-          "A helpful bug report includes the environment, expected behavior, actual behavior, and minimal steps to reproduce. Maintainers can address issues much faster when they can reliably reproduce the behavior locally.",
-          "Before filing a new issue, search existing issues and discussions to see if the problem or proposal has already been discussed."
-        ],
-        "subsections": [
-          {
-            "_id": "minimal-reproducible-examples",
-            "name": "Creating minimal reproductions",
-            "paragraphs": [
-              "A standalone reproduction repository or code sandbox saves maintainers time and helps pinpoint the root cause immediately."
-            ]
-          }
-        ]
-      },
-      {
-        "_id": "focused-pull-requests",
-        "name": "Keeping pull requests small and focused",
-        "paragraphs": [
-          "Small, focused pull requests are reviewed and merged much faster than large, multi-feature diffs. Address one problem per pull request and follow the project's code conventions.",
-          "Include unit tests and update relevant documentation to demonstrate that your change works as intended and will not regress."
-        ],
-        "screenshot": {
-          "index": 0,
-          "description": "Well-structured pull request overview"
-        }
-      },
-      {
-        "_id": "collaboration-video",
-        "name": "Open source collaboration video",
-        "paragraphs": [
-          "An overview of collaborative workflows and communication best practices in open source repositories."
-        ],
-        "video": {
-          "name": "Open source collaboration overview",
-          "description": "Video explaining open source communication and PR workflow."
-        }
-      },
-      {
-        "_id": "constructive-communication",
-        "name": "Communicating with empathy and respect",
-        "paragraphs": [
-          "Maintainers and contributors often work across time zones as volunteers. Friendly, constructive discussions keep the open source ecosystem welcoming and productive for everyone.",
-          "Taking review feedback constructively and answering follow-up questions promptly makes the merge process smooth and collaborative."
-        ],
-        "screenshot": {
-          "index": 1,
-          "description": "Constructive code review interaction"
-        }
       }
     ]
   }
