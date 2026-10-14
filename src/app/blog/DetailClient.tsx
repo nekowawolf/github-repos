@@ -9,7 +9,7 @@ import { FallbackImage } from '@/components/common/FallbackImage';
 import BlogAuthor from '@/components/blog/BlogAuthor';
 import BlogSortDropdown from '@/components/blog/BlogSortDropdown';
 import NwwOneeAIChat from '@/components/chat/NwwOneeAIChat';
-import { BLOG_POSTS_PER_PAGE, filterBlogPosts } from '@/lib/blog';
+import { BLOG_POSTS_PER_PAGE, filterBlogPosts, getBlogSearchSuggestion } from '@/lib/blog';
 import type { BlogPost, BlogSort } from '@/types/blog';
 
 export default function DetailClient({ posts }: { posts: BlogPost[] }) {
@@ -19,6 +19,7 @@ export default function DetailClient({ posts }: { posts: BlogPost[] }) {
   const resultsRef = useRef<HTMLDivElement>(null);
   const reducedMotion = useReducedMotion();
   const filteredPosts = useMemo(() => filterBlogPosts(posts, query, sort), [posts, query, sort]);
+  const suggestion = useMemo(() => getBlogSearchSuggestion(posts, query), [posts, query]);
   const totalPages = Math.max(1, Math.ceil(filteredPosts.length / BLOG_POSTS_PER_PAGE));
   const page = Math.min(currentPage, totalPages);
   const visiblePosts = filteredPosts.slice((page - 1) * BLOG_POSTS_PER_PAGE, page * BLOG_POSTS_PER_PAGE);
@@ -67,15 +68,25 @@ export default function DetailClient({ posts }: { posts: BlogPost[] }) {
                   <FiX aria-hidden="true" />
                 </button>
               )}
+              <div className="absolute left-0 top-full pt-1 pl-5 w-full text-left z-10 pointer-events-none">
+                <div role="status" className={`text-xs text-fill-color/70 transition-opacity duration-300 motion-reduce:transition-none pointer-events-auto ${suggestion ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
+                  Did you mean:{' '}
+                  <button
+                    type="button"
+                    disabled={!suggestion}
+                    onClick={() => { if (suggestion) { setQuery(suggestion); setCurrentPage(1); } }}
+                    className="blog-focus font-semibold text-blue-500 hover:underline cursor-pointer"
+                  >
+                    {suggestion}
+                  </button>
+                  ?
+                </div>
+              </div>
             </div>
             <BlogSortDropdown value={sort} onChange={(value) => { setSort(value); setCurrentPage(1); }} />
           </div>
 
-          <div className="mb-5 mt-6 flex items-center justify-between gap-3 text-xs text-fill-color/60">
-            <p role="status">{filteredPosts.length} {filteredPosts.length === 1 ? 'article' : 'articles'}{query.trim() ? ' found' : ''}</p>
-          </div>
-
-          <div className="grid gap-x-8 gap-y-10 sm:grid-cols-2">
+          <div className="mt-10 grid gap-x-8 gap-y-10 sm:grid-cols-2">
             {visiblePosts.map((post) => (
               <motion.article
                 key={post._id}

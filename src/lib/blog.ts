@@ -1,3 +1,4 @@
+import Fuse from 'fuse.js';
 import type { BlogHeading, BlogPost, BlogSort } from '@/types/blog';
 
 export const BLOG_POSTS_PER_PAGE = 4;
@@ -15,13 +16,25 @@ export function filterBlogPosts(posts: BlogPost[], query: string, sort: BlogSort
   const terms = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
 
   return posts.filter((post) => {
-    const searchable = [post.name, post.description, post.added_by.name, ...post.categories]
-      .join(' ').toLowerCase();
+    const searchable = post.name.toLowerCase();
     return terms.every((term) => searchable.includes(term));
   }).sort((a, b) => {
     const difference = Date.parse(a.created_at) - Date.parse(b.created_at);
     return sort === 'oldest' ? difference : -difference;
   });
+}
+
+export function getBlogSearchSuggestion(posts: BlogPost[], query: string): string | null {
+  const searchQuery = query.trim();
+  if (!searchQuery || filterBlogPosts(posts, searchQuery, 'latest').length > 0) return null;
+
+  const fuse = new Fuse(posts, {
+    keys: ['name'],
+    threshold: 0.4,
+  });
+  const bestMatch = fuse.search(searchQuery, { limit: 1 })[0]?.item.name;
+
+  return bestMatch && bestMatch.toLowerCase() !== searchQuery.toLowerCase() ? bestMatch : null;
 }
 
 export function getBlogHeadings(post: BlogPost): BlogHeading[] {
