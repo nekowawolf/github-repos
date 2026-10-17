@@ -336,12 +336,22 @@ a[href*="#gh-light-mode-only"] {
   opacity: 0.5;
 }
 
-/* Blog: reuse the directory palette in both themes, with a quieter reading layout. */
+.back-control {
+  @apply inline-flex cursor-pointer items-center gap-2 text-sm;
+  color: rgba(var(--fill-color-rgb), 0.7);
+}
+
+.back-control:hover {
+  color: var(--color-blue-500) !important;
+}
+
+.back-control:focus-visible,
 .blog-focus:focus-visible {
   outline: 2px solid #3b82f6;
   outline-offset: 4px;
 }
 
+/* Blog: reuse the directory palette in both themes, with a quieter reading layout. */
 .blog-search::-webkit-search-cancel-button {
   display: none;
 }

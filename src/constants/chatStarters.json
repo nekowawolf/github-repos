@@ -1,0 +1,32 @@
+{
+  "directory": {
+    "paths": ["/directory"],
+    "title": "Want help getting started?",
+    "description": "Select an option below based on how NwwOnee AI can help you.",
+    "options": [
+      "Find the best repositories",
+      "Explain repository details",
+      "Help me summarize data"
+    ]
+  },
+  "blog": {
+    "paths": ["/blog"],
+    "title": "Want help exploring the blog?",
+    "description": "Select an option below based on how NwwOnee AI can help you.",
+    "options": [
+      "Find articles about my interests",
+      "Help me summarize an article",
+      "Explain technical concepts in an article"
+    ]
+  },
+  "activity": {
+    "paths": ["/activity"],
+    "title": "Want help understanding activity?",
+    "description": "Select an option below based on how NwwOnee AI can help you.",
+    "options": [
+      "Summarize recent activity",
+      "Help me understand recent commits",
+      "How can I support this project?"
+    ]
+  }
+}

@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { FaArrowLeft } from "react-icons/fa6";
+import { FiArrowLeft } from "react-icons/fi";
 
 interface BackButtonProps {
     fallbackUrl?: string;
@@ -23,10 +23,10 @@ export default function BackButton({
         return (
             <Link
                 href={fallbackUrl}
-                className={`cursor-pointer flex items-center gap-2 mb-6 text-fill-color/70 hover:text-fill-color transition-colors w-fit px-4 py-2 rounded-lg hover:bg-card-color border border-transparent hover:border-color ${className}`}
+                className={`back-control mb-6 w-fit ${className}`}
             >
-                <FaArrowLeft className="w-4 h-4" />
-                <span className="font-medium">{label}</span>
+                <FiArrowLeft aria-hidden="true" />
+                <span>{label}</span>
             </Link>
         );
     }
@@ -41,11 +41,12 @@ export default function BackButton({
 
     return (
         <button
+            type="button"
             onClick={handleBack}
-            className={`cursor-pointer flex items-center gap-2 mb-6 text-fill-color/70 hover:text-fill-color transition-colors w-fit px-4 py-2 rounded-lg hover:bg-card-color border border-transparent hover:border-color ${className}`}
+            className={`back-control mb-6 w-fit ${className}`}
         >
-            <FaArrowLeft className="w-4 h-4" />
-            <span className="font-medium">{label}</span>
+            <FiArrowLeft aria-hidden="true" />
+            <span>{label}</span>
         </button>
     );
 }

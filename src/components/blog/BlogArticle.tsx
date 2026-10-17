@@ -36,7 +36,7 @@ export default function BlogArticle({ post }: { post: BlogPost }) {
   return (
     <main className="body-color text-fill-color min-h-screen px-4 pb-12 pt-28 sm:px-8 sm:pt-36">
       <article className="mx-auto max-w-3xl lg:grid lg:max-w-6xl lg:grid-cols-[minmax(0,1fr)_15rem] lg:gap-x-12">
-        <Link href="/blog" className="blog-focus mb-8 inline-flex cursor-pointer items-center gap-2 justify-self-start text-sm text-fill-color/70 hover:!text-blue-500 lg:col-span-2">
+        <Link href="/blog" className="back-control mb-8 justify-self-start lg:col-span-2">
           <FiArrowLeft aria-hidden="true" /> All articles
         </Link>
         <header className="min-w-0 lg:col-start-1">
@@ -125,7 +125,7 @@ export default function BlogArticle({ post }: { post: BlogPost }) {
             ))}
 
             <div className="blog-article-end mt-12 flex flex-wrap items-center justify-between gap-5 pt-7">
-              <Link href="/blog" className="blog-focus inline-flex cursor-pointer items-center gap-2 text-sm text-fill-color/70 hover:!text-blue-500">
+              <Link href="/blog" className="back-control">
                 <FiArrowLeft aria-hidden="true" /> Back to the blog
               </Link>
               <Link href="/directory" className="blog-focus inline-flex cursor-pointer items-center gap-2 text-sm font-medium text-blue-500 hover:text-blue-400">

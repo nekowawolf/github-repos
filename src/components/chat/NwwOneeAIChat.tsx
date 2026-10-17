@@ -6,8 +6,10 @@ import { FaArrowUp } from 'react-icons/fa';
 import { HiOutlineUserCircle } from 'react-icons/hi2';
 import { MdHistory } from 'react-icons/md';
 import { FcGoogle } from 'react-icons/fc';
-import { FaArrowLeft } from 'react-icons/fa6';
+import { FiArrowLeft } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
+import { usePathname } from 'next/navigation';
+import { getChatStarters } from '@/lib/chatStarters';
 
 export const chatStore = {
   _state: {
@@ -95,32 +97,39 @@ const ChatHeader = memo(function ChatHeader({
   setActiveView: (v: 'chat' | 'user' | 'history') => void;
 }) {
   return (
-    <div className="bg-blue-600/20 border-divider-b relative flex rounded-t-2xl rounded-b-3xl min-h-[140px] overflow-hidden">
-      <div className="absolute top-3 right-3 flex items-center gap-1 z-20">
-        <button 
+    <div className="bg-blue-600/20 border-divider-b relative flex rounded-t-2xl rounded-b-3xl min-h-[140px] overflow-clip">
+      <div className="absolute top-3 right-3 flex items-center gap-1 z-30">
+        <button
+          type="button"
+          aria-label="Toggle user view"
           onClick={() => setActiveView(activeView === 'user' ? 'chat' : 'user')}
           className={`cursor-pointer transition-all text-fill-color p-1 rounded-md ${activeView === 'user' ? 'bg-blue-600/30 opacity-100' : 'opacity-70 hover:opacity-100 hover:bg-blue-600/10'}`}
         >
-          <HiOutlineUserCircle className="w-5 h-5" />
+          <HiOutlineUserCircle aria-hidden="true" className="w-5 h-5 pointer-events-none" />
         </button>
-        <button 
+        <button
+          type="button"
+          aria-label="Toggle chat history"
           onClick={() => setActiveView(activeView === 'history' ? 'chat' : 'history')}
           className={`cursor-pointer transition-all text-fill-color p-1 rounded-md ${activeView === 'history' ? 'bg-blue-600/30 opacity-100' : 'opacity-70 hover:opacity-100 hover:bg-blue-600/10'}`}
         >
-          <MdHistory className="w-5 h-5" />
+          <MdHistory aria-hidden="true" className="w-5 h-5 pointer-events-none" />
         </button>
         <button
+          type="button"
+          aria-label="Close chat"
           onClick={() => chatStore.setIsOpen(false)}
           className="cursor-pointer opacity-70 hover:opacity-100 hover:bg-red-500/20 transition-all text-fill-color p-1 rounded-md"
         >
-          <CgClose className="w-5 h-5" />
+          <CgClose aria-hidden="true" className="w-5 h-5 pointer-events-none" />
         </button>
       </div>
       
       <img
         src={HI_IMAGE_URL}
         alt="NwwOnee AI Hi"
-        className="absolute -bottom-16 -left-1 w-[160px] h-auto z-10 pointer-events-none drop-shadow-md"
+        className="absolute -bottom-16 -left-1 w-[160px] h-auto z-10 pointer-events-none select-none drop-shadow-md"
+        draggable={false}
         loading="eager"
       />
       
@@ -165,21 +174,20 @@ const TypingIndicator = memo(function TypingIndicator() {
 });
 
 const StarterButtons = memo(function StarterButtons({ onSend }: { onSend: (t:string) => void }) {
+  const pathname = usePathname();
+  const { title, description, options } = getChatStarters(pathname);
+
   return (
     <div className="p-5">
-      <p className="text-[15px] font-semibold text-fill-color mb-1">Want help getting started?</p>
-      <p className="text-xs text-fill-color/70 mb-4">Select an option below based on how NwwOnee AI can help you.</p>
+      <p className="text-[15px] font-semibold text-fill-color mb-1">{title}</p>
+      <p className="text-xs text-fill-color/70 mb-4">{description}</p>
       
       <div className="flex flex-col gap-2.5">
-        <button onClick={() => onSend("Find the best repositories")} className="relative text-left px-4 py-3 rounded-xl border border-blue-600 bg-gradient-to-r from-blue-600/10 to-blue-500/10 hover:from-blue-600/20 hover:to-blue-500/20 transition-all text-sm text-fill-color/90 hover:text-fill-color shadow-sm cursor-pointer group">
-            <span className="relative z-10">Find the best repositories</span>
+        {options.map((option) => (
+          <button key={option} type="button" onClick={() => onSend(option)} className="relative text-left px-4 py-3 rounded-xl border border-blue-600 bg-gradient-to-r from-blue-600/10 to-blue-500/10 hover:from-blue-600/20 hover:to-blue-500/20 transition-all text-sm text-fill-color/90 hover:text-fill-color shadow-sm cursor-pointer group">
+            <span className="relative z-10">{option}</span>
           </button>
-          <button onClick={() => onSend("Explain repository details")} className="relative text-left px-4 py-3 rounded-xl border border-blue-600 bg-gradient-to-r from-blue-600/10 to-blue-500/10 hover:from-blue-600/20 hover:to-blue-500/20 transition-all text-sm text-fill-color/90 hover:text-fill-color shadow-sm cursor-pointer group">
-            <span className="relative z-10">Explain repository details</span>
-          </button>
-          <button onClick={() => onSend("Help me summarize data")} className="relative text-left px-4 py-3 rounded-xl border border-blue-600 bg-gradient-to-r from-blue-600/10 to-blue-500/10 hover:from-blue-600/20 hover:to-blue-500/20 transition-all text-sm text-fill-color/90 hover:text-fill-color shadow-sm cursor-pointer group">
-            <span className="relative z-10">Help me summarize data</span>
-          </button>
+        ))}
       </div>
     </div>
   );
@@ -238,7 +246,7 @@ export default function NwwOneeAIChat() {
             exit="hidden"
             transition={chatPanelTransition}
             style={{ willChange: 'transform, opacity' }}
-            className="w-[380px] max-w-[calc(100vw-32px)] bg-[var(--card-color2)] border-color rounded-2xl overflow-hidden flex flex-col origin-bottom-right relative"
+            className="w-[380px] max-w-[calc(100vw-32px)] bg-[var(--card-color2)] border-color rounded-2xl overflow-clip flex flex-col origin-bottom-right relative"
           >
           {/* Header */}
           <ChatHeader activeView={activeView} setActiveView={(v) => chatStore.setActiveView(v)} />
@@ -264,11 +272,12 @@ export default function NwwOneeAIChat() {
               <div className="w-full h-[349px] flex flex-col">
                 <div className="w-full h-[48px] p-4 pb-0">
                   <button
+                    type="button"
                     onClick={() => chatStore.setActiveView('chat')}
-                    className="flex items-center gap-2 text-fill-color/70 hover:text-fill-color transition-colors cursor-pointer w-fit"
+                    className="back-control w-fit"
                   >
-                    <FaArrowLeft className="w-4 h-4" />
-                    <span className="text-sm font-medium">Back to chat</span>
+                    <FiArrowLeft aria-hidden="true" />
+                    <span>Back to chat</span>
                   </button>
                 </div>
                 <div className="w-full flex-1 flex flex-col items-center justify-center px-5 pb-12 text-center">
@@ -305,11 +314,12 @@ export default function NwwOneeAIChat() {
               <div className="w-full h-[349px] flex flex-col">
                 <div className="w-full h-[48px] p-4 pb-0">
                   <button
+                    type="button"
                     onClick={() => chatStore.setActiveView('chat')}
-                    className="flex items-center gap-2 text-fill-color/70 hover:text-fill-color transition-colors cursor-pointer w-fit"
+                    className="back-control w-fit"
                   >
-                    <FaArrowLeft className="w-4 h-4" />
-                    <span className="text-sm font-medium">Back to chat</span>
+                    <FiArrowLeft aria-hidden="true" />
+                    <span>Back to chat</span>
                   </button>
                 </div>
                 <div className="w-full flex-1 flex flex-col items-center justify-center px-5 pb-12 text-center">
